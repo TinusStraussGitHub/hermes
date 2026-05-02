@@ -8,7 +8,7 @@ const DATA_EXT = ".enc.json"; // Encrypted files
 let isDarkMode = true;
 let knowledgeBase = [];
 let currentPassword = null; // Store password for decryption
-let insightsCollapsed = false;
+let insightsCollapsed = true;
 
 // Initialize AOS animations
 AOS.init({ duration: 600, once: true });
@@ -337,6 +337,18 @@ function toggleDarkMode() {
     document.getElementById("themeIcon").textContent = isDarkMode ? "🌙" : "☀️";
     localStorage.setItem("darkMode", isDarkMode);
 }
+
+// Initialize Insights as collapsed by default
+document.addEventListener("DOMContentLoaded", () => {
+    const content = document.getElementById("insightsContent");
+    const toggleIcon = document.getElementById("insightsToggle");
+    const toggleText = document.getElementById("insightsToggleText");
+    if (content && toggleIcon && toggleText) {
+        content.style.display = "none";
+        toggleIcon.style.transform = "rotate(-90deg)";
+        toggleText.textContent = "Expand";
+    }
+});
 
 // Load Dark Mode Preference
 if (localStorage.getItem("darkMode") === "false") {
