@@ -1,6 +1,7 @@
 // Configuration
 const PASSWORD_HASH = "21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee"; // SHA-256 of "tinus2026"
-const DATA_BASE = "/data/";
+// Use relative path so it works in both local and GitHub Pages environments
+const DATA_BASE = "data/";
 const DATA_EXT = ".enc.json"; // Encrypted files
 
 // State
