@@ -211,11 +211,13 @@ function renderWeather(weather) {
     `;
 }
 
-// Render Knowledge Base
+// Render Knowledge Base with clickable cards
 function renderKnowledgeBase(knowledge) {
     const container = document.getElementById("kbContent");
-    container.innerHTML = knowledge.map(note => `
-        <div class="kb-card bg-gray-700 p-4 rounded-lg cursor-pointer" data-aos="fade-up">
+    container.innerHTML = knowledge.map((note, index) => `
+        <div class="kb-card bg-gray-700 p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition" 
+             data-aos="fade-up" 
+             onclick="openNoteModal(${index})">
             <h3 class="font-bold text-blue-400 mb-2">${note.title}</h3>
             <p class="text-gray-300 text-sm mb-3">${note.snippet}</p>
             <div class="flex justify-between items-center text-xs text-gray-400">
@@ -228,15 +230,84 @@ function renderKnowledgeBase(knowledge) {
     `).join("");
 }
 
+// Open Note Modal with full content
+function openNoteModal(noteIndex) {
+    const note = knowledgeBase[noteIndex];
+    if (!note) return;
+    
+    document.getElementById("noteTitle").textContent = note.title;
+    document.getElementById("noteContent").innerHTML = formatNoteContent(note.content || note.snippet);
+    document.getElementById("noteModified").textContent = `Last modified: ${note.last_modified}`;
+    
+    // Render tags
+    const tagsContainer = document.getElementById("noteTags");
+    tagsContainer.innerHTML = note.tags.map(tag => 
+        `<span class="bg-gray-600 px-2 py-1 rounded">${tag}</span>`
+    ).join("");
+    
+    // Show modal
+    document.getElementById("noteModal").classList.remove("hidden");
+}
+
+// Close Note Modal
+function closeNoteModal() {
+    document.getElementById("noteModal").classList.add("hidden");
+}
+
+// Format note content (convert markdown-like syntax to HTML)
+function formatNoteContent(content) {
+    if (!content) return '<p class="text-gray-400">No content available</p>';
+    
+    // Convert markdown to HTML (basic implementation)
+    let html = content;
+    
+    // Headers
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold mt-4 mb-2">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mt-6 mb-3">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>');
+    
+    // Bold and italic
+    html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
+    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+    
+    // Code blocks
+    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code>$1</code></pre>');
+    html = html.replace(/`(.+?)`/g, '<code class="bg-gray-900 px-2 py-1 rounded">$1</code>');
+    
+    // Links
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-400 hover:underline">$1</a>');
+    
+    // Lists
+    html = html.replace(/^\s*[-*+] (.+)$/gim, '<li class="ml-4">$1</li>');
+    html = html.replace(/(<li.*<\/li>)/s, '<ul class="list-disc ml-4 my-2">$1</ul>');
+    
+    // Paragraphs (lines with content)
+    html = html.split('\n\n').map(para => {
+        if (para.trim().startsWith('<')) return para; // Already has HTML tags
+        return `<p class="mb-3">${para}</p>`;
+    }).join('\n');
+    
+    return html;
+}
+
 // Knowledge Base Search
 document.getElementById("kbSearch").addEventListener("input", (e) => {
     const query = e.target.value.toLowerCase();
     const filtered = knowledgeBase.filter(note => 
         note.title.toLowerCase().includes(query) || 
         note.snippet.toLowerCase().includes(query) || 
+        (note.content && note.content.toLowerCase().includes(query)) ||
         note.tags.some(tag => tag.toLowerCase().includes(query))
     );
     renderKnowledgeBase(filtered);
+});
+
+// Close modal on background click
+document.getElementById("noteModal").addEventListener("click", (e) => {
+    if (e.target.id === "noteModal") {
+        closeNoteModal();
+    }
 });
 
 // Dark Mode Toggle
