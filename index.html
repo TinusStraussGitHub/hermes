@@ -70,53 +70,42 @@
       <p class="hero-subtitle">Here's what's happening with your day</p>
     </section>
     
-    <!-- Quick Links -->
-    <div class="quick-links">
-      <a href="https://www.blastmap.co.za" target="_blank" class="quick-link">
-        💎 BlastMap
-      </a>
-      <a href="https://www.bme.co.za" target="_blank" class="quick-link">
-        🏢 BME
-      </a>
-      <a href="https://github.com/TinusStraussGitHub" target="_blank" class="quick-link">
-        💻 GitHub
-      </a>
-      <a href="#" onclick="openObsidianVault(); return false;" class="quick-link">
-        📝 Obsidian
-      </a>
-    </div>
-    
-    <!-- Dashboard Grid -->
+    <!-- Dashboard Grid - Reordered as requested -->
     <div class="dashboard-grid">
-      <!-- Calendar Section -->
+      <!-- AI Insights Section (First - Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.1s;">
         <div class="section-header">
           <h2>
-            <span class="icon blue">📅</span>
-            Today's Schedule
+            <span class="icon orange">🤖</span>
+            AI Insights
           </h2>
-          <span style="font-size: 14px; color: var(--text-tertiary);" id="currentDate"></span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleAllInsights()">
+            <span id="toggleAllText">Expand All</span>
+          </button>
         </div>
-        <div id="scheduleList">
-          <div class="loading">Loading calendar...</div>
+        <div id="insightsList">
+          <div class="loading">Loading insights...</div>
         </div>
       </div>
       
-      <!-- Weather Section -->
+      <!-- Weekly Schedule Section (Second) -->
       <div class="modern-card" style="animation-delay: 0.2s;">
         <div class="section-header">
           <h2>
-            <span class="icon purple">🌤️</span>
-            Weather
+            <span class="icon blue">📅</span>
+            <span id="scheduleTitle">Weekly Schedule</span>
           </h2>
-          <span style="font-size: 14px; color: var(--text-tertiary);">Delmas, ZA</span>
+          <button id="backToWeekBtn" class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px; display: none;" onclick="showWeeklyView()">
+            ← Back to Week
+          </button>
         </div>
-        <div id="weatherInfo">
-          <div class="loading">Loading weather...</div>
+        <div id="scheduleView">
+          <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
+          <div id="scheduleList"></div>
         </div>
       </div>
       
-      <!-- Knowledge Base Section -->
+      <!-- Knowledge Base Section (Third) -->
       <div class="modern-card" style="animation-delay: 0.3s;">
         <div class="section-header">
           <h2>
@@ -134,19 +123,27 @@
         </div>
       </div>
       
-      <!-- AI Insights Section -->
-      <div class="modern-card" style="animation-delay: 0.4s;">
+      <!-- Quick Links (Bottom Most) -->
+      <div class="modern-card" style="animation-delay: 0.4s; grid-column: 1 / -1;">
         <div class="section-header">
           <h2>
-            <span class="icon orange">🤖</span>
-            AI Insights
+            <span class="icon purple">🔗</span>
+            Quick Links
           </h2>
-          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleAllInsights()">
-            <span id="toggleAllText">Expand All</span>
-          </button>
         </div>
-        <div id="insightsList">
-          <div class="loading">Loading insights...</div>
+        <div class="quick-links" style="justify-content: center;">
+          <a href="https://www.blastmap.co.za" target="_blank" class="quick-link">
+            💎 BlastMap
+          </a>
+          <a href="https://www.bme.co.za" target="_blank" class="quick-link">
+            🏢 BME
+          </a>
+          <a href="https://github.com/TinusStraussGitHub" target="_blank" class="quick-link">
+            💻 GitHub
+          </a>
+          <a href="#" onclick="openObsidianVault(); return false;" class="quick-link">
+            📝 Obsidian
+          </a>
         </div>
       </div>
     </div>
@@ -179,13 +176,6 @@
       else greeting.textContent = 'evening';
     }
     updateGreeting();
-    
-    // Update current date
-    function updateDate() {
-      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
-    }
-    updateDate();
   </script>
 </body>
 </html>

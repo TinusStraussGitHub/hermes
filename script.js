@@ -6,23 +6,22 @@ const DATA_BASE = 'data/';
 let isDarkMode = false;
 let allInsightsCollapsed = true;
 let notes = [];
-let decryptedPassword = null; // Store password after login
+let decryptedPassword = null;
+let weeklyScheduleData = null;
+let currentSelectedDay = null;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
-  // Check if already authenticated
   if (sessionStorage.getItem('hermes_auth') === 'true') {
     showApp();
   }
   
-  // Check system dark mode preference
   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     isDarkMode = true;
     document.documentElement.classList.add('dark');
     updateThemeIcon();
   }
   
-  // Listen for system theme changes
   window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
     if (!localStorage.getItem('hermes_theme')) {
       isDarkMode = e.matches;
@@ -31,7 +30,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
   
-  // Register service worker
   if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js').catch(() => {});
   }
@@ -48,7 +46,7 @@ async function checkPassword() {
   
   if (hashHex === PASSWORD_HASH) {
     sessionStorage.setItem('hermes_auth', 'true');
-    decryptedPassword = input; // Store password for data decryption
+    decryptedPassword = input;
     showApp();
   } else {
     const errorEl = document.getElementById('loginError');
@@ -78,7 +76,6 @@ function toggleDarkMode() {
   localStorage.setItem('hermes_theme', isDarkMode ? 'dark' : 'light');
   updateThemeIcon();
   
-  // Update theme-color meta
   const meta = document.querySelector('meta[name="theme-color"]');
   if (meta) {
     meta.content = isDarkMode ? '#000000' : '#f5f5f7';
@@ -92,9 +89,8 @@ function updateThemeIcon() {
 
 // Load all data
 async function loadAllData() {
-  // Ensure we have the password
   if (!decryptedPassword) {
-    decryptedPassword = 'tinus2026'; // Fallback
+    decryptedPassword = 'tinus2026';
   }
   
   await Promise.all([
@@ -130,34 +126,105 @@ async function decryptData(encryptedData, password) {
   }
 }
 
-// Load schedule
+// Load schedule (weekly format)
 async function loadSchedule() {
   try {
     const response = await fetch(DATA_BASE + 'schedule.enc.json');
     if (!response.ok) throw new Error('Failed to load schedule');
     const encrypted = await response.json();
     const data = await decryptData(encrypted, decryptedPassword);
-    renderSchedule(data);
+    weeklyScheduleData = data;
+    renderWeeklyCalendar(data);
   } catch (error) {
     console.error('Schedule load error:', error);
-    document.getElementById('scheduleList').innerHTML = 
-      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No calendar data available</p>';
+    document.getElementById('weeklyCalendar').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No schedule data available</p>';
   }
 }
 
-function renderSchedule(events) {
+// Render weekly calendar with day buttons
+function renderWeeklyCalendar(weekData) {
+  const container = document.getElementById('weeklyCalendar');
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  const today = new Date().toLocaleDateString('en-US', { weekday: 'long' });
+  
+  container.innerHTML = weekData.map(dayData => {
+    const isToday = dayData.day === today;
+    const eventCount = dayData.events ? dayData.events.length : 0;
+    const isSelected = currentSelectedDay === dayData.day;
+    
+    return `
+      <div onclick="selectDay('${dayData.day}')" 
+           style="
+             background: ${isSelected ? 'var(--accent)' : (isToday ? 'var(--accent-light)' : 'var(--bg-secondary)')};
+             color: ${isSelected ? 'white' : 'var(--text-primary)'};
+             border: 1px solid ${isToday ? 'var(--accent)' : 'var(--border-light)'};
+             border-radius: var(--radius-sm);
+             padding: 12px;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             text-align: center;
+             animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) backwards;
+           "
+           onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='var(--shadow-md)';"
+           onmouseout="this.style.transform=''; this.style.boxShadow='';">
+        <div style="font-weight: 600; font-size: 14px; margin-bottom: 4px;">
+          ${isToday ? '📍 ' : ''}${dayData.day}
+        </div>
+        <div style="font-size: 12px; opacity: 0.8;">
+          ${eventCount} event${eventCount !== 1 ? 's' : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  
+  // Show today's schedule by default
+  if (!currentSelectedDay) {
+    selectDay(today);
+  }
+}
+
+// Select a day to view its schedule
+function selectDay(dayName) {
+  currentSelectedDay = dayName;
+  const dayData = weeklyScheduleData.find(d => d.day === dayName);
+  
+  // Update title
+  document.getElementById('scheduleTitle').textContent = `${dayName}'s Schedule`;
+  
+  // Show back button
+  document.getElementById('backToWeekBtn').style.display = 'block';
+  
+  // Re-render calendar to show selection
+  renderWeeklyCalendar(weeklyScheduleData);
+  
+  // Render events for selected day
+  renderDaySchedule(dayData);
+}
+
+// Show weekly view
+function showWeeklyView() {
+  currentSelectedDay = null;
+  document.getElementById('scheduleTitle').textContent = 'Weekly Schedule';
+  document.getElementById('backToWeekBtn').style.display = 'none';
+  renderWeeklyCalendar(weeklyScheduleData);
+  document.getElementById('scheduleList').innerHTML = '';
+}
+
+// Render schedule for a specific day
+function renderDaySchedule(dayData) {
   const container = document.getElementById('scheduleList');
-  if (!events || events.length === 0) {
-    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No events today</p>';
+  
+  if (!dayData || !dayData.events || dayData.events.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No events for this day</p>';
     return;
   }
   
-  container.innerHTML = events.map((event, idx) => `
+  container.innerHTML = dayData.events.map((event, idx) => `
     <div class="event-item" style="animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
-      <div class="event-title">${escapeHtml(event.summary || event.title || 'Untitled Event')}</div>
+      <div class="event-title">${escapeHtml(event.title || 'Untitled Event')}</div>
       <div class="event-time">
-        🕐 ${formatTime(event.start || event.startTime)} - ${formatTime(event.end || event.endTime)}
-        ${event.location ? `• 📍 ${escapeHtml(event.location)}` : ''}
+        🕐 ${event.time || '--:--'} (${event.duration || '1h'})
       </div>
     </div>
   `).join('');
@@ -180,12 +247,12 @@ async function loadWeather() {
 
 function renderWeather(data) {
   const container = document.getElementById('weatherInfo');
-  const temp = Math.round(data.main?.temp || data.temperature || 0);
-  const desc = data.weather?.[0]?.description || data.condition || 'Unknown';
-  const icon = getWeatherEmoji(data.weather?.[0]?.main || data.condition || '');
-  const humidity = data.main?.humidity || data.humidity || '--';
-  const wind = Math.round((data.wind?.speed || data.wind_speed || 0) * 3.6);
-  const feelsLike = Math.round(data.main?.feels_like || data.feels_like || temp);
+  const current = data.current || {};
+  const temp = current.temp || 0;
+  const desc = current.condition || 'Unknown';
+  const icon = current.icon || '🌤️';
+  const humidity = current.humidity || '--';
+  const wind = current.wind || 0;
   
   container.innerHTML = `
     <div class="weather-main">
@@ -193,9 +260,6 @@ function renderWeather(data) {
       <div>
         <div class="weather-temp">${temp}°C</div>
         <div class="weather-desc">${escapeHtml(desc)}</div>
-        <div style="font-size: 14px; color: var(--text-tertiary); margin-top: 4px;">
-          Feels like ${feelsLike}°C
-        </div>
       </div>
     </div>
     <div class="weather-details">
@@ -207,21 +271,22 @@ function renderWeather(data) {
         <div class="weather-detail-label">Wind</div>
         <div class="weather-detail-value">${wind} km/h</div>
       </div>
-      <div class="weather-detail-item">
-        <div class="weather-detail-label">Condition</div>
-        <div class="weather-detail-value" style="font-size: 14px;">${escapeHtml(desc)}</div>
+    </div>
+    ${data.forecast ? `
+    <div style="margin-top: 16px;">
+      <div style="font-size: 14px; color: var(--text-tertiary); margin-bottom: 8px;">3-Day Forecast</div>
+      <div style="display: flex; gap: 8px;">
+        ${data.forecast.map(day => `
+          <div style="flex: 1; background: var(--bg-secondary); padding: 10px; border-radius: var(--radius-sm); text-align: center; border: 1px solid var(--border-light);">
+            <div style="font-size: 12px; color: var(--text-tertiary);">${day.day}</div>
+            <div style="font-size: 20px; margin: 4px 0;">${day.icon || '🌤️'}</div>
+            <div style="font-size: 12px; color: var(--text-secondary);">${day.low}° / ${day.high}°</div>
+          </div>
+        `).join('')}
       </div>
     </div>
+    ` : ''}
   `;
-}
-
-function getWeatherEmoji(condition) {
-  const map = {
-    'Clear': '☀️', 'Sunny': '☀️', 'Clouds': '☁️', 'Cloudy': '☁️',
-    'Rain': '🌧️', 'Drizzle': '🌦️', 'Thunderstorm': '⛈️',
-    'Snow': '❄️', 'Mist': '🌫️', 'Fog': '🌫️', 'Haze': '🌫️'
-  };
-  return map[condition] || '🌤️';
 }
 
 // Load knowledge
@@ -289,23 +354,32 @@ async function loadInsights() {
 
 function renderInsights(insights) {
   const container = document.getElementById('insightsList');
-  if (!insights || insights.length === 0) {
+  
+  // Insights is an object with keys, convert to array
+  const insightsArray = Object.entries(insights)
+    .filter(([key]) => key !== 'last_generated' && key !== 'last_updated')
+    .map(([key, value]) => ({
+      id: key,
+      title: key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+      content: value
+    }));
+  
+  if (insightsArray.length === 0) {
     container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No insights available</p>';
     return;
   }
   
-  // Start with all insights collapsed
   allInsightsCollapsed = true;
   document.getElementById('toggleAllText').textContent = 'Expand All';
   
-  container.innerHTML = insights.map((insight, idx) => `
+  container.innerHTML = insightsArray.map((insight, idx) => `
     <div class="insight-item" style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
       <div class="insight-header" onclick="toggleInsight(${idx})">
-        <div class="insight-title">${escapeHtml(insight.title || `Insight ${idx + 1}`)}</div>
+        <div class="insight-title">${escapeHtml(insight.title)}</div>
         <div class="insight-toggle" id="insightToggle${idx}">▼</div>
       </div>
       <div class="insight-content" id="insightContent${idx}">
-        <div class="insight-text">${formatNoteContent(insight.content || insight.text || 'No content')}</div>
+        <div class="insight-text">${formatNoteContent(insight.content)}</div>
       </div>
     </div>
   `).join('');
@@ -317,7 +391,6 @@ function toggleInsight(idx) {
   content.classList.toggle('expanded');
   toggle.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
   
-  // Update allInsightsCollapsed state
   const allContents = document.querySelectorAll('.insight-content');
   const allToggles = document.querySelectorAll('.insight-toggle');
   const anyExpanded = Array.from(allContents).some(c => c.classList.contains('expanded'));
@@ -365,12 +438,6 @@ function closeNoteModal(event) {
 }
 
 // Utilities
-function formatTime(dateStr) {
-  if (!dateStr) return '--:--';
-  const date = new Date(dateStr);
-  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-}
-
 function formatNoteContent(content) {
   if (!content) return '';
   return escapeHtml(content)
