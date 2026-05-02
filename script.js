@@ -35,45 +35,20 @@ async function sha256(message) {
     return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Decrypt data using CryptoJS (compatible with Node.js encryption)
+// Decrypt data using CryptoJS (OpenSSL-compatible format)
 function decryptData(encryptedBase64, password) {
     try {
-        // Decode base64 to WordArray
-        const combinedWA = CryptoJS.enc.Base64.parse(encryptedBase64);
+        // CryptoJS.AES.decrypt automatically handles OpenSSL format
+        // when given a password string
+        const decrypted = CryptoJS.AES.decrypt(encryptedBase64, password);
+        const result = decrypted.toString(CryptoJS.enc.Utf8);
         
-        // Convert to byte array to extract components
-        const bytes = [];
-        for (let i = 0; i < combinedWA.sigBytes; i++) {
-            const wordIndex = Math.floor(i / 4);
-            const byteOffset = i % 4;
-            bytes.push((combinedWA.words[wordIndex] >>> (24 - byteOffset * 8)) & 0xFF);
+        if (!result) {
+            console.error("Decryption produced empty result");
+            return null;
         }
         
-        // Extract salt (8 bytes), iv (16 bytes), and ciphertext
-        const saltBytes = bytes.slice(0, 8);
-        const ivBytes = bytes.slice(8, 24);
-        const ciphertextBytes = bytes.slice(24);
-        
-        // Convert back to WordArrays
-        const saltWA = CryptoJS.lib.WordArray.create(saltBytes);
-        const ivWA = CryptoJS.lib.WordArray.create(ivBytes);
-        const ciphertextWA = CryptoJS.lib.WordArray.create(ciphertextBytes);
-        
-        // Derive key using PBKDF2 (matching Node.js crypto.pbkdf2Sync)
-        const key = CryptoJS.PBKDF2(password, saltWA, {
-            keySize: 256 / 32, // 8 words
-            iterations: 100000,
-            hasher: CryptoJS.algo.SHA256
-        });
-        
-        // Decrypt using AES-CBC
-        const decrypted = CryptoJS.AES.decrypt(
-            { ciphertext: ciphertextWA },
-            key,
-            { iv: ivWA }
-        );
-        
-        return decrypted.toString(CryptoJS.enc.Utf8);
+        return result;
     } catch (error) {
         console.error("Decryption error:", error);
         return null;
