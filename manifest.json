@@ -1,6 +1,6 @@
 {
-  "name": "Hermes Dashboard",
-  "short_name": "Hermes",
+  "name": "Personal Insights Hub",
+  "short_name": "InsightsHub",
   "description": "Personal dashboard for Tinus Strauss - Calendar, Weather, Notes, and AI Insights",
   "start_url": "./index.html",
   "display": "standalone",
