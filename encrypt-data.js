@@ -1,8 +1,8 @@
 #!/usr/bin/env node
 /**
- * Encrypt data in OpenSSL-compatible format that CryptoJS can decrypt
- * Format: "Salted__" + 8-byte salt + ciphertext
- * This is the format CryptoJS.AES.decrypt() expects when given a password
+ * Encrypt data for CryptoJS compatibility
+ * Outputs a JSON object with salt, iv, and ciphertext (all base64)
+ * This is easier to debug and ensures compatibility
  */
 
 const crypto = require('crypto');
@@ -11,42 +11,26 @@ const fs = require('fs');
 const DEFAULT_PASSWORD = 'tinus2026';
 
 function encrypt(text, password) {
-    // Generate 8-byte salt
-    const salt = crypto.randomBytes(8);
+    // Generate salt and IV
+    const salt = crypto.randomBytes(16);
+    const iv = crypto.randomBytes(16);
     
-    // Derive key and IV using EVP_BytesToKey (OpenSSL's key derivation)
-    // This is what CryptoJS uses internally
-    const keyIv = evpBytesToKey(password, salt, 32 + 16); // 32 for key, 16 for IV
-    const key = keyIv.slice(0, 32);
-    const iv = keyIv.slice(32, 48);
+    // Derive key using PBKDF2 (same as we'll use in browser with Web Crypto API)
+    const key = crypto.pbkdf2Sync(password, salt, 100000, 32, 'sha256');
     
     // Encrypt
     const cipher = crypto.createCipheriv('aes-256-cbc', key, iv);
-    let encrypted = cipher.update(text, 'utf8', 'hex');
-    encrypted += cipher.final('hex');
+    let encrypted = cipher.update(text, 'utf8', 'base64');
+    encrypted += cipher.final('base64');
     
-    // Format: "Salted__" + salt + ciphertext
-    const prefix = Buffer.from('Salted__', 'ascii');
-    const ciphertext = Buffer.from(encrypted, 'hex');
-    const combined = Buffer.concat([prefix, salt, ciphertext]);
+    // Return JSON with all components (except password!)
+    const result = {
+        salt: salt.toString('base64'),
+        iv: iv.toString('base64'),
+        ciphertext: encrypted
+    };
     
-    return combined.toString('base64');
-}
-
-// EVP_BytesToKey - OpenSSL's key derivation function (used by CryptoJS)
-function evpBytesToKey(password, salt, keyLen) {
-    const passwordBuf = Buffer.from(password, 'utf8');
-    let keyIv = Buffer.alloc(0);
-    let prev = Buffer.alloc(0);
-    
-    while (keyIv.length < keyLen) {
-        const hash = crypto.createHash('md5');
-        hash.update(Buffer.concat([prev, passwordBuf, salt]));
-        prev = hash.digest();
-        keyIv = Buffer.concat([keyIv, prev]);
-    }
-    
-    return keyIv.slice(0, keyLen);
+    return JSON.stringify(result);
 }
 
 // CLI usage

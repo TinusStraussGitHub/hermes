@@ -35,24 +35,69 @@ async function sha256(message) {
     return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
-// Decrypt data using CryptoJS (OpenSSL-compatible format)
-function decryptData(encryptedBase64, password) {
+// Decrypt data using Web Crypto API
+async function decryptData(encryptedJson, password) {
     try {
-        // CryptoJS.AES.decrypt automatically handles OpenSSL format
-        // when given a password string
-        const decrypted = CryptoJS.AES.decrypt(encryptedBase64, password);
-        const result = decrypted.toString(CryptoJS.enc.Utf8);
+        // Parse the JSON structure from Node.js
+        const encrypted = JSON.parse(encryptedJson);
         
-        if (!result) {
-            console.error("Decryption produced empty result");
-            return null;
-        }
+        // Convert base64 to ArrayBuffer
+        const salt = base64ToArrayBuffer(encrypted.salt);
+        const iv = base64ToArrayBuffer(encrypted.iv);
+        const ciphertext = base64ToArrayBuffer(encrypted.ciphertext);
         
-        return result;
+        // Derive key using PBKDF2 (same as Node.js)
+        const key = await deriveKey(password, salt);
+        
+        // Decrypt using AES-CBC
+        const decrypted = await crypto.subtle.decrypt(
+            { name: "AES-CBC", iv: iv },
+            key,
+            ciphertext
+        );
+        
+        // Convert decrypted ArrayBuffer to string
+        return new TextDecoder().decode(decrypted);
     } catch (error) {
         console.error("Decryption error:", error);
         return null;
     }
+}
+
+// Derive key using PBKDF2 (must match Node.js)
+async function deriveKey(password, salt) {
+    // Import password as key material
+    const passwordKey = await crypto.subtle.importKey(
+        "raw",
+        new TextEncoder().encode(password),
+        "PBKDF2",
+        false,
+        ["deriveKey"]
+    );
+    
+    // Derive the actual key
+    return await crypto.subtle.deriveKey(
+        {
+            name: "PBKDF2",
+            salt: salt,
+            iterations: 100000,
+            hash: "SHA-256"
+        },
+        passwordKey,
+        { name: "AES-CBC", length: 256 },
+        false,
+        ["decrypt"]
+    );
+}
+
+// Helper: Base64 to ArrayBuffer
+function base64ToArrayBuffer(base64) {
+    const binaryString = atob(base64);
+    const bytes = new Uint8Array(binaryString.length);
+    for (let i = 0; i < binaryString.length; i++) {
+        bytes[i] = binaryString.charCodeAt(i);
+    }
+    return bytes.buffer;
 }
 
 // Load All Data
@@ -67,10 +112,10 @@ async function loadAllData() {
         ]);
         
         // Decrypt and parse
-        const scheduleText = decryptData(scheduleEnc, currentPassword);
-        const weatherText = decryptData(weatherEnc, currentPassword);
-        const knowledgeText = decryptData(knowledgeEnc, currentPassword);
-        const insightsText = decryptData(insightsEnc, currentPassword);
+        const scheduleText = await decryptData(scheduleEnc, currentPassword);
+        const weatherText = await decryptData(weatherEnc, currentPassword);
+        const knowledgeText = await decryptData(knowledgeEnc, currentPassword);
+        const insightsText = await decryptData(insightsEnc, currentPassword);
         
         if (!scheduleText || !weatherText || !knowledgeText || !insightsText) {
             throw new Error("Decryption failed - wrong password or corrupted data");
