@@ -16,7 +16,15 @@ document.addEventListener('DOMContentLoaded', () => {
     showApp();
   }
   
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  // First check if user has a saved theme preference in localStorage
+  const savedTheme = localStorage.getItem('hermes_theme');
+  if (savedTheme) {
+    // Use saved preference
+    isDarkMode = savedTheme === 'dark';
+    document.documentElement.classList.toggle('dark', isDarkMode);
+    updateThemeIcon();
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    // Fall back to system preference if no saved preference
     isDarkMode = true;
     document.documentElement.classList.add('dark');
     updateThemeIcon();
