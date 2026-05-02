@@ -25,6 +25,23 @@
         </div>
     </div>
 
+    <!-- Note View Modal -->
+    <div id="noteModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-y-auto" data-aos="zoom-in">
+            <div class="flex justify-between items-center mb-6">
+                <h2 id="noteTitle" class="text-2xl font-bold"></h2>
+                <button onclick="closeNoteModal()" class="text-gray-400 hover:text-white text-2xl">&times;</button>
+            </div>
+            <div id="noteContent" class="text-gray-300 prose prose-invert">
+                <!-- Full note content loaded here -->
+            </div>
+            <div class="mt-6 pt-4 border-t border-gray-700 flex justify-between items-center text-sm text-gray-400">
+                <div id="noteTags" class="flex gap-2"></div>
+                <span id="noteModified"></span>
+            </div>
+        </div>
+    </div>
+
     <!-- Main Dashboard (hidden until login) -->
     <div id="dashboard" class="hidden">
         <!-- Header -->
