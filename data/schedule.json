@@ -1,0 +1,38 @@
+[
+  {
+    "day": "Monday",
+    "events": [
+      {"time": "09:00", "title": "Standup Meeting", "duration": "30m"},
+      {"time": "10:00", "title": "BlastMap Development", "duration": "2h"},
+      {"time": "14:00", "title": "Client Call: BME Metallurgy Team", "duration": "1h"}
+    ]
+  },
+  {
+    "day": "Tuesday",
+    "events": [
+      {"time": "09:30", "title": "Code Review: XPLOSMART", "duration": "1h"},
+      {"time": "11:00", "title": "Testing: BlastMap v2.1", "duration": "3h"}
+    ]
+  },
+  {
+    "day": "Wednesday",
+    "events": [
+      {"time": "10:00", "title": "Blasting Guide App Update", "duration": "2h"},
+      {"time": "13:00", "title": "Lunch & Learn: Sustainable Blasting", "duration": "1h"}
+    ]
+  },
+  {
+    "day": "Thursday",
+    "events": [
+      {"time": "09:00", "title": "Sprint Planning", "duration": "1.5h"},
+      {"time": "11:00", "title": "Documentation: XPLOLOG Underground", "duration": "2h"}
+    ]
+  },
+  {
+    "day": "Friday",
+    "events": [
+      {"time": "10:00", "title": "Weekly Report Prep", "duration": "1h"},
+      {"time": "14:00", "title": "Team Demo: BlastMap New Features", "duration": "1h"}
+    ]
+  }
+]

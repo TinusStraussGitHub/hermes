@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tinus Strauss | Hermes Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen">
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
+        <div class="bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md" data-aos="zoom-in">
+            <h2 class="text-2xl font-bold mb-6 text-center">🔒 Restricted Access</h2>
+            <p class="text-gray-400 mb-6 text-center">Enter password to access the dashboard</p>
+            <input type="password" id="passwordInput" placeholder="Password" class="w-full p-3 bg-gray-700 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-semibold transition">Unlock Dashboard</button>
+            <p id="loginError" class="text-red-500 mt-3 text-center hidden">Incorrect password. Try again.</p>
+        </div>
+    </div>
+
+    <!-- Main Dashboard (hidden until login) -->
+    <div id="dashboard" class="hidden">
+        <!-- Header -->
+        <header class="bg-gray-800 shadow-lg p-4 sticky top-0 z-40">
+            <div class="container mx-auto flex justify-between items-center">
+                <h1 class="text-2xl font-bold" data-aos="fade-right">Hermes Dashboard</h1>
+                <div class="flex items-center gap-4">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-700 transition">
+                        <span id="themeIcon">🌙</span>
+                    </button>
+                    <p class="text-gray-400 text-sm" id="lastUpdated"></p>
+                </div>
+            </div>
+        </header>
+
+        <main class="container mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <!-- AI Insights Card -->
+            <div class="bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3" data-aos="fade-up">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">🤖 AI Insights</h2>
+                <div id="insightsContent" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Insights loaded here -->
+                </div>
+            </div>
+
+            <!-- Weekly Schedule -->
+            <div class="bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">📅 Weekly Schedule</h2>
+                <div id="scheduleContent" class="space-y-4">
+                    <!-- Schedule loaded here -->
+                </div>
+            </div>
+
+            <!-- Weather Widget -->
+            <div class="bg-gray-800 rounded-xl p-6 shadow-lg" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2">🌦️ Weather</h2>
+                <div id="weatherContent">
+                    <!-- Weather loaded here -->
+                </div>
+            </div>
+
+            <!-- Knowledge Base -->
+            <div class="bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3" data-aos="fade-up" data-aos-delay="300">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold flex items-center gap-2">📚 Knowledge Base (Obsidian)</h2>
+                    <input type="text" id="kbSearch" placeholder="Search notes..." class="p-2 bg-gray-700 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                </div>
+                <div id="kbContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Knowledge base loaded here -->
+                </div>
+            </div>
+        </main>
+
+        <!-- Quick Links -->
+        <div class="container mx-auto p-4 md:p-8" data-aos="fade-up">
+            <h2 class="text-xl font-bold mb-4">🔗 Quick Links</h2>
+            <div class="flex flex-wrap gap-3">
+                <a href="https://www.bme.co.za" target="_blank" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition">BME Website</a>
+                <a href="https://www.blastmap.co.za" target="_blank" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition">BlastMap</a>
+                <a href="https://github.com/TinusStraussGitHub" target="_blank" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition">My GitHub</a>
+                <a href="mailto:Tinus.strauss2@bme.co.za" class="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-lg transition">Work Email</a>
+            </div>
+        </div>
+
+        <footer class="bg-gray-800 p-4 mt-8 text-center text-gray-400 text-sm">
+            Hermes Dashboard • Last updated: <span id="footerUpdated"></span>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

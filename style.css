@@ -1,0 +1,62 @@
+/* Custom Styles */
+body {
+    font-family: 'Inter', sans-serif;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* AOS Animation Overrides */
+[data-aos] {
+    transition-duration: 0.6s;
+}
+
+/* Schedule Event Cards */
+.event-card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Weather Icon Animation */
+.weather-icon {
+    animation: float 3s ease-in-out infinite;
+}
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Knowledge Base Card */
+.kb-card {
+    transition: transform 0.2s, border-color 0.2s;
+    border: 1px solid transparent;
+}
+.kb-card:hover {
+    transform: translateY(-3px);
+    border-color: #3b82f6;
+}
+
+/* Login Modal Animation */
+#loginModal {
+    animation: fadeIn 0.3s ease-in;
+}
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: #1f2937;
+}
+::-webkit-scrollbar-thumb {
+    background: #4b5563;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #6b7280;
+}
