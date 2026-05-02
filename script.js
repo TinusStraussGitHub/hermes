@@ -1,5 +1,5 @@
 // Configuration
-const PASSWORD_HASH = '9a9c3ebf96a3b3d7f7d3c8b5e8a2f1b4c7d9e0a1b2c3d4e5f6a7b8c9d0e1f2a3'; // SHA-256 of 'tinus2026'
+const PASSWORD_HASH='21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee'; // SHA-256 of 'tinus2026'
 const DATA_BASE = 'data/';
 
 // State
