@@ -3,29 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#111827">
+    <meta name="theme-color" content="#111827" id="theme-color-meta">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Hermes">
     <title>Tinus Strauss | Hermes Dashboard</title>
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
-    <script>
-        tailwind.config = {
-            darkMode: 'class'
-        }
-    </script>
+    <link rel="apple-touch-icon" href="icon-192.svg">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
     <link rel="stylesheet" href="style.css">
+    <style>
+        /* Dark mode styles - applied when .dark class is on html element */
+        .dark body { background-color: #111827; color: #f9fafb; }
+        .dark .bg-card { background-color: #1f2937; }
+        .dark .bg-card-header { background-color: #374151; }
+        .dark .text-primary { color: #f9fafb; }
+        .dark .text-secondary { color: #d1d5db; }
+        .dark .text-muted { color: #9ca3af; }
+        .dark .border-custom { border-color: #374151; }
+        .dark .bg-input { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
+        .dark .bg-hover:hover { background-color: #374151; }
+        
+        /* Light mode styles */
+        body { background-color: #ffffff; color: #111827; transition: background-color 0.3s, color 0.3s; }
+        .bg-card { background-color: #f9fafb; }
+        .bg-card-header { background-color: #f3f4f6; }
+        .text-primary { color: #111827; }
+        .text-secondary { color: #4b5563; }
+        .text-muted { color: #9ca3af; }
+        .border-custom { border-color: #e5e7eb; }
+        .bg-input { background-color: #ffffff; color: #111827; border-color: #d1d5db; }
+        .bg-hover:hover { background-color: #f3f4f6; }
+    </style>
 </head>
-<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100 min-h-screen transition-colors duration-300">
+<body>
     <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-        <div class="bg-gray-200 dark:bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-md" data-aos="zoom-in">
-            <h2 class="text-2xl font-bold mb-6 text-center text-gray-900 dark:text-white">🔒 Restricted Access</h2>
-            <p class="text-gray-600 dark:text-gray-400 mb-6 text-center">Enter password to access the dashboard</p>
-            <input type="password" id="passwordInput" placeholder="Password" class="w-full p-3 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+        <div class="bg-card p-8 rounded-xl shadow-2xl w-full max-w-md" data-aos="zoom-in">
+            <h2 class="text-2xl font-bold mb-6 text-center text-primary">🔒 Restricted Access</h2>
+            <p class="text-secondary mb-6 text-center">Enter password to access the dashboard</p>
+            <input type="password" id="passwordInput" placeholder="Password" class="w-full p-3 bg-input border border-custom rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
             <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-semibold transition text-white">Unlock Dashboard</button>
             <p id="loginError" class="text-red-500 mt-3 text-center hidden">Incorrect password. Try again.</p>
         </div>
@@ -33,15 +51,15 @@
 
     <!-- Note View Modal -->
     <div id="noteModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <div class="bg-gray-200 dark:bg-gray-800 p-8 rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-y-auto" data-aos="zoom-in">
+        <div class="bg-card p-8 rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-y-auto" data-aos="zoom-in">
             <div class="flex justify-between items-center mb-6">
-                <h2 id="noteTitle" class="text-2xl font-bold text-gray-900 dark:text-white"></h2>
-                <button onclick="closeNoteModal()" class="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white text-2xl">&times;</button>
+                <h2 id="noteTitle" class="text-2xl font-bold text-primary"></h2>
+                <button onclick="closeNoteModal()" class="text-muted hover:text-primary text-2xl">&times;</button>
             </div>
-            <div id="noteContent" class="text-gray-700 dark:text-gray-300 prose prose-gray dark:prose-invert">
+            <div id="noteContent" class="text-secondary prose">
                 <!-- Full note content loaded here -->
             </div>
-            <div class="mt-6 pt-4 border-t border-gray-300 dark:border-gray-700 flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+            <div class="mt-6 pt-4 border-t border-custom flex justify-between items-center text-sm text-muted">
                 <div id="noteTags" class="flex gap-2"></div>
                 <span id="noteModified"></span>
             </div>
@@ -51,27 +69,27 @@
     <!-- Main Dashboard (hidden until login) -->
     <div id="dashboard" class="hidden">
         <!-- Header -->
-        <header class="bg-gray-200 dark:bg-gray-800 shadow-lg p-4 sticky top-0 z-40 transition-colors duration-300">
+        <header class="bg-card-header shadow-lg p-4 sticky top-0 z-40 transition-colors duration-300">
             <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-gray-900 dark:text-white" data-aos="fade-right">Hermes Dashboard</h1>
+                <h1 class="text-2xl font-bold text-primary" data-aos="fade-right">Hermes Dashboard</h1>
                 <div class="flex items-center gap-4">
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-full hover:bg-gray-300 dark:hover:bg-gray-700 transition" title="Toggle dark mode">
+                    <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-hover transition" title="Toggle dark mode">
                         <span id="themeIcon">🌙</span>
                     </button>
-                    <p class="text-gray-600 dark:text-gray-400 text-sm" id="lastUpdated"></p>
+                    <p class="text-secondary text-sm" id="lastUpdated"></p>
                 </div>
             </div>
         </header>
 
         <main class="container mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- AI Insights Card (Collapsible) -->
-            <div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up">
+            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up">
                 <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleInsights()">
-                    <h2 class="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-primary">
                         🤖 AI Insights
                         <span id="insightsToggle" class="text-sm transition-transform duration-300">▼</span>
                     </h2>
-                    <button class="text-sm text-blue-600 dark:text-blue-400 hover:underline" onclick="event.stopPropagation(); toggleInsights();">
+                    <button class="text-sm text-blue-600 hover:underline" onclick="event.stopPropagation(); toggleInsights();">
                         <span id="insightsToggleText">Collapse</span>
                     </button>
                 </div>
@@ -81,26 +99,26 @@
             </div>
 
             <!-- Weekly Schedule -->
-            <div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 transition-colors duration-300" data-aos="fade-up" data-aos-delay="100">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">📅 Weekly Schedule</h2>
+            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 transition-colors duration-300" data-aos="fade-up" data-aos-delay="100">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-primary">📅 Weekly Schedule</h2>
                 <div id="scheduleContent" class="space-y-4">
                     <!-- Schedule loaded here -->
                 </div>
             </div>
 
             <!-- Weather Widget -->
-            <div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-6 shadow-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="200">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-gray-900 dark:text-white">🌦️ Weather</h2>
+            <div class="bg-card rounded-xl p-6 shadow-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="200">
+                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-primary">🌦️ Weather</h2>
                 <div id="weatherContent">
                     <!-- Weather loaded here -->
                 </div>
             </div>
 
             <!-- Knowledge Base -->
-            <div class="bg-gray-200 dark:bg-gray-800 rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up" data-aos-delay="300">
+            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up" data-aos-delay="300">
                 <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold flex items-center gap-2 text-gray-900 dark:text-white">📚 Knowledge Base (Obsidian)</h2>
-                    <input type="text" id="kbSearch" placeholder="Search notes..." class="p-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500 text-gray-900 dark:text-white">
+                    <h2 class="text-xl font-bold flex items-center gap-2 text-primary">📚 Knowledge Base (Obsidian)</h2>
+                    <input type="text" id="kbSearch" placeholder="Search notes..." class="p-2 bg-input border border-custom rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
                 </div>
                 <div id="kbContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <!-- Knowledge base loaded here -->
@@ -110,15 +128,15 @@
 
         <!-- Quick Links -->
         <div class="container mx-auto p-4 md:p-8" data-aos="fade-up">
-            <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">🔗 Quick Links</h2>
+            <h2 class="text-xl font-bold mb-4 text-primary">🔗 Quick Links</h2>
             <div class="flex flex-wrap gap-3">
-                <a href="https://www.bme.co.za" target="_blank" class="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 px-4 py-2 rounded-lg transition text-gray-900 dark:text-white">BME Website</a>
-                <a href="https://www.blastmap.co.za" target="_blank" class="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 px-4 py-2 rounded-lg transition text-gray-900 dark:text-white">BlastMap</a>
-                <a href="https://github.com/TinusStraussGitHub" target="_blank" class="bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 px-4 py-2 rounded-lg transition text-gray-900 dark:text-white">My GitHub</a>
+                <a href="https://www.bme.co.za" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">BME Website</a>
+                <a href="https://www.blastmap.co.za" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">BlastMap</a>
+                <a href="https://github.com/TinusStraussGitHub" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">My GitHub</a>
             </div>
         </div>
 
-        <footer class="bg-gray-200 dark:bg-gray-800 p-4 mt-8 text-center text-gray-600 dark:text-gray-400 text-sm transition-colors duration-300">
+        <footer class="bg-card-header p-4 mt-8 text-center text-sm text-muted transition-colors duration-300">
             Hermes Dashboard • Last updated: <span id="footerUpdated"></span>
         </footer>
     </div>

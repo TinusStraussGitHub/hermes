@@ -1,7 +1,39 @@
 /* Custom Styles */
+:root {
+    --bg-primary: #ffffff;
+    --bg-secondary: #f3f4f6;
+    --bg-card: #ffffff;
+    --bg-card-hover: #f9fafb;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --text-muted: #9ca3af;
+    --border-color: #e5e7eb;
+    --accent-blue: #2563eb;
+    --accent-green: #16a34a;
+    --accent-yellow: #ca8a04;
+    --accent-purple: #9333ea;
+}
+
+.dark {
+    --bg-primary: #111827;
+    --bg-secondary: #1f2937;
+    --bg-card: #1f2937;
+    --bg-card-hover: #374151;
+    --text-primary: #f9fafb;
+    --text-secondary: #d1d5db;
+    --text-muted: #9ca3af;
+    --border-color: #374151;
+    --accent-blue: #3b82f6;
+    --accent-green: #22c55e;
+    --accent-yellow: #eab308;
+    --accent-purple: #a855f7;
+}
+
 body {
     font-family: 'Inter', sans-serif;
     transition: background-color 0.3s, color 0.3s;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
 }
 
 /* AOS Animation Overrides */
@@ -12,16 +44,21 @@ body {
 /* Schedule Event Cards */
 .event-card {
     transition: transform 0.2s, box-shadow 0.2s;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
+
 .event-card:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    background-color: var(--bg-card-hover);
 }
 
 /* Weather Icon Animation */
 .weather-icon {
     animation: float 3s ease-in-out infinite;
 }
+
 @keyframes float {
     0%, 100% { transform: translateY(0); }
     50% { transform: translateY(-10px); }
@@ -31,16 +68,21 @@ body {
 .kb-card {
     transition: transform 0.2s, border-color 0.2s;
     border: 1px solid transparent;
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }
+
 .kb-card:hover {
     transform: translateY(-3px);
-    border-color: #3b82f6;
+    border-color: var(--accent-blue);
+    background-color: var(--bg-card-hover);
 }
 
 /* Login Modal Animation */
 #loginModal {
     animation: fadeIn 0.3s ease-in;
 }
+
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
@@ -50,13 +92,36 @@ body {
 ::-webkit-scrollbar {
     width: 8px;
 }
+
 ::-webkit-scrollbar-track {
-    background: #1f2937;
+    background: var(--bg-secondary);
 }
+
 ::-webkit-scrollbar-thumb {
-    background: #4b5563;
+    background: var(--text-muted);
     border-radius: 4px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
-    background: #6b7280;
+    background: var(--text-secondary);
+}
+
+/* Card Styles */
+.card {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
+}
+
+.card-title {
+    color: var(--text-primary);
+}
+
+.card-text {
+    color: var(--text-secondary);
+}
+
+/* Header */
+.header {
+    background-color: var(--bg-card);
+    color: var(--text-primary);
 }

@@ -336,6 +336,12 @@ function toggleDarkMode() {
     document.documentElement.classList.toggle("dark");
     document.getElementById("themeIcon").textContent = isDarkMode ? "🌙" : "☀️";
     localStorage.setItem("darkMode", isDarkMode);
+    
+    // Update theme-color meta tag
+    const themeColorMeta = document.getElementById("theme-color-meta");
+    if (themeColorMeta) {
+        themeColorMeta.content = isDarkMode ? "#111827" : "#ffffff";
+    }
 }
 
 // Initialize Insights as collapsed by default
