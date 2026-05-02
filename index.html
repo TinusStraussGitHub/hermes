@@ -1,147 +1,198 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en" class="no-js">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#111827" id="theme-color-meta">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Hermes">
-    <title>Tinus Strauss | Hermes Dashboard</title>
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.svg">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
-    <link rel="stylesheet" href="style.css">
-    <style>
-        /* Dark mode styles - applied when .dark class is on html element */
-        .dark body { background-color: #111827; color: #f9fafb; }
-        .dark .bg-card { background-color: #1f2937; }
-        .dark .bg-card-header { background-color: #374151; }
-        .dark .text-primary { color: #f9fafb; }
-        .dark .text-secondary { color: #d1d5db; }
-        .dark .text-muted { color: #9ca3af; }
-        .dark .border-custom { border-color: #374151; }
-        .dark .bg-input { background-color: #374151; color: #f9fafb; border-color: #4b5563; }
-        .dark .bg-hover:hover { background-color: #374151; }
-        
-        /* Light mode styles */
-        body { background-color: #ffffff; color: #111827; transition: background-color 0.3s, color 0.3s; }
-        .bg-card { background-color: #f9fafb; }
-        .bg-card-header { background-color: #f3f4f6; }
-        .text-primary { color: #111827; }
-        .text-secondary { color: #4b5563; }
-        .text-muted { color: #9ca3af; }
-        .border-custom { border-color: #e5e7eb; }
-        .bg-input { background-color: #ffffff; color: #111827; border-color: #d1d5db; }
-        .bg-hover:hover { background-color: #f3f4f6; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hermes Dashboard</title>
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.svg">
+  
+  <!-- Styles -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icon-192.svg" type="image/svg+xml">
+  <link rel="shortcut icon" href="icon-192.svg">
+  
+  <!-- Prevent indexing -->
+  <meta name="robots" content="noindex, nofollow">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+    }
+  </script>
+  
+  <style>
+    .js-enabled .no-js { display: none; }
+    .no-js { text-align: center; padding: 40px; color: var(--text-secondary); }
+  </style>
 </head>
-<body>
-    <!-- Login Modal -->
-    <div id="loginModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50">
-        <div class="bg-card p-8 rounded-xl shadow-2xl w-full max-w-md" data-aos="zoom-in">
-            <h2 class="text-2xl font-bold mb-6 text-center text-primary">🔒 Restricted Access</h2>
-            <p class="text-secondary mb-6 text-center">Enter password to access the dashboard</p>
-            <input type="password" id="passwordInput" placeholder="Password" class="w-full p-3 bg-input border border-custom rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-blue-500">
-            <button onclick="checkPassword()" class="w-full bg-blue-600 hover:bg-blue-700 p-3 rounded-lg font-semibold transition text-white">Unlock Dashboard</button>
-            <p id="loginError" class="text-red-500 mt-3 text-center hidden">Incorrect password. Try again.</p>
-        </div>
+<body class="bg-[var(--bg-primary)] text-[var(--text-primary)] min-h-screen">
+  <script>document.documentElement.classList.add('js-enabled');</script>
+  
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal-overlay">
+    <div class="modal-content">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+      <h2>Hermes Dashboard</h2>
+      <p>Enter your password to access the dashboard</p>
+      <input type="password" id="passwordInput" placeholder="Password" 
+             onkeydown="if(event.key==='Enter') checkPassword()">
+      <button onclick="checkPassword()">Unlock Dashboard</button>
+      <p id="loginError" style="color: #ff3b30; margin-top: 12px; font-size: 14px; display: none;">
+        Incorrect password. Please try again.
+      </p>
     </div>
-
-    <!-- Note View Modal -->
-    <div id="noteModal" class="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50 hidden">
-        <div class="bg-card p-8 rounded-xl shadow-2xl w-full max-w-3xl max-h-[80vh] overflow-y-auto" data-aos="zoom-in">
-            <div class="flex justify-between items-center mb-6">
-                <h2 id="noteTitle" class="text-2xl font-bold text-primary"></h2>
-                <button onclick="closeNoteModal()" class="text-muted hover:text-primary text-2xl">&times;</button>
-            </div>
-            <div id="noteContent" class="text-secondary prose">
-                <!-- Full note content loaded here -->
-            </div>
-            <div class="mt-6 pt-4 border-t border-custom flex justify-between items-center text-sm text-muted">
-                <div id="noteTags" class="flex gap-2"></div>
-                <span id="noteModified"></span>
-            </div>
+  </div>
+  
+  <!-- Main App (hidden until authenticated) -->
+  <div id="app" style="display: none;">
+    <!-- Glass Header -->
+    <header class="glass-header">
+      <div style="max-width: 1400px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="icon-192.svg" alt="Hermes" style="width: 36px; height: 36px;">
+          <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Hermes Dashboard</h1>
         </div>
-    </div>
-
-    <!-- Main Dashboard (hidden until login) -->
-    <div id="dashboard" class="hidden">
-        <!-- Header -->
-        <header class="bg-card-header shadow-lg p-4 sticky top-0 z-40 transition-colors duration-300">
-            <div class="container mx-auto flex justify-between items-center">
-                <h1 class="text-2xl font-bold text-primary" data-aos="fade-right">Hermes Dashboard</h1>
-                <div class="flex items-center gap-4">
-                    <button onclick="toggleDarkMode()" class="p-2 rounded-full bg-hover transition" title="Toggle dark mode">
-                        <span id="themeIcon">🌙</span>
-                    </button>
-                    <p class="text-secondary text-sm" id="lastUpdated"></p>
-                </div>
-            </div>
-        </header>
-
-        <main class="container mx-auto p-4 md:p-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- AI Insights Card (Collapsible) -->
-            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up">
-                <div class="flex justify-between items-center mb-4 cursor-pointer" onclick="toggleInsights()">
-                    <h2 class="text-xl font-bold flex items-center gap-2 text-primary">
-                        🤖 AI Insights
-                        <span id="insightsToggle" class="text-sm transition-transform duration-300">▼</span>
-                    </h2>
-                    <button class="text-sm text-blue-600 hover:underline" onclick="event.stopPropagation(); toggleInsights();">
-                        <span id="insightsToggleText">Collapse</span>
-                    </button>
-                </div>
-                <div id="insightsContent" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Insights loaded here -->
-                </div>
-            </div>
-
-            <!-- Weekly Schedule -->
-            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 transition-colors duration-300" data-aos="fade-up" data-aos-delay="100">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-primary">📅 Weekly Schedule</h2>
-                <div id="scheduleContent" class="space-y-4">
-                    <!-- Schedule loaded here -->
-                </div>
-            </div>
-
-            <!-- Weather Widget -->
-            <div class="bg-card rounded-xl p-6 shadow-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="200">
-                <h2 class="text-xl font-bold mb-4 flex items-center gap-2 text-primary">🌦️ Weather</h2>
-                <div id="weatherContent">
-                    <!-- Weather loaded here -->
-                </div>
-            </div>
-
-            <!-- Knowledge Base -->
-            <div class="bg-card rounded-xl p-6 shadow-lg col-span-1 md:col-span-2 lg:col-span-3 transition-colors duration-300" data-aos="fade-up" data-aos-delay="300">
-                <div class="flex justify-between items-center mb-4">
-                    <h2 class="text-xl font-bold flex items-center gap-2 text-primary">📚 Knowledge Base (Obsidian)</h2>
-                    <input type="text" id="kbSearch" placeholder="Search notes..." class="p-2 bg-input border border-custom rounded-lg w-64 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                </div>
-                <div id="kbContent" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Knowledge base loaded here -->
-                </div>
-            </div>
-        </main>
-
-        <!-- Quick Links -->
-        <div class="container mx-auto p-4 md:p-8" data-aos="fade-up">
-            <h2 class="text-xl font-bold mb-4 text-primary">🔗 Quick Links</h2>
-            <div class="flex flex-wrap gap-3">
-                <a href="https://www.bme.co.za" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">BME Website</a>
-                <a href="https://www.blastmap.co.za" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">BlastMap</a>
-                <a href="https://github.com/TinusStraussGitHub" target="_blank" class="bg-card-header hover:bg-hover px-4 py-2 rounded-lg transition text-primary">My GitHub</a>
-            </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button onclick="toggleDarkMode()" class="modern-btn icon-btn" id="themeToggle" title="Toggle dark mode">
+            <span id="themeIcon">🌙</span>
+          </button>
+          <button onclick="logout()" class="modern-btn secondary" style="font-size: 13px; padding: 8px 16px;">
+            Logout
+          </button>
         </div>
-
-        <footer class="bg-card-header p-4 mt-8 text-center text-sm text-muted transition-colors duration-300">
-            Hermes Dashboard • Last updated: <span id="footerUpdated"></span>
-        </footer>
+      </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">Good <span id="timeOfDay">day</span>, Tinus</h1>
+      <p class="hero-subtitle">Here's what's happening with your day</p>
+    </section>
+    
+    <!-- Quick Links -->
+    <div class="quick-links">
+      <a href="https://www.blastmap.co.za" target="_blank" class="quick-link">
+        💎 BlastMap
+      </a>
+      <a href="https://www.bme.co.za" target="_blank" class="quick-link">
+        🏢 BME
+      </a>
+      <a href="https://github.com/TinusStraussGitHub" target="_blank" class="quick-link">
+        💻 GitHub
+      </a>
+      <a href="#" onclick="openObsidianVault(); return false;" class="quick-link">
+        📝 Obsidian
+      </a>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
-    <script src="script.js"></script>
+    
+    <!-- Dashboard Grid -->
+    <div class="dashboard-grid">
+      <!-- Calendar Section -->
+      <div class="modern-card" style="animation-delay: 0.1s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">📅</span>
+            Today's Schedule
+          </h2>
+          <span style="font-size: 14px; color: var(--text-tertiary);" id="currentDate"></span>
+        </div>
+        <div id="scheduleList">
+          <div class="loading">Loading calendar...</div>
+        </div>
+      </div>
+      
+      <!-- Weather Section -->
+      <div class="modern-card" style="animation-delay: 0.2s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon purple">🌤️</span>
+            Weather
+          </h2>
+          <span style="font-size: 14px; color: var(--text-tertiary);">Delmas, ZA</span>
+        </div>
+        <div id="weatherInfo">
+          <div class="loading">Loading weather...</div>
+        </div>
+      </div>
+      
+      <!-- Knowledge Base Section -->
+      <div class="modern-card" style="animation-delay: 0.3s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon green">📚</span>
+            Knowledge Base
+          </h2>
+          <span style="font-size: 14px; color: var(--text-tertiary);" id="noteCount"></span>
+        </div>
+        <div class="search-wrapper">
+          <span class="search-icon">🔍</span>
+          <input type="text" class="search-input" id="searchInput" placeholder="Search knowledge..." oninput="searchNotes()">
+        </div>
+        <div id="knowledgeList" class="knowledge-grid">
+          <div class="loading">Loading knowledge base...</div>
+        </div>
+      </div>
+      
+      <!-- AI Insights Section -->
+      <div class="modern-card" style="animation-delay: 0.4s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon orange">🤖</span>
+            AI Insights
+          </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleAllInsights()">
+            <span id="toggleAllText">Expand All</span>
+          </button>
+        </div>
+        <div id="insightsList">
+          <div class="loading">Loading insights...</div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <footer class="modern-footer">
+      <p>Hermes Dashboard • Protected by client-side encryption • Data updated daily at 6:00 AM</p>
+    </footer>
+  </div>
+  
+  <!-- Note Modal -->
+  <div id="noteModal" class="modal-overlay" onclick="closeNoteModal(event)">
+    <div class="modal-content" style="position: relative;">
+      <button class="modal-close" onclick="closeNoteModal()">✕</button>
+      <h2 id="noteModalTitle" style="font-size: 24px; font-weight: 600; margin-bottom: 16px; padding-right: 40px;"></h2>
+      <div id="noteModalContent" style="color: var(--text-secondary); line-height: 1.8;"></div>
+      <div id="noteModalTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;"></div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="script.js"></script>
+  <script>
+    // Update time of day greeting
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const greeting = document.getElementById('timeOfDay');
+      if (hour < 12) greeting.textContent = 'morning';
+      else if (hour < 17) greeting.textContent = 'afternoon';
+      else greeting.textContent = 'evening';
+    }
+    updateGreeting();
+    
+    // Update current date
+    function updateDate() {
+      const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-US', options);
+    }
+    updateDate();
+  </script>
 </body>
 </html>

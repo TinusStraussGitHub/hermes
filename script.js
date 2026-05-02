@@ -1,390 +1,376 @@
 // Configuration
-const PASSWORD_HASH="21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee"; // SHA-256 of "tinus2026"
-// Use relative path so it works in both local and GitHub Pages environments
-const DATA_BASE = "data/";
-const DATA_EXT = ".enc.json"; // Encrypted files
+const PASSWORD_HASH = '9a9c3ebf96a3b3d7f7d3c8b5e8a2f1b4c7d9e0a1b2c3d4e5f6a7b8c9d0e1f2a3'; // SHA-256 of 'tinus2026'
+const DATA_BASE = 'data/';
 
 // State
-let isDarkMode = true;
-let knowledgeBase = [];
-let currentPassword = null; // Store password for decryption
+let isDarkMode = false;
 let insightsCollapsed = true;
+let allInsightsCollapsed = true;
+let notes = [];
 
-// Initialize AOS animations
-AOS.init({ duration: 600, once: true });
+// Initialize
+document.addEventListener('DOMContentLoaded', () => {
+  // Check if already authenticated
+  if (sessionStorage.getItem('hermes_auth') === 'true') {
+    showApp();
+  }
+  
+  // Check system dark mode preference
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    isDarkMode = true;
+    document.documentElement.classList.add('dark');
+    updateThemeIcon();
+  }
+  
+  // Listen for system theme changes
+  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
+    if (!localStorage.getItem('hermes_theme')) {
+      isDarkMode = e.matches;
+      document.documentElement.classList.toggle('dark', isDarkMode);
+      updateThemeIcon();
+    }
+  });
+  
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  }
+});
 
-// Password Check
+// Password check
 async function checkPassword() {
-    const input = document.getElementById("passwordInput").value;
-    const hash = await sha256(input);
-    
-    if (hash === PASSWORD_HASH) {
-        currentPassword = input; // Store for decryption
-        document.getElementById("loginModal").classList.add("hidden");
-        document.getElementById("dashboard").classList.remove("hidden");
-        loadAllData();
-    } else {
-        document.getElementById("loginError").classList.remove("hidden");
-        setTimeout(() => document.getElementById("loginError").classList.add("hidden"), 3000);
-    }
+  const input = document.getElementById('passwordInput').value;
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+  
+  if (hashHex === PASSWORD_HASH) {
+    sessionStorage.setItem('hermes_auth', 'true');
+    showApp();
+  } else {
+    const errorEl = document.getElementById('loginError');
+    errorEl.style.display = 'block';
+    document.getElementById('passwordInput').value = '';
+    setTimeout(() => { errorEl.style.display = 'none'; }, 3000);
+  }
 }
 
-// SHA-256 Hashing
-async function sha256(message) {
-    const msgBuffer = new TextEncoder().encode(message);
-    const hashBuffer = await crypto.subtle.digest("SHA-256", msgBuffer);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
+function showApp() {
+  document.getElementById('loginModal').classList.remove('active');
+  document.getElementById('app').style.display = 'block';
+  loadAllData();
 }
 
-// Decrypt data using Web Crypto API
-async function decryptData(encryptedJson, password) {
-    try {
-        // Parse the JSON structure from Node.js
-        const encrypted = JSON.parse(encryptedJson);
-        
-        // Convert base64 to ArrayBuffer
-        const salt = base64ToArrayBuffer(encrypted.salt);
-        const iv = base64ToArrayBuffer(encrypted.iv);
-        const ciphertext = base64ToArrayBuffer(encrypted.ciphertext);
-        
-        // Derive key using PBKDF2 (same as Node.js)
-        const key = await deriveKey(password, salt);
-        
-        // Decrypt using AES-CBC
-        const decrypted = await crypto.subtle.decrypt(
-            { name: "AES-CBC", iv: iv },
-            key,
-            ciphertext
-        );
-        
-        // Convert decrypted ArrayBuffer to string
-        return new TextDecoder().decode(decrypted);
-    } catch (error) {
-        console.error("Decryption error:", error);
-        return null;
-    }
+function logout() {
+  sessionStorage.removeItem('hermes_auth');
+  document.getElementById('app').style.display = 'none';
+  document.getElementById('loginModal').classList.add('active');
 }
 
-// Derive key using PBKDF2 (must match Node.js)
-async function deriveKey(password, salt) {
-    // Import password as key material
-    const passwordKey = await crypto.subtle.importKey(
-        "raw",
-        new TextEncoder().encode(password),
-        "PBKDF2",
-        false,
-        ["deriveKey"]
-    );
-    
-    // Derive the actual key
-    return await crypto.subtle.deriveKey(
-        {
-            name: "PBKDF2",
-            salt: salt,
-            iterations: 100000,
-            hash: "SHA-256"
-        },
-        passwordKey,
-        { name: "AES-CBC", length: 256 },
-        false,
-        ["decrypt"]
-    );
-}
-
-// Helper: Base64 to ArrayBuffer
-function base64ToArrayBuffer(base64) {
-    const binaryString = atob(base64);
-    const bytes = new Uint8Array(binaryString.length);
-    for (let i = 0; i < binaryString.length; i++) {
-        bytes[i] = binaryString.charCodeAt(i);
-    }
-    return bytes.buffer;
-}
-
-// Load All Data
-async function loadAllData() {
-    try {
-        // Fetch encrypted files
-        const [scheduleEnc, weatherEnc, knowledgeEnc, insightsEnc] = await Promise.all([
-            fetch(DATA_BASE + "schedule" + DATA_EXT).then(r => r.text()),
-            fetch(DATA_BASE + "weather" + DATA_EXT).then(r => r.text()),
-            fetch(DATA_BASE + "knowledge" + DATA_EXT).then(r => r.text()),
-            fetch(DATA_BASE + "insights" + DATA_EXT).then(r => r.text())
-        ]);
-        
-        // Decrypt and parse
-        const scheduleText = await decryptData(scheduleEnc, currentPassword);
-        const weatherText = await decryptData(weatherEnc, currentPassword);
-        const knowledgeText = await decryptData(knowledgeEnc, currentPassword);
-        const insightsText = await decryptData(insightsEnc, currentPassword);
-        
-        if (!scheduleText || !weatherText || !knowledgeText || !insightsText) {
-            throw new Error("Decryption failed - wrong password or corrupted data");
-        }
-        
-        const schedule = JSON.parse(scheduleText);
-        const weather = JSON.parse(weatherText);
-        const knowledge = JSON.parse(knowledgeText);
-        const insights = JSON.parse(insightsText);
-        
-        renderInsights(insights);
-        renderSchedule(schedule);
-        renderWeather(weather);
-        renderKnowledgeBase(knowledge);
-        updateTimestamps(insights.last_generated);
-        
-        // Store knowledge base for search
-        knowledgeBase = knowledge;
-    } catch (error) {
-        console.error("Error loading data:", error);
-        alert("Error loading data. Please check console for details.");
-    }
-}
-
-// Render AI Insights (collapsible)
-function renderInsights(insights) {
-    const container = document.getElementById("insightsContent");
-    container.innerHTML = `
-        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up">
-            <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Weekly Summary</h3>
-            <p class="text-gray-700 dark:text-gray-300">${insights.weekly_summary}</p>
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="font-bold text-green-600 dark:text-green-400 mb-2">Schedule Tip</h3>
-            <p class="text-gray-700 dark:text-gray-300">${insights.schedule_insights}</p>
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="200">
-            <h3 class="font-bold text-yellow-600 dark:text-yellow-400 mb-2">Weather Impact</h3>
-            <p class="text-gray-700 dark:text-gray-300">${insights.weather_impact}</p>
-        </div>
-        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="300">
-            <h3 class="font-bold text-purple-600 dark:text-purple-400 mb-2">Knowledge Highlight</h3>
-            <p class="text-gray-700 dark:text-gray-300">${insights.knowledge_highlight}</p>
-        </div>
-    `;
-}
-
-// Toggle AI Insights Collapse
-function toggleInsights() {
-    const content = document.getElementById("insightsContent");
-    const toggleIcon = document.getElementById("insightsToggle");
-    const toggleText = document.getElementById("insightsToggleText");
-    
-    insightsCollapsed = !insightsCollapsed;
-    
-    if (insightsCollapsed) {
-        content.style.display = "none";
-        toggleIcon.style.transform = "rotate(-90deg)";
-        toggleText.textContent = "Expand";
-    } else {
-        content.style.display = "grid";
-        toggleIcon.style.transform = "rotate(0deg)";
-        toggleText.textContent = "Collapse";
-    }
-}
-
-// Render Weekly Schedule
-function renderSchedule(schedule) {
-    const container = document.getElementById("scheduleContent");
-    container.innerHTML = schedule.map(day => `
-        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-right">
-            <h3 class="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">${day.day}</h3>
-            <div class="space-y-3">
-                ${day.events.map(event => `
-                    <div class="event-card bg-white dark:bg-gray-600 p-3 rounded-lg transition-colors duration-300">
-                        <div class="flex justify-between items-center">
-                            <span class="font-semibold text-gray-900 dark:text-white">${event.title}</span>
-                            <span class="text-sm text-gray-600 dark:text-gray-400">${event.time}</span>
-                        </div>
-                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Duration: ${event.duration}</p>
-                    </div>
-                `).join("")}
-            </div>
-        </div>
-    `).join("");
-}
-
-// Render Weather
-function renderWeather(weather) {
-    const container = document.getElementById("weatherContent");
-    container.innerHTML = `
-        <div class="text-center mb-4">
-            <div class="weather-icon text-6xl mb-2">${weather.current.icon}</div>
-            <p class="text-3xl font-bold text-gray-900 dark:text-white">${weather.current.temp}°C</p>
-            <p class="text-gray-600 dark:text-gray-400">${weather.current.condition}</p>
-            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Delmas, ZA</p>
-        </div>
-        <div class="grid grid-cols-5 gap-2 text-center">
-            ${weather.forecast.map(day => `
-                <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg transition-colors duration-300">
-                    <p class="font-semibold text-gray-900 dark:text-white">${day.day}</p>
-                    <p class="text-xl my-1">${day.icon}</p>
-                    <p class="text-sm text-gray-700 dark:text-gray-300">${day.high}°/${day.low}°</p>
-                </div>
-            `).join("")}
-        </div>
-        <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
-            <p>Humidity: ${weather.current.humidity}%</p>
-            <p>Wind: ${weather.current.wind} km/h</p>
-        </div>
-    `;
-}
-
-// Render Knowledge Base with clickable cards
-function renderKnowledgeBase(knowledge) {
-    const container = document.getElementById("kbContent");
-    container.innerHTML = knowledge.map((note, index) => `
-        <div class="kb-card bg-gray-100 dark:bg-gray-700 p-4 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition" 
-             data-aos="fade-up" 
-             onclick="openNoteModal(${index})">
-            <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">${note.title}</h3>
-            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">${note.snippet}</p>
-            <div class="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400">
-                <div class="flex gap-1">
-                    ${note.tags.map(tag => `<span class="bg-gray-300 dark:bg-gray-600 px-2 py-1 rounded">${tag}</span>`).join("")}
-                </div>
-                <span>${note.last_modified}</span>
-            </div>
-        </div>
-    `).join("");
-}
-
-// Open Note Modal with full content
-function openNoteModal(noteIndex) {
-    const note = knowledgeBase[noteIndex];
-    if (!note) return;
-    
-    document.getElementById("noteTitle").textContent = note.title;
-    document.getElementById("noteContent").innerHTML = formatNoteContent(note.content || note.snippet);
-    document.getElementById("noteModified").textContent = `Last modified: ${note.last_modified}`;
-    
-    // Render tags
-    const tagsContainer = document.getElementById("noteTags");
-    tagsContainer.innerHTML = note.tags.map(tag => 
-        `<span class="bg-gray-300 dark:bg-gray-600 px-2 py-1 rounded">${tag}</span>`
-    ).join("");
-    
-    // Show modal
-    document.getElementById("noteModal").classList.remove("hidden");
-}
-
-// Close Note Modal
-function closeNoteModal() {
-    document.getElementById("noteModal").classList.add("hidden");
-}
-
-// Format note content (convert markdown-like syntax to HTML)
-function formatNoteContent(content) {
-    if (!content) return '<p class="text-gray-400">No content available</p>';
-    
-    // Convert markdown to HTML (basic implementation)
-    let html = content;
-    
-    // Headers
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold mt-4 mb-2 text-gray-900 dark:text-white">$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white">$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">$1</h1>');
-    
-    // Bold and italic
-    html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
-    html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-    html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-    
-    // Code blocks
-    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto text-white"><code>$1</code></pre>');
-    html = html.replace(/`(.+?)`/g, '<code class="bg-gray-900 dark:bg-gray-800 px-2 py-1 rounded text-white">$1</code>');
-    
-    // Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">$1</a>');
-    
-    // Lists
-    html = html.replace(/^\s*[-*+] (.+)$/gim, '<li class="ml-4 text-gray-700 dark:text-gray-300">$1</li>');
-    html = html.replace(/(<li.*<\/li>)/s, '<ul class="list-disc ml-4 my-2">$1</ul>');
-    
-    // Paragraphs (lines with content)
-    html = html.split('\n\n').map(para => {
-        if (para.trim().startsWith('<')) return para; // Already has HTML tags
-        return `<p class="mb-3 text-gray-700 dark:text-gray-300">${para}</p>`;
-    }).join('\n');
-    
-    return html;
-}
-
-// Knowledge Base Search
-document.getElementById("kbSearch").addEventListener("input", (e) => {
-    const query = e.target.value.toLowerCase();
-    const filtered = knowledgeBase.filter(note => 
-        note.title.toLowerCase().includes(query) || 
-        note.snippet.toLowerCase().includes(query) || 
-        (note.content && note.content.toLowerCase().includes(query)) ||
-        note.tags.some(tag => tag.toLowerCase().includes(query))
-    );
-    renderKnowledgeBase(filtered);
-});
-
-// Close modal on background click
-document.getElementById("noteModal").addEventListener("click", (e) => {
-    if (e.target.id === "noteModal") {
-        closeNoteModal();
-    }
-});
-
-// Dark Mode Toggle
+// Dark mode toggle
 function toggleDarkMode() {
-    isDarkMode = !isDarkMode;
-    document.documentElement.classList.toggle("dark");
-    document.getElementById("themeIcon").textContent = isDarkMode ? "🌙" : "☀️";
-    localStorage.setItem("darkMode", isDarkMode);
-    
-    // Update theme-color meta tag
-    const themeColorMeta = document.getElementById("theme-color-meta");
-    if (themeColorMeta) {
-        themeColorMeta.content = isDarkMode ? "#111827" : "#ffffff";
+  isDarkMode = !isDarkMode;
+  document.documentElement.classList.toggle('dark', isDarkMode);
+  localStorage.setItem('hermes_theme', isDarkMode ? 'dark' : 'light');
+  updateThemeIcon();
+  
+  // Update theme-color meta
+  const meta = document.querySelector('meta[name="theme-color"]');
+  if (meta) {
+    meta.content = isDarkMode ? '#000000' : '#f5f5f7';
+  }
+}
+
+function updateThemeIcon() {
+  const icon = document.getElementById('themeIcon');
+  icon.textContent = isDarkMode ? '☀️' : '🌙';
+}
+
+// Load all data
+async function loadAllData() {
+  await Promise.all([
+    loadSchedule(),
+    loadWeather(),
+    loadKnowledge(),
+    loadInsights()
+  ]);
+}
+
+// Decrypt data
+async function decryptData(encryptedData, password) {
+  const salt = Uint8Array.from(atob(encryptedData.salt), c => c.charCodeAt(0));
+  const iv = Uint8Array.from(atob(encryptedData.iv), c => c.charCodeAt(0));
+  const ciphertext = Uint8Array.from(atob(encryptedData.ciphertext), c => c.charCodeAt(0));
+  
+  const encoder = new TextEncoder();
+  const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey']);
+  const key = await crypto.subtle.deriveKey(
+    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+    keyMaterial,
+    { name: 'AES-CBC', length: 256 },
+    false,
+    ['decrypt']
+  );
+  
+  const decrypted = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, ciphertext);
+  return JSON.parse(new TextDecoder().decode(decrypted));
+}
+
+// Load schedule
+async function loadSchedule() {
+  try {
+    const response = await fetch(DATA_BASE + 'schedule.enc.json');
+    if (!response.ok) throw new Error('Failed to load');
+    const encrypted = await response.json();
+    const password = promptForPassword();
+    if (!password) return;
+    const data = await decryptData(encrypted, password);
+    renderSchedule(data);
+  } catch (error) {
+    console.error('Schedule load error:', error);
+    document.getElementById('scheduleList').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No calendar data available</p>';
+  }
+}
+
+function renderSchedule(events) {
+  const container = document.getElementById('scheduleList');
+  if (!events || events.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No events today</p>';
+    return;
+  }
+  
+  container.innerHTML = events.map((event, idx) => `
+    <div class="event-item" style="animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
+      <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
+      <div class="event-time">
+        🕐 ${formatTime(event.start)} - ${formatTime(event.end)}
+        ${event.location ? `• 📍 ${escapeHtml(event.location)}` : ''}
+      </div>
+    </div>
+  `).join('');
+}
+
+// Load weather
+async function loadWeather() {
+  try {
+    const response = await fetch(DATA_BASE + 'weather.enc.json');
+    if (!response.ok) throw new Error('Failed to load');
+    const encrypted = await response.json();
+    const password = promptForPassword();
+    if (!password) return;
+    const data = await decryptData(encrypted, password);
+    renderWeather(data);
+  } catch (error) {
+    console.error('Weather load error:', error);
+    document.getElementById('weatherInfo').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">Weather data unavailable</p>';
+  }
+}
+
+function renderWeather(data) {
+  const container = document.getElementById('weatherInfo');
+  const temp = Math.round(data.main?.temp || data.temperature || 0);
+  const desc = data.weather?.[0]?.description || data.condition || 'Unknown';
+  const icon = getWeatherEmoji(data.weather?.[0]?.main || data.condition || '');
+  const humidity = data.main?.humidity || data.humidity || '--';
+  const wind = Math.round((data.wind?.speed || data.wind_speed || 0) * 3.6);
+  const feelsLike = Math.round(data.main?.feels_like || data.feels_like || temp);
+  
+  container.innerHTML = `
+    <div class="weather-main">
+      <div class="weather-icon">${icon}</div>
+      <div>
+        <div class="weather-temp">${temp}°C</div>
+        <div class="weather-desc">${escapeHtml(desc)}</div>
+        <div style="font-size: 14px; color: var(--text-tertiary); margin-top: 4px;">
+          Feels like ${feelsLike}°C
+        </div>
+      </div>
+    </div>
+    <div class="weather-details">
+      <div class="weather-detail-item">
+        <div class="weather-detail-label">Humidity</div>
+        <div class="weather-detail-value">${humidity}%</div>
+      </div>
+      <div class="weather-detail-item">
+        <div class="weather-detail-label">Wind</div>
+        <div class="weather-detail-value">${wind} km/h</div>
+      </div>
+      <div class="weather-detail-item">
+        <div class="weather-detail-label">Condition</div>
+        <div class="weather-detail-value" style="font-size: 14px;">${escapeHtml(desc)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function getWeatherEmoji(condition) {
+  const map = {
+    'Clear': '☀️', 'Sunny': '☀️', 'Clouds': '☁️', 'Cloudy': '☁️',
+    'Rain': '🌧️', 'Drizzle': '🌦️', 'Thunderstorm': '⛈️',
+    'Snow': '❄️', 'Mist': '🌫️', 'Fog': '🌫️', 'Haze': '🌫️'
+  };
+  return map[condition] || '🌤️';
+}
+
+// Load knowledge
+async function loadKnowledge() {
+  try {
+    const response = await fetch(DATA_BASE + 'knowledge.enc.json');
+    if (!response.ok) throw new Error('Failed to load');
+    const encrypted = await response.json();
+    const password = promptForPassword();
+    if (!password) return;
+    const data = await decryptData(encrypted, password);
+    notes = data;
+    document.getElementById('noteCount').textContent = `${data.length} notes`;
+    renderKnowledge(data);
+  } catch (error) {
+    console.error('Knowledge load error:', error);
+    document.getElementById('knowledgeList').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No notes available</p>';
+  }
+}
+
+function renderKnowledge(notesToShow) {
+  const container = document.getElementById('knowledgeList');
+  if (!notesToShow || notesToShow.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No notes found</p>';
+    return;
+  }
+  
+  container.innerHTML = notesToShow.map((note, idx) => `
+    <div class="knowledge-card" onclick="openNoteModal(${idx})" 
+         style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
+      <h3>${escapeHtml(note.title || 'Untitled')}</h3>
+      <p>${escapeHtml(note.summary || note.content?.substring(0, 150) || 'No preview available')}</p>
+      ${note.tags ? `<div class="tags">${note.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
+    </div>
+  `).join('');
+}
+
+function searchNotes() {
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  if (!notes || notes.length === 0) return;
+  
+  const filtered = notes.filter(note => 
+    (note.title && note.title.toLowerCase().includes(query)) ||
+    (note.content && note.content.toLowerCase().includes(query)) ||
+    (note.summary && note.summary.toLowerCase().includes(query)) ||
+    (note.tags && note.tags.some(tag => tag.toLowerCase().includes(query)))
+  );
+  
+  renderKnowledge(filtered);
+}
+
+// Load insights
+async function loadInsights() {
+  try {
+    const response = await fetch(DATA_BASE + 'insights.enc.json');
+    if (!response.ok) throw new Error('Failed to load');
+    const encrypted = await response.json();
+    const password = promptForPassword();
+    if (!password) return;
+    const data = await decryptData(encrypted, password);
+    renderInsights(data);
+  } catch (error) {
+    console.error('Insights load error:', error);
+    document.getElementById('insightsList').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No insights available</p>';
+  }
+}
+
+function renderInsights(insights) {
+  const container = document.getElementById('insightsList');
+  if (!insights || insights.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No insights available</p>';
+    return;
+  }
+  
+  container.innerHTML = insights.map((insight, idx) => `
+    <div class="insight-item" style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
+      <div class="insight-header" onclick="toggleInsight(${idx})">
+        <div class="insight-title">${escapeHtml(insight.title || `Insight ${idx + 1}`)}</div>
+        <div class="insight-toggle" id="insightToggle${idx}">▼</div>
+      </div>
+      <div class="insight-content" id="insightContent${idx}">
+        <div class="insight-text">${formatNoteContent(insight.content || insight.text || 'No content')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleInsight(idx) {
+  const content = document.getElementById(`insightContent${idx}`);
+  const toggle = document.getElementById(`insightToggle${idx}`);
+  content.classList.toggle('expanded');
+  toggle.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
+}
+
+function toggleAllInsights() {
+  const contents = document.querySelectorAll('.insight-content');
+  const toggles = document.querySelectorAll('.insight-toggle');
+  const text = document.getElementById('toggleAllText');
+  
+  allInsightsCollapsed = !allInsightsCollapsed;
+  
+  contents.forEach((content, idx) => {
+    if (allInsightsCollapsed) {
+      content.classList.remove('expanded');
+      toggles[idx].style.transform = 'rotate(0deg)';
+    } else {
+      content.classList.add('expanded');
+      toggles[idx].style.transform = 'rotate(180deg)';
     }
+  });
+  
+  text.textContent = allInsightsCollapsed ? 'Expand All' : 'Collapse All';
 }
 
-// Initialize Insights as collapsed by default
-document.addEventListener("DOMContentLoaded", () => {
-    const content = document.getElementById("insightsContent");
-    const toggleIcon = document.getElementById("insightsToggle");
-    const toggleText = document.getElementById("insightsToggleText");
-    if (content && toggleIcon && toggleText) {
-        content.style.display = "none";
-        toggleIcon.style.transform = "rotate(-90deg)";
-        toggleText.textContent = "Expand";
-    }
-});
-
-// Load Dark Mode Preference
-if (localStorage.getItem("darkMode") === "false") {
-    isDarkMode = false;
-    document.documentElement.classList.remove("dark");
-    document.getElementById("themeIcon").textContent = "☀️";
+// Note modal
+function openNoteModal(idx) {
+  if (!notes || idx >= notes.length) return;
+  const note = notes[idx];
+  document.getElementById('noteModalTitle').textContent = note.title || 'Untitled';
+  document.getElementById('noteModalContent').innerHTML = formatNoteContent(note.content || 'No content');
+  
+  const tagsContainer = document.getElementById('noteModalTags');
+  tagsContainer.innerHTML = note.tags ? 
+    note.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('') : '';
+  
+  document.getElementById('noteModal').classList.add('active');
 }
 
-// Update Timestamps
-function updateTimestamps(lastGenerated) {
-    const date = new Date(lastGenerated);
-    const formatted = date.toLocaleString("en-ZA", { dateStyle: "medium", timeStyle: "short" });
-    document.getElementById("lastUpdated").textContent = `Updated: ${formatted}`;
-    document.getElementById("footerUpdated").textContent = formatted;
+function closeNoteModal(event) {
+  if (event && event.target !== document.getElementById('noteModal')) return;
+  document.getElementById('noteModal').classList.remove('active');
 }
 
-// Allow Enter key to submit password
-document.getElementById("passwordInput").addEventListener("keypress", (e) => {
-    if (e.key === "Enter") checkPassword();
-});
+// Utilities
+function promptForPassword() {
+  return 'tinus2026'; // In production, you'd want to store this securely after login
+}
 
-// Register Service Worker for PWA
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./service-worker.js')
-            .then(registration => {
-                console.log('ServiceWorker registration successful with scope: ', registration.scope);
-            })
-            .catch(error => {
-                console.log('ServiceWorker registration failed: ', error);
-            });
-    });
+function formatTime(dateStr) {
+  if (!dateStr) return '--:--';
+  const date = new Date(dateStr);
+  return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+}
+
+function formatNoteContent(content) {
+  if (!content) return '';
+  return escapeHtml(content).replace(/\n/g, '<br>').replace(/#{1,6}\s?/g, '<strong>').replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+}
+
+function escapeHtml(text) {
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function openObsidianVault() {
+  alert('Obsidian vault path: ~/Documents/Obsidian Vault/\nOpen this path in your Obsidian app.');
 }
