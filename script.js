@@ -1,10 +1,12 @@
 // Configuration
 const PASSWORD_HASH = "21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee"; // SHA-256 of "tinus2026"
 const DATA_BASE = "/data/";
+const DATA_EXT = ".enc.json"; // Encrypted files
 
 // State
 let isDarkMode = true;
 let knowledgeBase = [];
+let currentPassword = null; // Store password for decryption
 
 // Initialize AOS animations
 AOS.init({ duration: 600, once: true });
@@ -15,6 +17,7 @@ async function checkPassword() {
     const hash = await sha256(input);
     
     if (hash === PASSWORD_HASH) {
+        currentPassword = input; // Store for decryption
         document.getElementById("loginModal").classList.add("hidden");
         document.getElementById("dashboard").classList.remove("hidden");
         loadAllData();
@@ -32,16 +35,77 @@ async function sha256(message) {
     return hashArray.map(b => b.toString(16).padStart(2, "0")).join("");
 }
 
+// Decrypt data using CryptoJS (compatible with Node.js encryption)
+function decryptData(encryptedBase64, password) {
+    try {
+        // Decode base64 to WordArray
+        const combinedWA = CryptoJS.enc.Base64.parse(encryptedBase64);
+        
+        // Convert to byte array to extract components
+        const bytes = [];
+        for (let i = 0; i < combinedWA.sigBytes; i++) {
+            const wordIndex = Math.floor(i / 4);
+            const byteOffset = i % 4;
+            bytes.push((combinedWA.words[wordIndex] >>> (24 - byteOffset * 8)) & 0xFF);
+        }
+        
+        // Extract salt (8 bytes), iv (16 bytes), and ciphertext
+        const saltBytes = bytes.slice(0, 8);
+        const ivBytes = bytes.slice(8, 24);
+        const ciphertextBytes = bytes.slice(24);
+        
+        // Convert back to WordArrays
+        const saltWA = CryptoJS.lib.WordArray.create(saltBytes);
+        const ivWA = CryptoJS.lib.WordArray.create(ivBytes);
+        const ciphertextWA = CryptoJS.lib.WordArray.create(ciphertextBytes);
+        
+        // Derive key using PBKDF2 (matching Node.js crypto.pbkdf2Sync)
+        const key = CryptoJS.PBKDF2(password, saltWA, {
+            keySize: 256 / 32, // 8 words
+            iterations: 100000,
+            hasher: CryptoJS.algo.SHA256
+        });
+        
+        // Decrypt using AES-CBC
+        const decrypted = CryptoJS.AES.decrypt(
+            { ciphertext: ciphertextWA },
+            key,
+            { iv: ivWA }
+        );
+        
+        return decrypted.toString(CryptoJS.enc.Utf8);
+    } catch (error) {
+        console.error("Decryption error:", error);
+        return null;
+    }
+}
+
 // Load All Data
 async function loadAllData() {
     try {
-        const [schedule, weather, knowledge, insights] = await Promise.all([
-            fetch(DATA_BASE + "schedule.json").then(r => r.json()),
-            fetch(DATA_BASE + "weather.json").then(r => r.json()),
-            fetch(DATA_BASE + "knowledge.json").then(r => r.json()),
-            fetch(DATA_BASE + "insights.json").then(r => r.json())
+        // Fetch encrypted files
+        const [scheduleEnc, weatherEnc, knowledgeEnc, insightsEnc] = await Promise.all([
+            fetch(DATA_BASE + "schedule" + DATA_EXT).then(r => r.text()),
+            fetch(DATA_BASE + "weather" + DATA_EXT).then(r => r.text()),
+            fetch(DATA_BASE + "knowledge" + DATA_EXT).then(r => r.text()),
+            fetch(DATA_BASE + "insights" + DATA_EXT).then(r => r.text())
         ]);
-
+        
+        // Decrypt and parse
+        const scheduleText = decryptData(scheduleEnc, currentPassword);
+        const weatherText = decryptData(weatherEnc, currentPassword);
+        const knowledgeText = decryptData(knowledgeEnc, currentPassword);
+        const insightsText = decryptData(insightsEnc, currentPassword);
+        
+        if (!scheduleText || !weatherText || !knowledgeText || !insightsText) {
+            throw new Error("Decryption failed - wrong password or corrupted data");
+        }
+        
+        const schedule = JSON.parse(scheduleText);
+        const weather = JSON.parse(weatherText);
+        const knowledge = JSON.parse(knowledgeText);
+        const insights = JSON.parse(insightsText);
+        
         renderInsights(insights);
         renderSchedule(schedule);
         renderWeather(weather);
@@ -52,6 +116,7 @@ async function loadAllData() {
         knowledgeBase = knowledge;
     } catch (error) {
         console.error("Error loading data:", error);
+        alert("Error loading data. Please check console for details.");
     }
 }
 

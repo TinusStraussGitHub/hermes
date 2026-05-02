@@ -1,0 +1,13 @@
+# Exclude plaintext data files - only encrypted versions should be committed
+data/*.json
+!data/*.enc.json
+
+# Node modules
+node_modules/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
