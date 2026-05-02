@@ -1,12 +1,12 @@
 // Configuration
-const PASSWORD_HASH='21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee'; // SHA-256 of 'tinus2026'
+const PASSWORD_HASH = '21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee'; // SHA-256 of 'tinus2026'
 const DATA_BASE = 'data/';
 
 // State
 let isDarkMode = false;
-let insightsCollapsed = true;
 let allInsightsCollapsed = true;
 let notes = [];
+let decryptedPassword = null; // Store password after login
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -48,6 +48,7 @@ async function checkPassword() {
   
   if (hashHex === PASSWORD_HASH) {
     sessionStorage.setItem('hermes_auth', 'true');
+    decryptedPassword = input; // Store password for data decryption
     showApp();
   } else {
     const errorEl = document.getElementById('loginError');
@@ -65,6 +66,7 @@ function showApp() {
 
 function logout() {
   sessionStorage.removeItem('hermes_auth');
+  decryptedPassword = null;
   document.getElementById('app').style.display = 'none';
   document.getElementById('loginModal').classList.add('active');
 }
@@ -90,6 +92,11 @@ function updateThemeIcon() {
 
 // Load all data
 async function loadAllData() {
+  // Ensure we have the password
+  if (!decryptedPassword) {
+    decryptedPassword = 'tinus2026'; // Fallback
+  }
+  
   await Promise.all([
     loadSchedule(),
     loadWeather(),
@@ -100,33 +107,36 @@ async function loadAllData() {
 
 // Decrypt data
 async function decryptData(encryptedData, password) {
-  const salt = Uint8Array.from(atob(encryptedData.salt), c => c.charCodeAt(0));
-  const iv = Uint8Array.from(atob(encryptedData.iv), c => c.charCodeAt(0));
-  const ciphertext = Uint8Array.from(atob(encryptedData.ciphertext), c => c.charCodeAt(0));
-  
-  const encoder = new TextEncoder();
-  const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey']);
-  const key = await crypto.subtle.deriveKey(
-    { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
-    keyMaterial,
-    { name: 'AES-CBC', length: 256 },
-    false,
-    ['decrypt']
-  );
-  
-  const decrypted = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, ciphertext);
-  return JSON.parse(new TextDecoder().decode(decrypted));
+  try {
+    const salt = Uint8Array.from(atob(encryptedData.salt), c => c.charCodeAt(0));
+    const iv = Uint8Array.from(atob(encryptedData.iv), c => c.charCodeAt(0));
+    const ciphertext = Uint8Array.from(atob(encryptedData.ciphertext), c => c.charCodeAt(0));
+    
+    const encoder = new TextEncoder();
+    const keyMaterial = await crypto.subtle.importKey('raw', encoder.encode(password), 'PBKDF2', false, ['deriveKey']);
+    const key = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+      keyMaterial,
+      { name: 'AES-CBC', length: 256 },
+      false,
+      ['decrypt']
+    );
+    
+    const decrypted = await crypto.subtle.decrypt({ name: 'AES-CBC', iv }, key, ciphertext);
+    return JSON.parse(new TextDecoder().decode(decrypted));
+  } catch (e) {
+    console.error('Decryption failed:', e);
+    throw new Error('Failed to decrypt data');
+  }
 }
 
 // Load schedule
 async function loadSchedule() {
   try {
     const response = await fetch(DATA_BASE + 'schedule.enc.json');
-    if (!response.ok) throw new Error('Failed to load');
+    if (!response.ok) throw new Error('Failed to load schedule');
     const encrypted = await response.json();
-    const password = promptForPassword();
-    if (!password) return;
-    const data = await decryptData(encrypted, password);
+    const data = await decryptData(encrypted, decryptedPassword);
     renderSchedule(data);
   } catch (error) {
     console.error('Schedule load error:', error);
@@ -144,9 +154,9 @@ function renderSchedule(events) {
   
   container.innerHTML = events.map((event, idx) => `
     <div class="event-item" style="animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
-      <div class="event-title">${escapeHtml(event.summary || 'Untitled Event')}</div>
+      <div class="event-title">${escapeHtml(event.summary || event.title || 'Untitled Event')}</div>
       <div class="event-time">
-        🕐 ${formatTime(event.start)} - ${formatTime(event.end)}
+        🕐 ${formatTime(event.start || event.startTime)} - ${formatTime(event.end || event.endTime)}
         ${event.location ? `• 📍 ${escapeHtml(event.location)}` : ''}
       </div>
     </div>
@@ -157,11 +167,9 @@ function renderSchedule(events) {
 async function loadWeather() {
   try {
     const response = await fetch(DATA_BASE + 'weather.enc.json');
-    if (!response.ok) throw new Error('Failed to load');
+    if (!response.ok) throw new Error('Failed to load weather');
     const encrypted = await response.json();
-    const password = promptForPassword();
-    if (!password) return;
-    const data = await decryptData(encrypted, password);
+    const data = await decryptData(encrypted, decryptedPassword);
     renderWeather(data);
   } catch (error) {
     console.error('Weather load error:', error);
@@ -220,11 +228,9 @@ function getWeatherEmoji(condition) {
 async function loadKnowledge() {
   try {
     const response = await fetch(DATA_BASE + 'knowledge.enc.json');
-    if (!response.ok) throw new Error('Failed to load');
+    if (!response.ok) throw new Error('Failed to load knowledge');
     const encrypted = await response.json();
-    const password = promptForPassword();
-    if (!password) return;
-    const data = await decryptData(encrypted, password);
+    const data = await decryptData(encrypted, decryptedPassword);
     notes = data;
     document.getElementById('noteCount').textContent = `${data.length} notes`;
     renderKnowledge(data);
@@ -246,7 +252,7 @@ function renderKnowledge(notesToShow) {
     <div class="knowledge-card" onclick="openNoteModal(${idx})" 
          style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
       <h3>${escapeHtml(note.title || 'Untitled')}</h3>
-      <p>${escapeHtml(note.summary || note.content?.substring(0, 150) || 'No preview available')}</p>
+      <p>${escapeHtml(note.summary || (note.content && note.content.substring(0, 150)) || 'No preview available')}</p>
       ${note.tags ? `<div class="tags">${note.tags.map(tag => `<span class="tag">${escapeHtml(tag)}</span>`).join('')}</div>` : ''}
     </div>
   `).join('');
@@ -270,11 +276,9 @@ function searchNotes() {
 async function loadInsights() {
   try {
     const response = await fetch(DATA_BASE + 'insights.enc.json');
-    if (!response.ok) throw new Error('Failed to load');
+    if (!response.ok) throw new Error('Failed to load insights');
     const encrypted = await response.json();
-    const password = promptForPassword();
-    if (!password) return;
-    const data = await decryptData(encrypted, password);
+    const data = await decryptData(encrypted, decryptedPassword);
     renderInsights(data);
   } catch (error) {
     console.error('Insights load error:', error);
@@ -289,6 +293,10 @@ function renderInsights(insights) {
     container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No insights available</p>';
     return;
   }
+  
+  // Start with all insights collapsed
+  allInsightsCollapsed = true;
+  document.getElementById('toggleAllText').textContent = 'Expand All';
   
   container.innerHTML = insights.map((insight, idx) => `
     <div class="insight-item" style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
@@ -308,6 +316,13 @@ function toggleInsight(idx) {
   const toggle = document.getElementById(`insightToggle${idx}`);
   content.classList.toggle('expanded');
   toggle.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
+  
+  // Update allInsightsCollapsed state
+  const allContents = document.querySelectorAll('.insight-content');
+  const allToggles = document.querySelectorAll('.insight-toggle');
+  const anyExpanded = Array.from(allContents).some(c => c.classList.contains('expanded'));
+  allInsightsCollapsed = !anyExpanded;
+  document.getElementById('toggleAllText').textContent = allInsightsCollapsed ? 'Expand All' : 'Collapse All';
 }
 
 function toggleAllInsights() {
@@ -350,10 +365,6 @@ function closeNoteModal(event) {
 }
 
 // Utilities
-function promptForPassword() {
-  return 'tinus2026'; // In production, you'd want to store this securely after login
-}
-
 function formatTime(dateStr) {
   if (!dateStr) return '--:--';
   const date = new Date(dateStr);
@@ -362,7 +373,11 @@ function formatTime(dateStr) {
 
 function formatNoteContent(content) {
   if (!content) return '';
-  return escapeHtml(content).replace(/\n/g, '<br>').replace(/#{1,6}\s?/g, '<strong>').replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>');
+  return escapeHtml(content)
+    .replace(/\n/g, '<br>')
+    .replace(/#{1,6}\s?(.*)/g, '<strong>$1</strong>')
+    .replace(/(\*\*|__)(.*?)\1/g, '<strong>$2</strong>')
+    .replace(/(\*|_)(.*?)\1/g, '<em>$2</em>');
 }
 
 function escapeHtml(text) {
