@@ -1,5 +1,5 @@
 // Configuration
-const PASSWORD_HASH = "21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee"; // SHA-256 of "tinus2026"
+const PASSWORD_HASH="21930c...05ee"; // SHA-256 of "tinus2026"
 // Use relative path so it works in both local and GitHub Pages environments
 const DATA_BASE = "data/";
 const DATA_EXT = ".enc.json"; // Encrypted files
@@ -8,6 +8,7 @@ const DATA_EXT = ".enc.json"; // Encrypted files
 let isDarkMode = true;
 let knowledgeBase = [];
 let currentPassword = null; // Store password for decryption
+let insightsCollapsed = false;
 
 // Initialize AOS animations
 AOS.init({ duration: 600, once: true });
@@ -141,43 +142,62 @@ async function loadAllData() {
     }
 }
 
-// Render AI Insights
+// Render AI Insights (collapsible)
 function renderInsights(insights) {
     const container = document.getElementById("insightsContent");
     container.innerHTML = `
-        <div class="bg-gray-700 p-4 rounded-lg" data-aos="fade-up">
-            <h3 class="font-bold text-blue-400 mb-2">Weekly Summary</h3>
-            <p class="text-gray-300">${insights.weekly_summary}</p>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up">
+            <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">Weekly Summary</h3>
+            <p class="text-gray-700 dark:text-gray-300">${insights.weekly_summary}</p>
         </div>
-        <div class="bg-gray-700 p-4 rounded-lg" data-aos="fade-up" data-aos-delay="100">
-            <h3 class="font-bold text-green-400 mb-2">Schedule Tip</h3>
-            <p class="text-gray-300">${insights.schedule_insights}</p>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="100">
+            <h3 class="font-bold text-green-600 dark:text-green-400 mb-2">Schedule Tip</h3>
+            <p class="text-gray-700 dark:text-gray-300">${insights.schedule_insights}</p>
         </div>
-        <div class="bg-gray-700 p-4 rounded-lg" data-aos="fade-up" data-aos-delay="200">
-            <h3 class="font-bold text-yellow-400 mb-2">Weather Impact</h3>
-            <p class="text-gray-300">${insights.weather_impact}</p>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="200">
+            <h3 class="font-bold text-yellow-600 dark:text-yellow-400 mb-2">Weather Impact</h3>
+            <p class="text-gray-700 dark:text-gray-300">${insights.weather_impact}</p>
         </div>
-        <div class="bg-gray-700 p-4 rounded-lg" data-aos="fade-up" data-aos-delay="300">
-            <h3 class="font-bold text-purple-400 mb-2">Knowledge Highlight</h3>
-            <p class="text-gray-300">${insights.knowledge_highlight}</p>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-up" data-aos-delay="300">
+            <h3 class="font-bold text-purple-600 dark:text-purple-400 mb-2">Knowledge Highlight</h3>
+            <p class="text-gray-700 dark:text-gray-300">${insights.knowledge_highlight}</p>
         </div>
     `;
+}
+
+// Toggle AI Insights Collapse
+function toggleInsights() {
+    const content = document.getElementById("insightsContent");
+    const toggleIcon = document.getElementById("insightsToggle");
+    const toggleText = document.getElementById("insightsToggleText");
+    
+    insightsCollapsed = !insightsCollapsed;
+    
+    if (insightsCollapsed) {
+        content.style.display = "none";
+        toggleIcon.style.transform = "rotate(-90deg)";
+        toggleText.textContent = "Expand";
+    } else {
+        content.style.display = "grid";
+        toggleIcon.style.transform = "rotate(0deg)";
+        toggleText.textContent = "Collapse";
+    }
 }
 
 // Render Weekly Schedule
 function renderSchedule(schedule) {
     const container = document.getElementById("scheduleContent");
     container.innerHTML = schedule.map(day => `
-        <div class="bg-gray-700 p-4 rounded-lg" data-aos="fade-right">
-            <h3 class="font-bold text-lg mb-3 text-blue-400">${day.day}</h3>
+        <div class="bg-gray-100 dark:bg-gray-700 p-4 rounded-lg transition-colors duration-300" data-aos="fade-right">
+            <h3 class="font-bold text-lg mb-3 text-blue-600 dark:text-blue-400">${day.day}</h3>
             <div class="space-y-3">
                 ${day.events.map(event => `
-                    <div class="event-card bg-gray-600 p-3 rounded-lg">
+                    <div class="event-card bg-white dark:bg-gray-600 p-3 rounded-lg transition-colors duration-300">
                         <div class="flex justify-between items-center">
-                            <span class="font-semibold">${event.title}</span>
-                            <span class="text-sm text-gray-400">${event.time}</span>
+                            <span class="font-semibold text-gray-900 dark:text-white">${event.title}</span>
+                            <span class="text-sm text-gray-600 dark:text-gray-400">${event.time}</span>
                         </div>
-                        <p class="text-sm text-gray-400 mt-1">Duration: ${event.duration}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">Duration: ${event.duration}</p>
                     </div>
                 `).join("")}
             </div>
@@ -191,20 +211,20 @@ function renderWeather(weather) {
     container.innerHTML = `
         <div class="text-center mb-4">
             <div class="weather-icon text-6xl mb-2">${weather.current.icon}</div>
-            <p class="text-3xl font-bold">${weather.current.temp}°C</p>
-            <p class="text-gray-400">${weather.current.condition}</p>
-            <p class="text-sm text-gray-400 mt-2">Delmas, ZA</p>
+            <p class="text-3xl font-bold text-gray-900 dark:text-white">${weather.current.temp}°C</p>
+            <p class="text-gray-600 dark:text-gray-400">${weather.current.condition}</p>
+            <p class="text-sm text-gray-600 dark:text-gray-400 mt-2">Delmas, ZA</p>
         </div>
         <div class="grid grid-cols-5 gap-2 text-center">
             ${weather.forecast.map(day => `
-                <div class="bg-gray-700 p-2 rounded-lg">
-                    <p class="font-semibold">${day.day}</p>
+                <div class="bg-gray-100 dark:bg-gray-700 p-2 rounded-lg transition-colors duration-300">
+                    <p class="font-semibold text-gray-900 dark:text-white">${day.day}</p>
                     <p class="text-xl my-1">${day.icon}</p>
-                    <p class="text-sm">${day.high}°/${day.low}°</p>
+                    <p class="text-sm text-gray-700 dark:text-gray-300">${day.high}°/${day.low}°</p>
                 </div>
             `).join("")}
         </div>
-        <div class="mt-4 text-sm text-gray-400">
+        <div class="mt-4 text-sm text-gray-600 dark:text-gray-400">
             <p>Humidity: ${weather.current.humidity}%</p>
             <p>Wind: ${weather.current.wind} km/h</p>
         </div>
@@ -215,14 +235,14 @@ function renderWeather(weather) {
 function renderKnowledgeBase(knowledge) {
     const container = document.getElementById("kbContent");
     container.innerHTML = knowledge.map((note, index) => `
-        <div class="kb-card bg-gray-700 p-4 rounded-lg cursor-pointer hover:bg-gray-600 transition" 
+        <div class="kb-card bg-gray-100 dark:bg-gray-700 p-4 rounded-lg cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-600 transition" 
              data-aos="fade-up" 
              onclick="openNoteModal(${index})">
-            <h3 class="font-bold text-blue-400 mb-2">${note.title}</h3>
-            <p class="text-gray-300 text-sm mb-3">${note.snippet}</p>
-            <div class="flex justify-between items-center text-xs text-gray-400">
+            <h3 class="font-bold text-blue-600 dark:text-blue-400 mb-2">${note.title}</h3>
+            <p class="text-gray-700 dark:text-gray-300 text-sm mb-3">${note.snippet}</p>
+            <div class="flex justify-between items-center text-xs text-gray-600 dark:text-gray-400">
                 <div class="flex gap-1">
-                    ${note.tags.map(tag => `<span class="bg-gray-600 px-2 py-1 rounded">${tag}</span>`).join("")}
+                    ${note.tags.map(tag => `<span class="bg-gray-300 dark:bg-gray-600 px-2 py-1 rounded">${tag}</span>`).join("")}
                 </div>
                 <span>${note.last_modified}</span>
             </div>
@@ -242,7 +262,7 @@ function openNoteModal(noteIndex) {
     // Render tags
     const tagsContainer = document.getElementById("noteTags");
     tagsContainer.innerHTML = note.tags.map(tag => 
-        `<span class="bg-gray-600 px-2 py-1 rounded">${tag}</span>`
+        `<span class="bg-gray-300 dark:bg-gray-600 px-2 py-1 rounded">${tag}</span>`
     ).join("");
     
     // Show modal
@@ -262,9 +282,9 @@ function formatNoteContent(content) {
     let html = content;
     
     // Headers
-    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold mt-4 mb-2">$1</h3>');
-    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mt-6 mb-3">$1</h2>');
-    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4">$1</h1>');
+    html = html.replace(/^### (.*$)/gim, '<h3 class="text-lg font-bold mt-4 mb-2 text-gray-900 dark:text-white">$1</h3>');
+    html = html.replace(/^## (.*$)/gim, '<h2 class="text-xl font-bold mt-6 mb-3 text-gray-900 dark:text-white">$1</h2>');
+    html = html.replace(/^# (.*$)/gim, '<h1 class="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">$1</h1>');
     
     // Bold and italic
     html = html.replace(/\*\*\*(.+?)\*\*\*/g, '<strong><em>$1</em></strong>');
@@ -272,20 +292,20 @@ function formatNoteContent(content) {
     html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
     
     // Code blocks
-    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto"><code>$1</code></pre>');
-    html = html.replace(/`(.+?)`/g, '<code class="bg-gray-900 px-2 py-1 rounded">$1</code>');
+    html = html.replace(/```([\s\S]*?)```/g, '<pre class="bg-gray-900 p-4 rounded-lg overflow-x-auto text-white"><code>$1</code></pre>');
+    html = html.replace(/`(.+?)`/g, '<code class="bg-gray-900 dark:bg-gray-800 px-2 py-1 rounded text-white">$1</code>');
     
     // Links
-    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-400 hover:underline">$1</a>');
+    html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" class="text-blue-600 dark:text-blue-400 hover:underline">$1</a>');
     
     // Lists
-    html = html.replace(/^\s*[-*+] (.+)$/gim, '<li class="ml-4">$1</li>');
+    html = html.replace(/^\s*[-*+] (.+)$/gim, '<li class="ml-4 text-gray-700 dark:text-gray-300">$1</li>');
     html = html.replace(/(<li.*<\/li>)/s, '<ul class="list-disc ml-4 my-2">$1</ul>');
     
     // Paragraphs (lines with content)
     html = html.split('\n\n').map(para => {
         if (para.trim().startsWith('<')) return para; // Already has HTML tags
-        return `<p class="mb-3">${para}</p>`;
+        return `<p class="mb-3 text-gray-700 dark:text-gray-300">${para}</p>`;
     }).join('\n');
     
     return html;
@@ -337,3 +357,16 @@ function updateTimestamps(lastGenerated) {
 document.getElementById("passwordInput").addEventListener("keypress", (e) => {
     if (e.key === "Enter") checkPassword();
 });
+
+// Register Service Worker for PWA
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./service-worker.js')
+            .then(registration => {
+                console.log('ServiceWorker registration successful with scope: ', registration.scope);
+            })
+            .catch(error => {
+                console.log('ServiceWorker registration failed: ', error);
+            });
+    });
+}
