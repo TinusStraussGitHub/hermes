@@ -608,7 +608,12 @@ function renderStandupBoard(data) {
   
   let html = '';
   
-  for (const [name, member] of Object.entries(data.team_members)) {
+  // Sort team members alphabetically by name
+  const sortedMembers = Object.entries(data.team_members).sort((a, b) => 
+    a[0].localeCompare(b[0])
+  );
+  
+  for (const [name, member] of sortedMembers) {
     html += `
       <div class="kanban-person">
         <h3>${escapeHtml(name)}</h3>
