@@ -10,7 +10,8 @@ const urlsToCache = [
   './marked.min.js',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './data/standup.enc.json'
 ];
 
 // Install event - cache resources

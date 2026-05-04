@@ -105,7 +105,8 @@ async function loadAllData() {
     loadSchedule(),
     loadWeather(),
     loadKnowledge(),
-    loadInsights()
+    loadInsights(),
+    loadStandup()
   ]);
 }
 
@@ -474,4 +475,59 @@ function escapeHtml(text) {
 
 function openObsidianVault() {
   alert('Obsidian vault path: ~/Documents/Obsidian Vault/\nOpen this path in your Obsidian app.');
+}
+
+// Standup Tracker Functions
+async function loadStandup() {
+  try {
+    const response = await fetch(DATA_BASE + 'standup.enc.json');
+    if (!response.ok) throw new Error('Failed to load standup data');
+    const encrypted = await response.json();
+    const data = await decryptData(encrypted, decryptedPassword);
+    
+    renderStandupBoard(data);
+  } catch (error) {
+    console.error('Standup load error:', error);
+    document.getElementById('standupBoard').innerHTML = 
+      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No standup data available</p>';
+  }
+}
+
+function renderStandupBoard(data) {
+  const container = document.getElementById('standupBoard');
+  
+  if (!data.team_members || Object.keys(data.team_members).length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No team members tracked yet</p>';
+    return;
+  }
+  
+  // Update last updated
+  if (data.last_updated) {
+    const date = new Date(data.last_updated);
+    document.getElementById('standupLastUpdated').textContent = 
+      `Updated: ${date.toLocaleDateString('en-GB')}`;
+  }
+  
+  let html = '';
+  
+  for (const [name, member] of Object.entries(data.team_members)) {
+    html += `
+      <div class="kanban-person">
+        <h3>${escapeHtml(name)}</h3>
+        ${member.tasks && member.tasks.length > 0 ? 
+          member.tasks.map(task => `
+            <div class="kanban-task ${task.status === 'potentially_completed' ? 'status-completed' : ''}">
+              ${escapeHtml(task.description)}
+              ${task.status === 'potentially_completed' ? '<span class="task-status">Done?</span>' : ''}
+              ${task.added_on && task.status !== 'potentially_completed' ? 
+                `<div class="task-date">Started: ${task.added_on}</div>` : ''}
+            </div>
+          `).join('') : 
+          '<p style="color: var(--text-tertiary); font-size: 13px;">No active tasks</p>'
+        }
+      </div>
+    `;
+  }
+  
+  container.innerHTML = html;
 }
