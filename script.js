@@ -432,7 +432,19 @@ function openNoteModal(idx) {
   if (!notes || idx >= notes.length) return;
   const note = notes[idx];
   document.getElementById('noteModalTitle').textContent = note.title || 'Untitled';
-  document.getElementById('noteModalContent').innerHTML = formatNoteContent(note.content || 'No content');
+  
+  // Format content with markdown
+  const formattedContent = formatNoteContent(note.content || 'No content');
+  
+  // Generate table of contents from headings
+  const toc = generateTableOfContents(note.content || '');
+  
+  // Combine TOC and content
+  const fullContent = toc + '<div class="markdown-body">' + formattedContent + '</div>';
+  document.getElementById('noteModalContent').innerHTML = fullContent;
+  
+  // Add reading progress bar
+  addReadingProgress();
   
   const tagsContainer = document.getElementById('noteModalTags');
   tagsContainer.innerHTML = note.tags ? 
@@ -444,6 +456,83 @@ function openNoteModal(idx) {
 function closeNoteModal(event) {
   if (event && event.target !== document.getElementById('noteModal')) return;
   document.getElementById('noteModal').classList.remove('active');
+  // Remove progress bar on close
+  const progressBar = document.querySelector('.reading-progress');
+  if (progressBar) progressBar.remove();
+}
+
+// Generate table of contents from markdown headings
+function generateTableOfContents(markdown) {
+  if (!markdown) return '';
+  
+  // Extract headings (h1-h4)
+  const headingRegex = /^(#{1,4})\s+(.+)$/gm;
+  const headings = [];
+  let match;
+  
+  while ((match = headingRegex.exec(markdown)) !== null) {
+    const level = match[1].length;
+    const text = match[2].trim();
+    const id = text.toLowerCase()
+      .replace(/[^\w\s-]/g, '')
+      .replace(/\s+/g, '-')
+      .replace(/-+/g, '-');
+    
+    headings.push({ level, text, id });
+  }
+  
+  if (headings.length === 0) return '';
+  
+  // Build TOC HTML
+  let tocHTML = '<div class="toc-container"><div class="toc-title">📑 Table of Contents</div><ul class="toc-list">';
+  
+  headings.forEach(heading => {
+    const className = 'toc-h' + heading.level;
+    const escapedText = escapeHtml(heading.text);
+    tocHTML += `<li class="${className}"><a href="#" onclick="scrollToHeading('${heading.id}'); return false;">${escapedText}</a></li>`;
+  });
+  
+  tocHTML += '</ul></div>';
+  
+  // Also add IDs to the actual headings in the content for scrolling
+  return tocHTML;
+}
+
+// Scroll to heading smoothly
+function scrollToHeading(id) {
+  // Find the heading element in the modal content
+  const content = document.getElementById('noteModalContent');
+  const headings = content.querySelectorAll('h1, h2, h3, h4');
+  
+  for (const h of headings) {
+    if (h.textContent.toLowerCase().replace(/[^\w\s-]/g, '').replace(/\s+/g, '-') === id) {
+      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      break;
+    }
+  }
+}
+
+// Add reading progress bar
+function addReadingProgress() {
+  // Remove existing progress bar
+  const existingBar = document.querySelector('.reading-progress');
+  if (existingBar) existingBar.remove();
+  
+  // Create progress bar
+  const progressBar = document.createElement('div');
+  progressBar.className = 'reading-progress';
+  document.body.appendChild(progressBar);
+  
+  // Update progress on scroll
+  const modalContent = document.getElementById('noteModalContent');
+  if (!modalContent) return;
+  
+  modalContent.onscroll = function() {
+    const scrollTop = modalContent.scrollTop;
+    const scrollHeight = modalContent.scrollHeight - modalContent.clientHeight;
+    const progress = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
+    progressBar.style.width = progress + '%';
+  };
 }
 
 // Utilities
@@ -453,9 +542,18 @@ function formatNoteContent(content) {
   // Configure marked for safe rendering
   if (typeof marked !== 'undefined') {
     // Parse markdown to HTML
-    return marked.parse(content, {
+    const html = marked.parse(content, {
       breaks: true,
       gfm: true  // GitHub Flavored Markdown (tables, strikethrough, etc.)
+    });
+    
+    // Add IDs to headings for TOC navigation
+    return html.replace(/<h([1-4])>(.*?)<\/h[1-4]>/g, (match, level, text) => {
+      const id = text.toLowerCase()
+        .replace(/[^\w\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-');
+      return `<h${level} id="${id}">${text}</h${level}>`;
     });
   }
   
