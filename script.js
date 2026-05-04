@@ -448,6 +448,17 @@ function closeNoteModal(event) {
 // Utilities
 function formatNoteContent(content) {
   if (!content) return '';
+  
+  // Configure marked for safe rendering
+  if (typeof marked !== 'undefined') {
+    // Parse markdown to HTML
+    return marked.parse(content, {
+      breaks: true,
+      gfm: true  // GitHub Flavored Markdown (tables, strikethrough, etc.)
+    });
+  }
+  
+  // Fallback to basic formatting if marked is not available
   return escapeHtml(content)
     .replace(/\n/g, '<br>')
     .replace(/#{1,6}\s?(.*)/g, '<strong>$1</strong>')
