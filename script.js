@@ -618,14 +618,42 @@ function renderStandupBoard(data) {
       <div class="kanban-person">
         <h3>${escapeHtml(name)}</h3>
         ${member.tasks && member.tasks.length > 0 ? 
-          member.tasks.map(task => `
-            <div class="kanban-task ${task.status === 'potentially_completed' ? 'status-completed' : ''}">
-              ${escapeHtml(task.description)}
-              ${task.status === 'potentially_completed' ? '<span class="task-status">Done?</span>' : ''}
-              ${task.added_on && task.status !== 'potentially_completed' ? 
-                `<div class="task-date">Started: ${task.added_on}</div>` : ''}
-            </div>
-          `).join('') : 
+          member.tasks.map(task => {
+            const status = task.status || 'in_progress';
+            const statusConfig = {
+              'in_progress': { 
+                label: 'IN PROGRESS', 
+                class: 'status-in-progress',
+                icon: '⟳'
+              },
+              'completed': { 
+                label: 'COMPLETED', 
+                class: 'status-completed',
+                icon: '✓'
+              },
+              'potentially_completed': { 
+                label: 'POTENTIALLY DONE', 
+                class: 'status-potentially',
+                icon: '?'
+              }
+            };
+            const config = statusConfig[status] || statusConfig['in_progress'];
+            
+            return `
+              <div class="kanban-task ${config.class}">
+                <div class="task-header">
+                  <span class="task-status-badge ${config.class}">
+                    ${config.icon} ${config.label}
+                  </span>
+                </div>
+                <div class="task-description">${escapeHtml(task.description)}</div>
+                ${task.added_on ? 
+                  `<div class="task-date">📅 ${task.added_on}</div>` : ''}
+                ${task.completed_on && status === 'completed' ? 
+                  `<div class="task-date">✅ ${task.completed_on}</div>` : ''}
+              </div>
+            `;
+          }).join('') : 
           '<p style="color: var(--text-tertiary); font-size: 13px;">No active tasks</p>'
         }
       </div>
