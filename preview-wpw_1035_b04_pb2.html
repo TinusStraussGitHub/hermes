@@ -220,6 +220,7 @@
         <div class="controls">
             <button class="control-btn active" onclick="sortTable(0, 'asc')">Sort by Hole # (Asc)</button>
             <button class="control-btn" onclick="sortTable(0, 'desc')">Sort by Hole # (Desc)</button>
+            <button class="control-btn" onclick="sortTable(1, 'asc')">Sort by Hole Name (AlphaNum)</button>
             <button class="control-btn" onclick="sortTable(5, 'asc')">Sort by Drilling Status</button>
             <button class="control-btn" onclick="sortTable(6, 'asc')">Sort by Charging Status</button>
             <button class="control-btn" onclick="sortTable(7, 'asc')">Sort by Mass (kg)</button>
@@ -9323,6 +9324,31 @@
     <script>
         let decksVisible = false;
         
+        // Alphanumeric sort function for hole names
+        function alphaNumSort(a, b) {
+            // Split strings into parts (text and numbers)
+            const regex = /(\d+)|(\D+)/g;
+            const aParts = a.match(regex) || [];
+            const bParts = b.match(regex) || [];
+            
+            for (let i = 0; i < Math.min(aParts.length, bParts.length); i++) {
+                const aPart = aParts[i];
+                const bPart = bParts[i];
+                
+                // If both parts are numbers, compare numerically
+                if (/\d/.test(aPart) && /\d/.test(bPart)) {
+                    const aNum = parseInt(aPart, 10);
+                    const bNum = parseInt(bPart, 10);
+                    if (aNum !== bNum) return aNum - bNum;
+                } else {
+                    // Otherwise compare as strings
+                    if (aPart !== bPart) return aPart.localeCompare(bPart);
+                }
+            }
+            
+            return aParts.length - bParts.length;
+        }
+        
         function sortTable(column, direction) {
             const table = document.getElementById('holesTable');
             const tbody = table.getElementsByTagName('tbody')[0];
@@ -9331,7 +9357,13 @@
             rows.sort((a, b) => {
                 let aVal, bVal;
                 
-                if (column === 9) {
+                if (column === 1) {
+                    // Hole Name - alphanumeric sort
+                    aVal = a.getElementsByTagName('td')[column].textContent.trim();
+                    bVal = b.getElementsByTagName('td')[column].textContent.trim();
+                    const result = alphaNumSort(aVal, bVal);
+                    return direction === 'asc' ? result : -result;
+                } else if (column === 9) {
                     // Charging date sorting by timestamp
                     aVal = parseInt(a.getAttribute('data-charging-timestamp')) || 0;
                     bVal = parseInt(b.getAttribute('data-charging-timestamp')) || 0;
@@ -9351,10 +9383,12 @@
                     bVal = b.getElementsByTagName('td')[column].textContent.trim();
                 }
                 
-                if (direction === 'asc') {
-                    return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
-                } else {
-                    return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
+                if (column !== 1) {
+                    if (direction === 'asc') {
+                        return aVal < bVal ? -1 : aVal > bVal ? 1 : 0;
+                    } else {
+                        return aVal > bVal ? -1 : aVal < bVal ? 1 : 0;
+                    }
                 }
             });
             
