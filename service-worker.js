@@ -7,7 +7,6 @@ const urlsToCache = [
   './index.html',
   './preview-operator-flow.html',
   './preview-fleet-dashboard.html',
-  './preview-truck-dashboard.html',
   './script.js',
   './style.css',
   './marked.min.js',
