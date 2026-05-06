@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Fleet Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #888;
+            font-size: 1rem;
+        }
+        .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 1000;
+        }
+        .back-link:hover { color: #ffffff; }
+
+        .dashboard-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 40px;
+            border-left: 4px solid #007AFF;
+        }
+        .dashboard-title {
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 8px;
+            font-weight: 400;
+        }
+        .dashboard-subtitle {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 24px;
+        }
+        .dashboard-audience {
+            display: inline-block;
+            background: rgba(0, 122, 255, 0.15);
+            color: #007AFF;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+        }
+
+        /* Fleet Overview Styles */
+        .fleet-stats-bar {
+            background: #252525;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 4px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: #252525;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-card.green { border-left: 4px solid #30d158; }
+        .stat-card.blue { border-left: 4px solid #007AFF; }
+        .stat-card.red { border-left: 4px solid #FF3B30; }
+        .stat-card.orange { border-left: 4px solid #FF9F0A; }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        .stat-card.green .stat-number { color: #30d158; }
+        .stat-card.blue .stat-number { color: #007AFF; }
+        .stat-card.red .stat-number { color: #FF3B30; }
+        .stat-card.orange .stat-number { color: #FF9F0A; }
+
+        /* Map Placeholder */
+        .map-placeholder {
+            background: #252525;
+            border-radius: 8px;
+            padding: 60px 20px;
+            text-align: center;
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .map-placeholder h3 { color: #888; margin-bottom: 10px; }
+
+        /* Timeline Styles */
+        .timeline-bar {
+            background: #252525;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            color: #888;
+        }
+        .timeline-track {
+            height: 40px;
+            background: #333;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .timeline-segment {
+            position: absolute;
+            height: 100%;
+            top: 0;
+        }
+        .timeline-segment.green { background: #30d158; }
+        .timeline-segment.red { background: #FF3B30; }
+        .timeline-segment.orange { background: #FF9F0A; }
+
+        .time-split {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+        .time-item {
+            background: #252525;
+            padding: 12px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .time-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .time-dot.green { background: #30d158; }
+        .time-dot.red { background: #FF3B30; }
+        .time-dot.orange { background: #FF9F0A; }
+
+        /* Table Styles */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .data-table th {
+            background: #252525;
+            padding: 12px;
+            text-align: left;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-bottom: 2px solid #333;
+        }
+        .data-table td {
+            padding: 12px;
+            border-bottom: 1px solid #333;
+            font-size: 0.9rem;
+        }
+        .data-table tr:hover {
+            background: #252525;
+        }
+
+        /* Bar Chart */
+        .bar-chart {
+            margin-bottom: 20px;
+        }
+        .bar-item {
+            margin-bottom: 12px;
+        }
+        .bar-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+        .bar-track {
+            height: 24px;
+            background: #252525;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+        .bar-fill.blue { background: #007AFF; }
+        .bar-fill.red { background: #FF3B30; }
+        .bar-fill.orange { background: #FF9F0A; }
+
+        /* Reliability Metrics */
+        .reliability-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .reliability-card {
+            background: #252525;
+            border-radius: 8px;
+            padding: 16px;
+        }
+        .reliability-card h4 {
+            color: #aaa;
+            font-size: 0.85rem;
+            margin-bottom: 8px;
+        }
+        .reliability-value {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #ffffff;
+        }
+
+        .note-box {
+            background: rgba(255, 159, 10, 0.1);
+            border-left: 3px solid #FF9F0A;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 1.8rem; }
+            .content { padding: 10px; }
+            .dashboard-section { padding: 20px; }
+            .fleet-stats-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    
+    <div class="header">
+        <h1>Fleet Dashboard</h1>
+        <p>Mockup dashboards for Xplolog fleet management</p>
+    </div>
+
+    <div class="content">
+        
+        <!-- Dashboard 1: Fleet Overview -->
+        <div class="dashboard-section">
+            <span class="dashboard-audience">Executives, Operations Managers, Control Room</span>
+            <h2 class="dashboard-title">1. Fleet Overview Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "What is the overall health and performance of the fleet right now and today?"</p>
+
+            <div class="fleet-stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">18</div>
+                    <div class="stat-label">Active Trucks</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: #30d158;">14</div>
+                    <div class="stat-label">Operational</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: #FF3B30;">4</div>
+                    <div class="stat-label">Down</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">89%</div>
+                    <div class="stat-label">Availability</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">412.6 t</div>
+                    <div class="stat-label">Total Pumped</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">890 km</div>
+                    <div class="stat-label">Distance</div>
+                </div>
+            </div>
+
+            <div class="stat-grid">
+                <div class="stat-card green">
+                    <div style="color: #30d158; font-size: 0.9rem;">Operational</div>
+                    <div class="stat-number">14</div>
+                </div>
+                <div class="stat-card blue">
+                    <div style="color: #007AFF; font-size: 0.9rem;">Pumping Now</div>
+                    <div class="stat-number">6</div>
+                </div>
+                <div class="stat-card red">
+                    <div style="color: #FF3B30; font-size: 0.9rem;">Breakdown</div>
+                    <div class="stat-number">3</div>
+                </div>
+                <div class="stat-card orange">
+                    <div style="color: #FF9F0A; font-size: 0.9rem;">Environmental</div>
+                    <div class="stat-number">1</div>
+                </div>
+            </div>
+
+            <div class="map-placeholder">
+                <h3>🗺️ Fleet Status Map</h3>
+                <p>Live GPS map with truck icons (🟢 Operational | 🔴 Down | ⚙️ Pumping)</p>
+                <p style="margin-top: 10px; font-size: 0.85rem;">HA100: 🟢 Operational @ Site A &nbsp;&nbsp; HA101: 🔴 Down (Hydraulic) &nbsp;&nbsp; HA102: ⚙️ Pumping @ Site B</p>
+            </div>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Immediate situational awareness. Combines state + output + movement. First screen everyone understands.
+            </div>
+        </div>
+
+        <!-- Dashboard 2: Fleet Timeline -->
+        <div class="dashboard-section" style="border-left-color: #FF9F0A;">
+            <span class="dashboard-audience" style="background: rgba(255, 159, 10, 0.15); color: #FF9F0A;">Operations & Reliability Managers</span>
+            <h2 class="dashboard-title">2. Fleet Timeline Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "Where did fleet time go during the day?"</p>
+
+            <div class="time-split">
+                <div class="time-item">
+                    <div class="time-dot green"></div>
+                    <div>
+                        <div style="font-weight: 600;">Operational</div>
+                        <div style="color: #30d158;">87%</div>
+                    </div>
+                </div>
+                <div class="time-item">
+                    <div class="time-dot red"></div>
+                    <div>
+                        <div style="font-weight: 600;">Breakdown</div>
+                        <div style="color: #FF3B30;">6%</div>
+                    </div>
+                </div>
+                <div class="time-item">
+                    <div class="time-dot orange"></div>
+                    <div>
+                        <div style="font-weight: 600;">Environmental</div>
+                        <div style="color: #FF9F0A;">7%</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="timeline-bar">
+                <div class="timeline-header">
+                    <span>06:00</span>
+                    <span>Fleet Timeline (Aggregated)</span>
+                    <span>18:00</span>
+                </div>
+                <div class="timeline-track">
+                    <div class="timeline-segment green" style="left: 0%; width: 25%;"></div>
+                    <div class="timeline-segment green" style="left: 25%; width: 20%;"></div>
+                    <div class="timeline-segment red" style="left: 45%; width: 8%;"></div>
+                    <div class="timeline-segment green" style="left: 53%; width: 15%;"></div>
+                    <div class="timeline-segment green" style="left: 68%; width: 12%;"></div>
+                    <div class="timeline-segment orange" style="left: 80%; width: 10%;"></div>
+                    <div class="timeline-segment green" style="left: 90%; width: 10%;"></div>
+                </div>
+                <div style="margin-top: 8px; font-size: 0.8rem; color: #666;">🟩🟩🟩🟥🟥🟩🟩🟩🟧🟧🟩🟩</div>
+            </div>
+
+            <div style="background: #252525; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                <h4 style="color: #aaa; margin-bottom: 12px;">Top Time Losses</h4>
+                <ol style="padding-left: 20px; color: #ccc;">
+                    <li style="margin-bottom: 8px;">Heavy Rain – 11.2 hrs</li>
+                    <li style="margin-bottom: 8px;">Hydraulic Fault – 6.4 hrs</li>
+                    <li>Electrical Fault – 3.1 hrs</li>
+                </ol>
+            </div>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Explains why production dipped. Separates uncontrollable vs controllable loss. Perfect for daily reviews.
+            </div>
+        </div>
+
+        <!-- Dashboard 3: Productivity -->
+        <div class="dashboard-section" style="border-left-color: #30d158;">
+            <span class="dashboard-audience" style="background: rgba(48, 209, 88, 0.15); color: #30d158;">Production Managers, Planners</span>
+            <h2 class="dashboard-title">3. Productivity Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "Which trucks are producing, and how efficiently?"</p>
+
+            <div class="stat-grid">
+                <div class="stat-card blue">
+                    <div style="color: #007AFF; font-size: 0.9rem;">Total Pumped (t) - Last 7 Days</div>
+                    <div class="stat-number">2,911.4</div>
+                </div>
+                <div class="stat-card green">
+                    <div style="color: #30d158; font-size: 0.9rem;">Avg t / Op Hr</div>
+                    <div class="stat-number">3.2</div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Truck ID</th>
+                        <th>Pumped (t)</th>
+                        <th>Op Hrs</th>
+                        <th>t/hr</th>
+                        <th>km</th>
+                        <th>kg/km</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>HA100</strong></td>
+                        <td>212.3</td>
+                        <td>68</td>
+                        <td style="color: #30d158;">3.1</td>
+                        <td>342</td>
+                        <td>620</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HA101</strong></td>
+                        <td>164.8</td>
+                        <td>71</td>
+                        <td style="color: #FF9F0A;">2.3</td>
+                        <td>398</td>
+                        <td>414</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HA102</strong></td>
+                        <td>244.9</td>
+                        <td>66</td>
+                        <td style="color: #30d158;">3.7</td>
+                        <td>301</td>
+                        <td>813</td>
+                    </tr>
+                    <tr>
+                        <td><strong>T-07</strong></td>
+                        <td>198.5</td>
+                        <td>65</td>
+                        <td style="color: #30d158;">3.1</td>
+                        <td>320</td>
+                        <td>620</td>
+                    </tr>
+                    <tr>
+                        <td><strong>T-12</strong></td>
+                        <td>244.9</td>
+                        <td>66</td>
+                        <td style="color: #30d158;">3.7</td>
+                        <td>301</td>
+                        <td>813</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Shows productivity, not just activity. Distance adds deployment context. Identifies high-efficiency units.
+            </div>
+        </div>
+
+        <!-- Dashboard 4: Downtime & Reliability -->
+        <div class="dashboard-section" style="border-left-color: #FF3B30;">
+            <span class="dashboard-audience" style="background: rgba(255, 59, 48, 0.15); color: #FF3B30;">Maintenance & Reliability Teams</span>
+            <h2 class="dashboard-title">4. Downtime & Reliability Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "Which trucks are failing, how often, and why?"</p>
+
+            <div class="reliability-grid">
+                <div class="reliability-card">
+                    <h4>Total Downtime (30 Days)</h4>
+                    <div class="reliability-value">182 hrs</div>
+                </div>
+                <div class="reliability-card">
+                    <h4>Breakdown vs Environmental</h4>
+                    <div class="reliability-value">
+                        <span style="color: #FF3B30;">🔧 56%</span> | 
+                        <span style="color: #FF9F0A;">🌧️ 44%</span>
+                    </div>
+                </div>
+                <div class="reliability-card">
+                    <h4>Total Downtime Events</h4>
+                    <div class="reliability-value">78</div>
+                </div>
+            </div>
+
+            <h4 style="color: #aaa; margin-bottom: 12px;">Breakdown Causes</h4>
+            <div class="bar-chart">
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span>Hydraulic</span>
+                        <span>46 hrs</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill red" style="width: 75%;"></div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span>Electrical</span>
+                        <span>31 hrs</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill orange" style="width: 50%;"></div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span>Pump System</span>
+                        <span>12 hrs</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill blue" style="width: 20%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Truck ID</th>
+                        <th>Breakdowns</th>
+                        <th>km Travelled</th>
+                        <th>Rate/1000 km</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>HA101</strong></td>
+                        <td style="color: #FF3B30;">7</td>
+                        <td>890</td>
+                        <td>7.8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>HA100</strong></td>
+                        <td style="color: #30d158;">2</td>
+                        <td>760</td>
+                        <td>2.6</td>
+                    </tr>
+                    <tr>
+                        <td><strong>T-07</strong></td>
+                        <td style="color: #FF3B30;">7</td>
+                        <td>890</td>
+                        <td>7.8</td>
+                    </tr>
+                    <tr>
+                        <td><strong>T-03</strong></td>
+                        <td style="color: #30d158;">2</td>
+                        <td>760</td>
+                        <td>2.6</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Early failure indicators. Supports preventative maintenance decisions. Data-backed reliability discussion.
+            </div>
+        </div>
+
+        <!-- Dashboard 5: Movement & Deployment -->
+        <div class="dashboard-section" style="border-left-color: #5856D6;">
+            <span class="dashboard-audience" style="background: rgba(88, 86, 214, 0.15); color: #5856D6;">Fleet Managers, Logistics Planners</span>
+            <h2 class="dashboard-title">5. Movement & Deployment Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "Are trucks deployed efficiently across sites?"</p>
+
+            <div class="stat-grid">
+                <div class="stat-card" style="border-left-color: #5856D6;">
+                    <div style="color: #5856D6; font-size: 0.9rem;">Avg km / Shift</div>
+                    <div class="stat-number">48</div>
+                </div>
+                <div class="stat-card" style="border-left-color: #5856D6;">
+                    <div style="color: #5856D6; font-size: 0.9rem;">Avg kg / km</div>
+                    <div class="stat-number">510</div>
+                </div>
+            </div>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Site</th>
+                        <th>Pumped (t)</th>
+                        <th>Trucks</th>
+                        <th>km / t</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Site A</strong></td>
+                        <td>1,204</td>
+                        <td>5</td>
+                        <td style="color: #30d158;">7.1</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Site B</strong></td>
+                        <td>812</td>
+                        <td>4</td>
+                        <td style="color: #FF3B30;">11.3</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Site C</strong></td>
+                        <td>895</td>
+                        <td>4</td>
+                        <td style="color: #FF9F0A;">9.2</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="map-placeholder">
+                <h3>🗺️ Site Deployment Map</h3>
+                <p>All truck tracks with pump & downtime markers</p>
+                <p style="margin-top: 10px; font-size: 0.85rem;">HA100 → Site A (12 trips) &nbsp;|&nbsp; HA101 → Site B (8 trips, 2 breakdowns) &nbsp;|&nbsp; HA102 → Site A (15 trips)</p>
+            </div>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Highlights logistics inefficiencies. Helps rebalance fleet allocation. Supports strategic planning.
+            </div>
+        </div>
+
+        <!-- Dashboard 6: Contract & Executive -->
+        <div class="dashboard-section" style="border-left-color: #FF9500;">
+            <span class="dashboard-audience" style="background: rgba(255, 149, 0, 0.15); color: #FF9500;">Executives, Clients, Contract Managers</span>
+            <h2 class="dashboard-title">6. Contract & Executive Dashboard</h2>
+            <p class="dashboard-subtitle">Primary Question: "Are we meeting contractual obligations, and why?"</p>
+
+            <div class="fleet-stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value" style="color: #30d158;">91.2%</div>
+                    <div class="stat-label">Availability (Target: 90% ✅)</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-item">
+                        <div style="color: #FF9F0A; font-size: 0.9rem;">Excluded Downtime</div>
+                        <div class="stat-value">64.5 hrs</div>
+                    </div>
+                </div>
+                <div class="stat-item">
+                    <div style="color: #007AFF; font-size: 0.9rem;">Total Pumped (Month)</div>
+                    <div class="stat-value">12,482 t</div>
+                </div>
+            </div>
+
+            <div style="background: #252525; border-radius: 8px; padding: 16px; margin-bottom: 20px;">
+                <h4 style="color: #aaa; margin-bottom: 12px;">Lost Opportunity Analysis</h4>
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span>Breakdown Loss</span>
+                        <span>418 t</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill red" style="width: 40%;"></div>
+                    </div>
+                </div>
+                <div class="bar-item">
+                    <div class="bar-label">
+                        <span>Environmental Loss</span>
+                        <span>612 t</span>
+                    </div>
+                    <div class="bar-track">
+                        <div class="bar-fill orange" style="width: 60%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="note-box">
+                <strong>Why This Works:</strong> Clean, defensible metrics. Environmental exclusions clearly shown. No operational clutter.
+            </div>
+        </div>
+
+        <!-- Final Takeaway -->
+        <div style="background: linear-gradient(135deg, #1a1a1a 0%, #252525 100%); border-radius: 12px; padding: 40px; text-align: center; border: 1px solid #333;">
+            <h2 style="color: #ffffff; font-size: 2rem; margin-bottom: 16px;">Final Takeaway</h2>
+            <p style="color: #ccc; font-size: 1.1rem; line-height: 1.6; max-width: 800px; margin: 0 auto;">
+                With consolidated truck data, Xplolog can offer:<br>
+                <strong style="color: #ffffff;">One fleet truth, visualised differently for each role.</strong>
+            </p>
+            <p style="color: #888; margin-top: 20px; font-style: italic;">
+                You are no longer reporting activity —<br>
+                you are reporting performance, availability, and accountability.
+            </p>
+        </div>
+
+    </div>
+</body>
+</html>
