@@ -1,0 +1,833 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gamsberg Blocks - April 2026</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0a0a0a;
+            color: #e0e0e0;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #333;
+        }
+        .back-link {
+            color: #4a9eff;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        h1 {
+            color: #ffffff;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .subtitle {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-card {
+            background: #1a1a1a;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #333;
+        }
+        .stat-label {
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+        .stat-value {
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .blocks-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #1a1a1a;
+            border-radius: 8px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .blocks-table th {
+            background: #2a2a2a;
+            padding: 12px 15px;
+            text-align: left;
+            color: #888;
+            font-size: 12px;
+            text-transform: uppercase;
+            border-bottom: 1px solid #333;
+        }
+        .blocks-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #333;
+            font-size: 14px;
+        }
+        .blocks-table tr:hover {
+            background: #2a2a2a;
+        }
+        .block-name {
+            color: #4a9eff;
+            font-weight: bold;
+        }
+        .status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        .status.completed {
+            background: #1a3a1a;
+            color: #4caf50;
+        }
+        .status.active {
+            background: #3a2a1a;
+            color: #ff9800;
+        }
+        .mass {
+            font-family: monospace;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div>
+            <h1>📊 Gamsberg Blocks Dashboard</h1>
+            <div class="subtitle">April 2026 | Total Blocks: 66</div>
+        </div>
+        <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    </div>
+
+    <div class="stats">
+        <div class="stat-card">
+            <div class="stat-label">Total Blocks</div>
+            <div class="stat-value">66</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Completed</div>
+            <div class="stat-value">4</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Active</div>
+            <div class="stat-value">62</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Planned Mass</div>
+            <div class="stat-value">2,562,203 kg</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-label">Total Charged Mass</div>
+            <div class="stat-value">1,887,610 kg</div>
+        </div>
+    </div>
+
+    <div class="table-container">
+        <table class="blocks-table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Block Name</th>
+                    <th>Status</th>
+                    <th>Burden</th>
+                    <th>Spacing</th>
+                    <th>Planned Mass (kg)</th>
+                    <th>Charged Mass (kg)</th>
+                    <th>BMT Holes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="block-name">WPW_1035_B04_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">127,616.71</td>
+                    <td class="mass">121,539.20</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="block-name">EPW_960_B06_PB3_R1</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">33,393.61</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="block-name">EPW_975_T01_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">25,002.73</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="block-name">WPO_945_B06A_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">109,007.38</td>
+                    <td class="mass">112,490.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="block-name">EPW_975_T01_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="block-name">EPW_990_T03_PB2_R1</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">8,874.22</td>
+                    <td class="mass">9,209.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="block-name">WPW_960_T04_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="block-name">WPO_960_T05_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">28,118.77</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td class="block-name">WPW_945_SECONDARIES</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td class="mass">4,303.17</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="block-name">EPW_975_B03_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">28,669.38</td>
+                    <td class="mass">28,756.70</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="block-name">EPW_975_B05_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">41,552.15</td>
+                    <td class="mass">42,061.60</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td class="block-name">WPO_960_T05_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">15,825.28</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>13</td>
+                    <td class="block-name">EPO_945_B04_B05A_PB2</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">111,285.99</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>14</td>
+                    <td class="block-name">WPW_1035_B03_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">74,438.81</td>
+                    <td class="mass">71,514.48</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>15</td>
+                    <td class="block-name">EPW_960_B06_PB2_rem</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">48,407.17</td>
+                    <td class="mass">50,919.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>16</td>
+                    <td class="block-name">EPW_975_T02_PB3_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">33,370.72</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>17</td>
+                    <td class="block-name">EPO_855_B03_PB2 Timing Design</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>18</td>
+                    <td class="block-name">WPW_1050_T01_PB2_PS</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">556.80</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>19</td>
+                    <td class="block-name">EPO_855_B03_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">9,804.36</td>
+                    <td class="mass">10,463.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>20</td>
+                    <td class="block-name">WPW_1050_T08_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">3,307.16</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>21</td>
+                    <td class="block-name">CHARGE_MASS_TOLERANCE_TEST</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6</td>
+                    <td class="mass">15,593.00</td>
+                    <td class="mass">7,945.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>22</td>
+                    <td class="block-name">WPW_1050_T07_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>23</td>
+                    <td class="block-name">WPW_945_B04B_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">144,998.26</td>
+                    <td class="mass">148,929.30</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>24</td>
+                    <td class="block-name">WPW_1050_T01_PB2_PS.</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>25</td>
+                    <td class="block-name">WPW_1050_T01_PB2_PS_v2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">39,118.83</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>26</td>
+                    <td class="block-name">EPW_870_T01_OFFSET_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5</td>
+                    <td class="mass">1,349.56</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>27</td>
+                    <td class="block-name">WPW_1050_T01_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">29,988.57</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>28</td>
+                    <td class="block-name">EPW_960_R01_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">30,215.64</td>
+                    <td class="mass">33,477.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>29</td>
+                    <td class="block-name">EPW_960_H01_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">18,439.77</td>
+                    <td class="mass">18,708.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>30</td>
+                    <td class="block-name">EPW_975_T02_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">70,294.23</td>
+                    <td class="mass">70,543.23</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>31</td>
+                    <td class="block-name">WPW_1050_T08_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">6,539.09</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>32</td>
+                    <td class="block-name">EPO_855_R01_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">12,756.47</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>33</td>
+                    <td class="block-name">EPO_855_B01_PB2_AMENDED</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">30,219.43</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>34</td>
+                    <td class="block-name">EPO_855_B01_AMENDED_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">47,622.36</td>
+                    <td class="mass">12,999.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>35</td>
+                    <td class="block-name">WPW_1050_T01_PB2_v2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">96,260.07</td>
+                    <td class="mass">89,223.55</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>36</td>
+                    <td class="block-name">WPW_1050_T08_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">8,973.88</td>
+                    <td class="mass">6,615.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>37</td>
+                    <td class="block-name">WPW_1050_T07_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">61,496.04</td>
+                    <td class="mass">61,793.13</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>38</td>
+                    <td class="block-name">EPW_975_B15A_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">49,595.11</td>
+                    <td class="mass">50,916.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>39</td>
+                    <td class="block-name">EPW_960_T06_PS_R1</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">9,232.44</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>40</td>
+                    <td class="block-name">EPO_945_B04_B05A_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">113,631.51</td>
+                    <td class="mass">111,485.01</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>41</td>
+                    <td class="block-name">EPW_975_T01_PB1_Remaining</td>
+                    <td><span class="status completed">Completed</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">4,488.81</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>42</td>
+                    <td class="block-name">EPW_975_T01_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>0</td>
+                    <td class="mass">64,510.84</td>
+                    <td class="mass">66,448.60</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>43</td>
+                    <td class="block-name">EPW_990_T04_PB3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">64,827.98</td>
+                    <td class="mass">64,926.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>44</td>
+                    <td class="block-name">EPW_945_B03A_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">65,813.76</td>
+                    <td class="mass">65,568.02</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>45</td>
+                    <td class="block-name">EPW_945_B06A_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">88,672.10</td>
+                    <td class="mass">91,888.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>46</td>
+                    <td class="block-name">WPO_945_B06B_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">126,576.83</td>
+                    <td class="mass">121,467.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>47</td>
+                    <td class="block-name">WPW_960_T13_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">19,532.52</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>48</td>
+                    <td class="block-name">EPW_960_T06_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">10,484.85</td>
+                    <td class="mass">10,860.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>49</td>
+                    <td class="block-name">EPO_855_B02_PB2_R1</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">972.83</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>50</td>
+                    <td class="block-name">WPW_1050_B01B_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">19,083.39</td>
+                    <td class="mass">14,360.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>51</td>
+                    <td class="block-name">WPW_960_T13_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">39,691.52</td>
+                    <td class="mass">38,972.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>52</td>
+                    <td class="block-name">EPW_975_T03_PB2 Fault</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.7</td>
+                    <td class="mass">0.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>53</td>
+                    <td class="block-name">WPW_1020_T105_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">27,794.00</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>54</td>
+                    <td class="block-name">EPW_975_B03_PB2_R1</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">11,547.11</td>
+                    <td class="mass">12,342.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>55</td>
+                    <td class="block-name">EPO_855_B04_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">10,730.72</td>
+                    <td class="mass">13,284.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>56</td>
+                    <td class="block-name">WPW_930_T01_PB2_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">28,336.26</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>57</td>
+                    <td class="block-name">EPO_855_B05_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">8,274.21</td>
+                    <td class="mass">9,508.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>58</td>
+                    <td class="block-name">EPW_975_T04_PB3_PS</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">18,172.08</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>59</td>
+                    <td class="block-name">WPW_945_B07A_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>3.7</td>
+                    <td>4.2</td>
+                    <td class="mass">143,181.31</td>
+                    <td class="mass">146,750.28</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>60</td>
+                    <td class="block-name">EPW_960_B06_PB2_R2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">38,983.34</td>
+                    <td class="mass">39,983.02</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>61</td>
+                    <td class="block-name">EPW_960_B06_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">47,152.95</td>
+                    <td class="mass">48,343.55</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>62</td>
+                    <td class="block-name">EPW_960_B06_B07_PB2_REMAINING</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>6</td>
+                    <td>7</td>
+                    <td class="mass">27,819.76</td>
+                    <td class="mass">27,489.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>63</td>
+                    <td class="block-name">EPW_1005_T10_PB2_PS_R2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>0</td>
+                    <td>1.5</td>
+                    <td class="mass">23,812.42</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>64</td>
+                    <td class="block-name">EPW_975_T03_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">61,807.52</td>
+                    <td class="mass">43,668.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>65</td>
+                    <td class="block-name">EPW_975_B12_PB2</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5</td>
+                    <td>5.8</td>
+                    <td class="mass">31,744.22</td>
+                    <td class="mass">0.00</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>66</td>
+                    <td class="block-name">bin 3</td>
+                    <td><span class="status active">Active</span></td>
+                    <td>5.7</td>
+                    <td>6.4</td>
+                    <td class="mass">88,889.31</td>
+                    <td class="mass">11,609.00</td>
+                    <td>0</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
