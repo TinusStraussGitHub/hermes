@@ -8,8 +8,6 @@ const urlsToCache = [
   './preview-operator-flow.html',
   './preview-fleet-dashboard.html',
   './preview-rustenberg-server.html',
-  './preview-blocks-april-2026.html',
-  './preview-wpw_1035_b04_pb2.html',
   './script.js',
   './style.css',
   './marked.min.js',
