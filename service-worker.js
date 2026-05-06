@@ -5,7 +5,7 @@ const CACHE_NAME = 'personal-insights-hub-v1';
 const urlsToCache = [
   './',
   './index.html',
-  './preview.html',
+  './preview-operator-flow.html',
   './script.js',
   './style.css',
   './marked.min.js',
