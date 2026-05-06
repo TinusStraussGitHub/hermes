@@ -39,25 +39,9 @@
         }
 
         .content {
-            max-width: 1200px;
+            max-width: 1400px;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        .placeholder {
-            background: #1a1a1a;
-            border: 2px dashed #333;
-            border-radius: 12px;
-            padding: 60px 20px;
-            text-align: center;
-            color: #666;
-            font-size: 1.1rem;
-        }
-
-        .placeholder h2 {
-            color: #888;
-            margin-bottom: 15px;
-            font-weight: 400;
         }
 
         .back-link {
@@ -68,10 +52,189 @@
             text-decoration: none;
             font-size: 0.9rem;
             transition: color 0.3s;
+            z-index: 1000;
         }
 
         .back-link:hover {
             color: #ffffff;
+        }
+
+        .flow-container {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 40px 20px;
+            margin-bottom: 40px;
+        }
+
+        .flow-title {
+            text-align: center;
+            font-size: 1.8rem;
+            color: #ffffff;
+            margin-bottom: 10px;
+            font-weight: 400;
+        }
+
+        .flow-subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        /* Flow Step Styles */
+        .flow-step {
+            background: #252525;
+            border-left: 4px solid #007AFF;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .flow-step:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.2);
+        }
+
+        .flow-step.operator-action {
+            border-left-color: #30d158;
+        }
+
+        .flow-step.system-action {
+            border-left-color: #FF9F0A;
+        }
+
+        .flow-step.warning {
+            border-left-color: #FF3B30;
+        }
+
+        .step-number {
+            display: inline-block;
+            background: #007AFF;
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 32px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-right: 12px;
+        }
+
+        .flow-step.operator-action .step-number {
+            background: #30d158;
+        }
+
+        .flow-step.system-action .step-number {
+            background: #FF9F0A;
+        }
+
+        .flow-step.warning .step-number {
+            background: #FF3B30;
+        }
+
+        .step-title {
+            font-size: 1.2rem;
+            color: #ffffff;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .step-content {
+            margin-left: 44px;
+        }
+
+        .step-section {
+            margin-bottom: 12px;
+        }
+
+        .step-section h4 {
+            color: #aaa;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            font-weight: 500;
+        }
+
+        .step-section ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .step-section li {
+            padding: 4px 0;
+            color: #ccc;
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .step-section li::before {
+            content: "•";
+            color: #007AFF;
+            font-weight: bold;
+            display: inline-block;
+            width: 1em;
+            margin-left: -1em;
+        }
+
+        .flow-step.operator-action .step-section li::before {
+            color: #30d158;
+        }
+
+        .flow-step.system-action .step-section li::before {
+            color: #FF9F0A;
+        }
+
+        .flow-step.warning .step-section li::before {
+            color: #FF3B30;
+        }
+
+        .button-mock {
+            display: inline-block;
+            background: #007AFF;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            margin: 4px 4px 4px 0;
+            font-weight: 500;
+        }
+
+        .button-mock.success {
+            background: #30d158;
+        }
+
+        .button-mock.warning {
+            background: #FF9F0A;
+        }
+
+        .button-mock.danger {
+            background: #FF3B30;
+        }
+
+        .flow-arrow {
+            text-align: center;
+            color: #555;
+            font-size: 1.5rem;
+            margin: 10px 0;
+            font-weight: 300;
+        }
+
+        .note-box {
+            background: rgba(255, 159, 10, 0.1);
+            border-left: 3px solid #FF9F0A;
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            color: #e0e0e0;
+        }
+
+        .note-box strong {
+            color: #FF9F0A;
         }
 
         @media (max-width: 768px) {
@@ -82,6 +245,15 @@
             .content {
                 padding: 10px;
             }
+
+            .flow-step {
+                padding: 15px;
+            }
+
+            .step-content {
+                margin-left: 0;
+                margin-top: 10px;
+            }
         }
     </style>
 </head>
@@ -90,13 +262,265 @@
     
     <div class="header">
         <h1>Preview</h1>
-        <p>Mockup ideas and temporary visualizations</p>
+        <p>Normal Working Day – Operator Flow</p>
     </div>
 
     <div class="content">
-        <div class="placeholder">
-            <h2>Preview Area</h2>
-            <p>Visualizations and mockups will appear here when requested.</p>
+        <div class="flow-container">
+            <h2 class="flow-title">Normal Working Day – Operator Flow</h2>
+            <p class="flow-subtitle">Xplolog Mobile App Operator Journey</p>
+
+            <!-- Step 1: Start of Shift -->
+            <div class="flow-step operator-action">
+                <span class="step-number">1</span>
+                <span class="step-title">Start of Shift (Morning)</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Action</h4>
+                        <ul>
+                            <li>Open Xplolog app</li>
+                            <li>Press <span class="button-mock success">✅ Start Shift</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>App Prompts (Minimal & Fast)</h4>
+                        <ul>
+                            <li>Odometer reading (pre-filled with last known value, adjust if needed)</li>
+                            <li>No downtime, no reasons, no extra questions</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>System Captures Automatically</h4>
+                        <ul>
+                            <li>Shift start timestamp</li>
+                            <li>Operator ID</li>
+                            <li>MMU ID</li>
+                            <li>Initial odometer</li>
+                            <li>✅ Android GPS location (lat/long) - automatic & invisible</li>
+                        </ul>
+                    </div>
+                    <div class="note-box">
+                        <strong>Important:</strong> Location capture is automatic and invisible. Do NOT ask operator to "confirm location".
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 2: Driving -->
+            <div class="flow-step system-action">
+                <span class="step-number">2</span>
+                <span class="step-title">Driving Between Mines / Blast Areas</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Does NOTHING in App</h4>
+                        <ul>
+                            <li>Drives to different mines</li>
+                            <li>Moves between blast sites</li>
+                            <li>Parks, waits, queues</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>App Behavior (Passive)</h4>
+                        <ul>
+                            <li>Captures GPS points (low frequency, battery safe)</li>
+                            <li>No "travel" button</li>
+                            <li>No manual status changes</li>
+                        </ul>
+                    </div>
+                    <div class="note-box">
+                        <strong>Operator mindset:</strong> "Driving is just part of the job. I don't have to log it."
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 3: Pumping -->
+            <div class="flow-step operator-action">
+                <span class="step-number">3</span>
+                <span class="step-title">Pumping Explosives (Core Work)</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Action</h4>
+                        <ul>
+                            <li>Press <span class="button-mock">▶️ Start Pumping</span></li>
+                            <li>Press <span class="button-mock">⏹️ Stop Pumping</span></li>
+                            <li>Quantity is logged automatically</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>System Behavior</h4>
+                        <ul>
+                            <li>Pump start/stop timestamps already exist ✔</li>
+                            <li>Pumping = MMU is operational</li>
+                            <li>GPS location stored at pump start/stop</li>
+                        </ul>
+                    </div>
+                    <div class="note-box">
+                        <strong>Key:</strong> No changes to operator behaviour - crucial for adoption.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 4: Normal Pauses -->
+            <div class="flow-step system-action">
+                <span class="step-number">4</span>
+                <span class="step-title">Normal Pauses During the Day</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Examples</h4>
+                        <ul>
+                            <li>Waiting for blast clearance</li>
+                            <li>Waiting for geology or QA</li>
+                            <li>Lunch</li>
+                            <li>Short delays</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>Operator Does NOTHING</h4>
+                        <ul>
+                            <li>Not downtime events</li>
+                            <li>Remain: Operational but not pumping</li>
+                            <li>Still count as available time</li>
+                        </ul>
+                    </div>
+                    <div class="note-box">
+                        <strong>Benefit:</strong> Avoids over-reporting and confusion.
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 5: Breakdown -->
+            <div class="flow-step warning">
+                <span class="step-number">5</span>
+                <span class="step-title">Breakdown or Environmental Issue</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Trigger (Something Abnormal)</h4>
+                        <ul>
+                            <li>MMU breaks</li>
+                            <li>Lightning / heavy rain stops work</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>Operator Action</h4>
+                        <ul>
+                            <li>Press <span class="button-mock warning">⚠️ Report Downtime</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>Downtime Flow (Very Short)</h4>
+                        <ul>
+                            <li>Select type: <span class="button-mock warning">🔧 MMU Breakdown</span> or <span class="button-mock warning">🌧️ Environmental</span></li>
+                            <li>Select reason from list ("Other" requires comment)</li>
+                            <li>Confirm odometer (pre-filled, adjust if needed)</li>
+                            <li>Press <span class="button-mock success">✅ Submit</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>System Behavior</h4>
+                        <ul>
+                            <li>Timestamp captured</li>
+                            <li>MMU marked Non Operational</li>
+                            <li>GPS location captured at downtime start</li>
+                            <li>Pump actions disabled</li>
+                        </ul>
+                    </div>
+                    <div class="note-box">
+                        <strong>Operator mindset:</strong> "Something is wrong → I report it → I carry on dealing with the problem."
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 6: During Downtime -->
+            <div class="flow-step warning">
+                <span class="step-number">6</span>
+                <span class="step-title">During Downtime</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Activities</h4>
+                        <ul>
+                            <li>Fixes the MMU</li>
+                            <li>Waits for weather to clear</li>
+                            <li>Moves to safer area (GPS shows this)</li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>App Display</h4>
+                        <ul>
+                            <li>Clear banner: 🔴 MMU DOWN – [Reason] – 00:42 elapsed</li>
+                            <li>Button shown: <span class="button-mock success">✅ Resume Operation</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 7: Resume -->
+            <div class="flow-step operator-action">
+                <span class="step-number">7</span>
+                <span class="step-title">Resuming Work</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Action</h4>
+                        <ul>
+                            <li>Press <span class="button-mock success">✅ Resume Operation</span></li>
+                            <li>Confirm odometer reading (pre-filled)</li>
+                            <li>Press <span class="button-mock success">✅ Submit</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>System Behavior</h4>
+                        <ul>
+                            <li>Downtime closed</li>
+                            <li>MMU back to operational</li>
+                            <li>Downtime duration calculated automatically</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flow-arrow">↓</div>
+
+            <!-- Step 8: End of Shift -->
+            <div class="flow-step operator-action">
+                <span class="step-number">8</span>
+                <span class="step-title">End of Shift</span>
+                <div class="step-content">
+                    <div class="step-section">
+                        <h4>Operator Action</h4>
+                        <ul>
+                            <li>At end of day, press <span class="button-mock danger">🟥 End Shift</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>App Prompts</h4>
+                        <ul>
+                            <li>Final odometer reading (pre-filled)</li>
+                            <li>(Optional) shift comment</li>
+                            <li>Press <span class="button-mock success">✅ Submit</span></li>
+                        </ul>
+                    </div>
+                    <div class="step-section">
+                        <h4>System Captures</h4>
+                        <ul>
+                            <li>Shift end timestamp</li>
+                            <li>Final odometer</li>
+                            <li>GPS location</li>
+                            <li>Shift summary locked</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </body>
