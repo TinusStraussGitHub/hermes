@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Rustenberg Server</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 100;
+        }
+        .back-link:hover { color: #ffffff; }
+        .header {
+            text-align: center;
+            padding: 40px 20px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+        .content {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .dashboard-section {
+            background: #1a1a1a;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 32px;
+            border: 1px solid #333;
+        }
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .section-subtitle {
+            font-size: 0.9rem;
+            color: #888;
+            margin-bottom: 20px;
+        }
+        .server-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 24px;
+        }
+        .server-card {
+            background: #252525;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #22c55e;
+        }
+        .server-card.warning { border-left-color: #f59e0b; }
+        .server-card.error { border-left-color: #ef4444; }
+        .server-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ffffff;
+            margin-bottom: 12px;
+        }
+        .server-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 16px;
+        }
+        .server-status.online { background: #22c55e; color: #000; }
+        .server-status.offline { background: #ef4444; color: #fff; }
+        .server-status.degraded { background: #f59e0b; color: #000; }
+        .metric-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        .metric-label { color: #888; }
+        .metric-value { color: #e0e0e0; font-weight: 500; }
+        .progress-container {
+            margin-top: 8px;
+            height: 6px;
+            background: #333;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+        }
+        .progress-bar.green { background: #22c55e; }
+        .progress-bar.yellow { background: #f59e0b; }
+        .progress-bar.red { background: #ef4444; }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .table th {
+            background: #252525;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+            color: #aaa;
+            border-bottom: 1px solid #333;
+        }
+        .table td {
+            padding: 12px;
+            border-bottom: 1px solid #333;
+            font-size: 0.9rem;
+        }
+        .service-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+            margin-top: 16px;
+        }
+        .service-item {
+            background: #2a2a2a;
+            padding: 10px 14px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .service-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .service-dot.running { background: #22c55e; }
+        .service-dot.stopped { background: #ef4444; }
+        .service-dot.pending { background: #f59e0b; }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    <div class="header">
+        <h1>Rustenberg Server Dashboard</h1>
+        <p>Preview - Server Status & Metrics (Mock Data)</p>
+    </div>
+    <div class="content">
+        <div class="dashboard-section">
+            <div class="section-title">Server Overview</div>
+            <div class="section-subtitle">Rustenburg Site (BME) - Server Infrastructure Status</div>
+            
+            <div class="server-grid">
+                <!-- Primary App Server -->
+                <div class="server-card">
+                    <div class="server-name">RUS-APP-01</div>
+                    <div class="server-status online">Online</div>
+                    <div class="metric-row">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value">42%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 42%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">RAM Usage</span>
+                        <span class="metric-value">12.4 GB / 32 GB (38%)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 38%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Disk (C:)</span>
+                        <span class="metric-value">180 GB / 500 GB (36%)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 36%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime</span>
+                        <span class="metric-value">45 days, 12:30:22</span>
+                    </div>
+                </div>
+
+                <!-- Database Server -->
+                <div class="server-card warning">
+                    <div class="server-name">RUS-DB-01</div>
+                    <div class="server-status degraded">Degraded</div>
+                    <div class="metric-row">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value">78%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar yellow" style="width: 78%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">RAM Usage</span>
+                        <span class="metric-value">26.8 GB / 32 GB (83%)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar yellow" style="width: 83%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Disk (D:)</span>
+                        <span class="metric-value">420 GB / 1 TB (41%)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 41%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime</span>
+                        <span class="metric-value">12 days, 08:15:45</span>
+                    </div>
+                </div>
+
+                <!-- BlastMap API Server -->
+                <div class="server-card">
+                    <div class="server-name">RUS-BLAST-01</div>
+                    <div class="server-status online">Online</div>
+                    <div class="metric-row">
+                        <span class="metric-label">CPU Usage</span>
+                        <span class="metric-value">28%</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 28%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">RAM Usage</span>
+                        <span class="metric-value">8.2 GB / 16 GB (51%)</span>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-bar green" style="width: 51%;"></div>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Active Connections</span>
+                        <span class="metric-value">147 (BlastMap Users)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Uptime</span>
+                        <span class="metric-value">23 days, 04:22:10</span>
+                    </div>
+                </div>
+
+                <!-- File Server (Error State) -->
+                <div class="server-card error">
+                    <div class="server-name">RUS-FILE-01</div>
+                    <div class="server-status offline">Offline</div>
+                    <div class="metric-row">
+                        <span class="metric-label">Last Seen</span>
+                        <span class="metric-value">2026-05-06 03:15:00</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Issue</span>
+                        <span class="metric-value">Disk failure (RAID 5 degraded)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Response Team</span>
+                        <span class="metric-value">Dispatched (ETA 45 min)</span>
+                    </div>
+                    <div class="metric-row">
+                        <span class="metric-label">Failover</span>
+                        <span class="metric-value">Active (RUS-FILE-02)</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services Status -->
+            <div class="section-title" style="font-size: 1.2rem; margin-top: 32px;">Critical Services Status</div>
+            <div class="service-list">
+                <div class="service-item">
+                    <div class="service-dot running"></div>
+                    <span>BlastMap API</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot running"></div>
+                    <span>SQL Server</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot pending"></div>
+                    <span>IIS Worker Process</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot running"></div>
+                    <span>Active Directory</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot stopped"></div>
+                    <span>Backup Service</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot running"></div>
+                    <span>Antivirus</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot running"></div>
+                    <span>VPN Gateway</span>
+                </div>
+                <div class="service-item">
+                    <div class="service-dot pending"></div>
+                    <span>Monitoring Agent</span>
+                </div>
+            </div>
+
+            <!-- Recent Events Table -->
+            <div class="section-title" style="font-size: 1.2rem; margin-top: 32px;">Recent Events (Last 24h)</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Time</th>
+                        <th>Server</th>
+                        <th>Event</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>06:15</td>
+                        <td>RUS-FILE-01</td>
+                        <td>Disk failure detected (Drive 3)</td>
+                        <td style="color: #ef4444;">Critical</td>
+                    </tr>
+                    <tr>
+                        <td>05:45</td>
+                        <td>RUS-DB-01</td>
+                        <td>High memory usage alert (83%)</td>
+                        <td style="color: #f59e0b;">Warning</td>
+                    </tr>
+                    <tr>
+                        <td>03:20</td>
+                        <td>RUS-BLAST-01</td>
+                        <td>BlastMap API restart (memory leak fix)</td>
+                        <td style="color: #22c55e;">Resolved</td>
+                    </tr>
+                    <tr>
+                        <td>01:10</td>
+                        <td>RUS-APP-01</td>
+                        <td>Windows Update installed (KB5034441)</td>
+                        <td style="color: #22c55e;">Info</td>
+                    </tr>
+                    <tr>
+                        <td>00:05</td>
+                        <td>RUS-DB-01</td>
+                        <td>Database backup completed (2.4 TB)</td>
+                        <td style="color: #22c55e;">Success</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>
