@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Personal Insights Hub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0a0a;
+            color: #e0e0e0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 40px 20px;
+            border-bottom: 1px solid #333;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: #ffffff;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #888;
+            font-size: 1rem;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .placeholder {
+            background: #1a1a1a;
+            border: 2px dashed #333;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+        }
+
+        .placeholder h2 {
+            color: #888;
+            margin-bottom: 15px;
+            font-weight: 400;
+        }
+
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: #ffffff;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .content {
+                padding: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    
+    <div class="header">
+        <h1>Preview</h1>
+        <p>Mockup ideas and temporary visualizations</p>
+    </div>
+
+    <div class="content">
+        <div class="placeholder">
+            <h2>Preview Area</h2>
+            <p>Visualizations and mockups will appear here when requested.</p>
+        </div>
+    </div>
+</body>
+</html>
