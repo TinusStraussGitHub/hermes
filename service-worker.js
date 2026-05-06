@@ -10,6 +10,7 @@ const urlsToCache = [
   './preview-rustenberg-server.html',
   './preview-epw-975-t03-pb2-r1.html',
   './preview-gamsberg-blocks-may-04-11-2026.html',
+  './preview-gamsberg-blocks-april-2026.html',
   './script.js',
   './style.css',
   './marked.min.js',
