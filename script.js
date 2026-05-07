@@ -107,7 +107,9 @@ async function loadAllData() {
     loadWeather(),
     loadKnowledge(),
     loadInsights(),
-    loadStandup()
+    loadStandup(),
+    loadAiNews(),
+    loadBibleVerse()
   ]);
 }
 
@@ -451,6 +453,79 @@ function toggleAllInsights() {
   });
   
   text.textContent = allInsightsCollapsed ? 'Expand All' : 'Collapse All';
+}
+
+// Load AI News
+async function loadAiNews() {
+  try {
+    const response = await fetch(DATA_BASE + 'ai-news.enc.json');
+    if (!response.ok) throw new Error('Failed to load AI news');
+    const encrypted = await response.json();
+    const data = await decryptData(encrypted, decryptedPassword);
+    renderAiNews(data);
+  } catch (error) {
+    console.error('AI News load error:', error);
+    const container = document.getElementById('aiNewsList');
+    if (container) {
+      container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No AI news available</p>';
+    }
+  }
+}
+
+function renderAiNews(data) {
+  const container = document.getElementById('aiNewsList');
+  if (!container) return;
+  
+  if (!data || !data.headlines || data.headlines.length === 0) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No AI news available</p>';
+    return;
+  }
+  
+  container.innerHTML = data.headlines.map((article, idx) => `
+    <div class="news-item" style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
+      <div class="news-title">
+        <a href="${article.url || '#'}" target="_blank" style="color: var(--text-primary); text-decoration: none;">
+          ${escapeHtml(article.title || 'Untitled')}
+        </a>
+      </div>
+      <div class="news-meta">
+        <span class="news-source">${escapeHtml(article.source || 'Unknown')}</span>
+      </div>
+    </div>
+  `).join('');
+}
+
+// Load Bible Verse
+async function loadBibleVerse() {
+  try {
+    const response = await fetch(DATA_BASE + 'bible-verse.enc.json');
+    if (!response.ok) throw new Error('Failed to load Bible verse');
+    const encrypted = await response.json();
+    const data = await decryptData(encrypted, decryptedPassword);
+    renderBibleVerse(data);
+  } catch (error) {
+    console.error('Bible Verse load error:', error);
+    const container = document.getElementById('bibleVerseContainer');
+    if (container) {
+      container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No verse available</p>';
+    }
+  }
+}
+
+function renderBibleVerse(data) {
+  const container = document.getElementById('bibleVerseContainer');
+  if (!container) return;
+  
+  if (!data || !data.reference) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No verse available</p>';
+    return;
+  }
+  
+  container.innerHTML = `
+    <div class="verse-reference">${escapeHtml(data.reference)}</div>
+    <div class="verse-text">${escapeHtml(data.text || '')}</div>
+    <div class="verse-translation">${escapeHtml(data.translation || 'KJV')}</div>
+  `;
 }
 
 // Note modal

@@ -14,7 +14,9 @@ const urlsToCache = [
   './manifest.json',
   './icon-192.png',
   './icon-512.png',
-  './data/standup.enc.json'
+  './data/standup.enc.json',
+  './data/ai-news.enc.json',
+  './data/bible-verse.enc.json'
 ];
 
 // Install event - cache resources
