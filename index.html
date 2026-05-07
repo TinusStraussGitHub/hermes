@@ -70,8 +70,27 @@
       <p class="hero-subtitle">Here's what's happening with your day</p>
     </section>
     
-    <!-- Dashboard Grid - Reordered as requested -->
+    <!-- Dashboard Grid - Calendar first as requested -->
     <div class="dashboard-grid">
+<!-- Weekly Schedule Section (Second - EXPANDED by default) -->
+      <div class="modern-card" style="animation-delay: 0.2s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">📅</span>
+            <span id="scheduleTitle">Weekly Schedule</span>
+          </h2>
+          <button id="backToWeekBtn" class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px; display: none;" onclick="showWeeklyView()">
+            ← Back to Week
+          </button>
+        </div>
+        <div id="scheduleSection" class="section-content">
+          <div id="scheduleView">
+            <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
+            <div id="scheduleList"></div>
+          </div>
+        </div>
+      </div>
+      
       <!-- Weather Section (Always Expanded) -->
       <div class="modern-card" style="animation-delay: 0.05s;">
         <div class="section-header">
@@ -135,25 +154,6 @@
         <div id="bibleVerseSection" class="section-content collapsed">
           <div id="bibleVerseContainer">
             <div class="loading">Loading verse...</div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Weekly Schedule Section (Second - EXPANDED by default) -->
-      <div class="modern-card" style="animation-delay: 0.2s;">
-        <div class="section-header">
-          <h2>
-            <span class="icon blue">📅</span>
-            <span id="scheduleTitle">Weekly Schedule</span>
-          </h2>
-          <button id="backToWeekBtn" class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px; display: none;" onclick="showWeeklyView()">
-            ← Back to Week
-          </button>
-        </div>
-        <div id="scheduleSection" class="section-content">
-          <div id="scheduleView">
-            <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
-            <div id="scheduleList"></div>
           </div>
         </div>
       </div>
@@ -234,6 +234,7 @@
           </a>
          </div>
       </div>
+    </div>
     </div>
     
     <!-- Footer -->
