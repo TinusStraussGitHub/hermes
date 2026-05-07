@@ -9,6 +9,7 @@ let notes = [];
 let decryptedPassword = null;
 let weeklyScheduleData = null;
 let currentSelectedDay = null;
+let showAllEvents = false;
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
@@ -196,6 +197,7 @@ function renderWeeklyCalendar(weekData) {
 // Select a day to view its schedule
 function selectDay(dayName) {
   currentSelectedDay = dayName;
+  showAllEvents = false; // Reset to default view when switching days
   const dayData = weeklyScheduleData.find(d => d.day === dayName);
   
   // Update title
@@ -229,14 +231,48 @@ function renderDaySchedule(dayData) {
     return;
   }
   
-  container.innerHTML = dayData.events.map((event, idx) => `
-    <div class="event-item" style="animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
-      <div class="event-title">${escapeHtml(event.title || 'Untitled Event')}</div>
-      <div class="event-time">
-        🕐 ${event.time || '--:--'} (${event.duration || '1h'})
+  // Filter to only upcoming events (events with time >= current time)
+  const now = new Date();
+  const currentTime = now.getHours() * 60 + now.getMinutes();
+  
+  let upcomingEvents = dayData.events.filter(event => {
+    if (!event.time) return true; // Include events without time
+    const [hours, minutes] = event.time.split(':').map(Number);
+    const eventTime = hours * 60 + minutes;
+    return eventTime >= currentTime;
+  });
+  
+  // Limit to 5 events unless showAllEvents is true
+  const displayEvents = showAllEvents ? upcomingEvents : upcomingEvents.slice(0, 5);
+  const hasMoreEvents = upcomingEvents.length > 5 && !showAllEvents;
+  
+  container.innerHTML = `
+    ${displayEvents.map((event, idx) => `
+      <div class="event-item" style="animation: slideInRight 0.4s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
+        <div class="event-title">${escapeHtml(event.title || 'Untitled Event')}</div>
+        <div class="event-time">
+          🕐 ${event.time || '--:--'} (${event.duration || '1h'})
+        </div>
       </div>
-    </div>
-  `).join('');
+    `).join('')}
+    ${hasMoreEvents ? `
+      <button onclick="toggleShowAllEvents()" class="modern-btn secondary" style="margin-top: 12px; width: 100%;">
+        Show All Events (${upcomingEvents.length - 5} more)
+      </button>
+    ` : ''}
+    ${showAllEvents && upcomingEvents.length > 5 ? `
+      <button onclick="toggleShowAllEvents()" class="modern-btn secondary" style="margin-top: 12px; width: 100%;">
+        Show Less
+      </button>
+    ` : ''}
+  `;
+}
+
+// Toggle show all events
+function toggleShowAllEvents() {
+  showAllEvents = !showAllEvents;
+  const dayData = weeklyScheduleData.find(d => d.day === currentSelectedDay);
+  renderDaySchedule(dayData);
 }
 
 // Load weather
