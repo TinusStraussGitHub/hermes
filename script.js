@@ -133,7 +133,7 @@ async function loadWeather() {
     renderWeather(data);
   } catch (error) {
     console.error('Weather load error:', error);
-    const container = document.getElementById('weatherWidget');
+    const container = document.getElementById('weatherInfo');
     if (container) {
       container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No weather data available</p>';
     }
@@ -141,7 +141,7 @@ async function loadWeather() {
 }
 
 function renderWeather(data) {
-  const container = document.getElementById('weatherWidget');
+  const container = document.getElementById('weatherInfo');
   if (!container) return;
   
   if (!data || !data.current) {
@@ -347,8 +347,11 @@ async function loadWeather() {
     renderWeather(data);
   } catch (error) {
     console.error('Weather load error:', error);
-    document.getElementById('weatherInfo').innerHTML = 
-      '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">Weather data unavailable</p>';
+    const container = document.getElementById('weatherInfo');
+    if (container) {
+      container.innerHTML = 
+        '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">Weather data unavailable</p>';
+    }
   }
 }
 
