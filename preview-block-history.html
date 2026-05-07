@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Block History Report - WPW_960_T13_PB2</title>
+    <style>
+        * { margin:0; padding:0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container { max-width: 1200px; margin:0 auto; }
+        .header {
+            background: linear-gradient(135deg, #2d2d2d, #1f1f1f);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #333;
+        }
+        .header h1 { font-size: 28px; margin-bottom: 10px; color: #fff; }
+        .header .subtitle { color: #aaa; font-size: 14px; }
+        .card {
+            background: #2d2d2d;
+            border: 1px solid #333;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .card h2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+            border-bottom: 2px solid #007AFF;
+            padding-bottom: 10px;
+        }
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .stat-box {
+            background: #1f1f1f;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #444;
+        }
+        .stat-box .label { font-size: 12px; color: #888; margin-bottom: 5px; }
+        .stat-box .value { font-size: 24px; color: #007AFF; font-weight: bold; }
+        .stat-box .unit { font-size: 12px; color: #aaa; }
+        .timeline { margin: 20px 0; }
+        .timeline-item {
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #1f1f1f;
+            border-left: 4px solid #007AFF;
+            border-radius: 4px;
+        }
+        .timeline-item.major { border-left-color: #FF3B30; }
+        .timeline-item h3 { font-size: 16px; margin-bottom: 5px; }
+        .timeline-item .meta { font-size: 12px; color: #888; }
+        .change-list { list-style: none; padding-left: 0; }
+        .change-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #1f1f1f;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .change-list li:before { content: "→ "; color: #007AFF; }
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        .badge.update { background: #FF9500; color: #fff; }
+        .badge.create { background: #30D158; color: #fff; }
+        .progress-bar {
+            height: 8px;
+            background: #1f1f1f;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #007AFF, #5856D6);
+        }
+        .twocol { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 768px) { .twocol { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+<a href="./index.html" style="position: fixed; top: 20px; left: 20px; color: #888; text-decoration: none; font-size: 0.9rem; z-index: 1000;">← Back to Dashboard</a>
+<div class="container">
+    <div class="header">
+        <h1>Block History Report</h1>
+        <div class="subtitle">WPW_960_T13_PB2 | Gamsberg Site | Generated: 2026-05-07 08:14:43</div>
+    </div>
+    
+    <div class="twocol">
+        <div class="card">
+            <h2>Block Overview</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="label">Block Name</div>
+                    <div class="value" style="font-size: 18px;">WPW_960_T13_PB2</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Total Holes</div>
+                    <div class="value">203</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Total Decks</div>
+                    <div class="value">203</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Burden</div>
+                    <div class="value">5.7<span class="unit">m</span></div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Spacing</div>
+                    <div class="value">6.4<span class="unit">m</span></div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Total Mass</div>
+                    <div class="value">38972<span class="unit">kg</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Last Modified</h2>
+            <div style="padding: 20px; background: #1f1f1f; border-radius: 8px;">
+                <div style="font-size: 18px; color: #fff; margin-bottom: 10px;">
+                    Tinus Strauss
+                </div>
+                <div style="font-size: 14px; color: #888;">
+                    2026-04-24 09:49:39
+                </div>
+                <div style="margin-top: 15px; padding: 10px; background: #2d2d2d; border-radius: 4px; font-size: 13px;">
+                    <strong>Planned Blast Date:</strong><br>
+                    2026-04-20 22:00:00
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Upload Timeline & Changes</h2>
+        <div class="timeline">
+
+            <div class="timeline-item">
+                <h3>Upload 1 <span class="badge update">UPDATE</span></h3>
+                <div class="meta">
+                    2026-04-18 07:37:04 | 
+                    Lindokuhle Nyembe | 
+                    97 holes in upload
+                </div>
+                <div style="margin-top: 10px; font-size: 13px; color: #aaa;">
+                    <strong>Upload ID:</strong> FfEUe5kSmnKGVRNKCxJG<br>
+                    <strong>Metadata Name:</strong> WPW_960_T13_PB2
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <strong>Sample Holes:</strong>
+                    <ul class="change-list">
+                        <li>D2 - Depth: 15.1m, 
+                                    Diameter: 171mm</li>
+                        <li>F21 - Depth: 15.8m, 
+                                    Diameter: 171mm</li>
+                        <li>D15 - Depth: 16.3m, 
+                                    Diameter: 171mm</li>
+                        <li>E5 - Depth: 15.5m, 
+                                    Diameter: 171mm</li>
+                        <li>E17 - Depth: 15.8m, 
+                                    Diameter: 171mm</li>
+                        <li>... and 92 more holes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Upload 2 <span class="badge update">UPDATE</span></h3>
+                <div class="meta">
+                    2026-04-20 06:58:52 | 
+                    Lindokuhle Nyembe | 
+                    106 holes in upload
+                </div>
+                <div style="margin-top: 10px; font-size: 13px; color: #aaa;">
+                    <strong>Upload ID:</strong> 7WhYmxXdqzqxExxs6c0K<br>
+                    <strong>Metadata Name:</strong> N/A
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <strong>Sample Holes:</strong>
+                    <ul class="change-list">
+                        <li>A9 - Depth: 4.9m, 
+                                    Diameter: 140mm</li>
+                        <li>A18 - Depth: 4.7m, 
+                                    Diameter: 140mm</li>
+                        <li>B48 - Depth: 14.6m, 
+                                    Diameter: 140mm</li>
+                        <li>B2 - Depth: 14.1m, 
+                                    Diameter: 140mm</li>
+                        <li>B46 - Depth: 14.4m, 
+                                    Diameter: 140mm</li>
+                        <li>... and 101 more holes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item">
+                <h3>Upload 3 <span class="badge update">UPDATE</span></h3>
+                <div class="meta">
+                    2026-04-20 06:59:01 | 
+                    Lindokuhle Nyembe | 
+                    97 holes in upload
+                </div>
+                <div style="margin-top: 10px; font-size: 13px; color: #aaa;">
+                    <strong>Upload ID:</strong> mVJDKfSZrRakSxLRqS9l<br>
+                    <strong>Metadata Name:</strong> N/A
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <strong>Sample Holes:</strong>
+                    <ul class="change-list">
+                        <li>D2 - Depth: 15.1m, 
+                                    Diameter: 171mm</li>
+                        <li>F21 - Depth: 15.8m, 
+                                    Diameter: 171mm</li>
+                        <li>D15 - Depth: 16.3m, 
+                                    Diameter: 171mm</li>
+                        <li>E5 - Depth: 15.5m, 
+                                    Diameter: 171mm</li>
+                        <li>E17 - Depth: 15.8m, 
+                                    Diameter: 171mm</li>
+                        <li>... and 92 more holes</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="timeline-item major">
+                <h3>Upload 4 <span class="badge update">MAJOR UPDATE</span></h3>
+                <div class="meta">
+                    2026-04-21 06:34:03 | 
+                    Lindokuhle Nyembe | 
+                    203 holes in upload
+                </div>
+                <div style="margin-top: 10px; font-size: 13px; color: #aaa;">
+                    <strong>Upload ID:</strong> tHjT9JuwbOybBLmHmLv9<br>
+                    <strong>Metadata Name:</strong> N/A
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <strong>Sample Holes:</strong>
+                    <ul class="change-list">
+                        <li>A9 - Depth: 4.9m, 
+                                    Diameter: 140mm</li>
+                        <li>D2 - Depth: 15.1m, 
+                                    Diameter: 171mm</li>
+                        <li>A18 - Depth: 4.7m, 
+                                    Diameter: 140mm</li>
+                        <li>F21 - Depth: 15.8m, 
+                                    Diameter: 171mm</li>
+                        <li>D15 - Depth: 16.3m, 
+                                    Diameter: 171mm</li>
+                        <li>... and 198 more holes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="twocol">
+        <div class="card">
+            <h2>Recent Changes Summary</h2>
+            <div style="padding: 10px 0;">
+
+                <div class="stat-box" style="margin: 10px 0;">
+                    <div class="label">Total Holes Tracked</div>
+                    <div class="value">503</div>
+                </div>
+                <div class="stat-box" style="margin: 10px 0;">
+                    <div class="label">Holes Marked "update"</div>
+                    <div class="value">300</div>
+                </div>
+                <div class="stat-box" style="margin: 10px 0;">
+                    <div class="label">Recently Modified (May 7)</div>
+                    <div class="value">203</div>
+                </div>
+                
+                <div style="margin-top: 20px;">
+                    <strong>Most Recent Changes:</strong>
+                    <ul class="change-list">
+                        <li>A9 - Modified by Lindokuhle</li>
+                        <li>D2 - Modified by Lindokuhle</li>
+                        <li>A18 - Modified by Lindokuhle</li>
+                        <li>F21 - Modified by Lindokuhle</li>
+                        <li>D15 - Modified by Lindokuhle</li>
+                        <li>E5 - Modified by Lindokuhle</li>
+                        <li>B48 - Modified by Lindokuhle</li>
+                        <li>B2 - Modified by Lindokuhle</li>
+                        <li>B46 - Modified by Lindokuhle</li>
+                        <li>E17 - Modified by Lindokuhle</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>Deck Statistics</h2>
+            <div class="stat-grid">
+                <div class="stat-box">
+                    <div class="label">Total Decks</div>
+                    <div class="value">""" + str(block.get('totalDecks', 0)) + """</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Decks Charged</div>
+                    <div class="value">""" + str(block.get('totalDecksCharged', 0)) + """</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Correctly Stemmed</div>
+                    <div class="value">""" + str(block.get('totalDecksCorrectlyStemmed', 0)) + """</div>
+                </div>
+                <div class="stat-box">
+                    <div class="label">Overcharged Decks</div>
+                    <div class="value" style="color: #FF3B30;">""" + str(block.get('totalDecksOverCharged', 0)) + """</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 15px;">
+                <strong>Charge Compliance</strong>
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: """ + str((block.get('totalDecksCorrectlyCharged', 0) / max(block.get('totalDecks', 1), 1) * 100)) + """%;"></div>
+                </div>
+                <div style="font-size: 12px; color: #888; text-align: center;">
+                    """ + str(block.get('totalDecksCorrectlyCharged', 0)) + """ / """ + str(block.get('totalDecks', 0)) + """ decks correctly charged
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h2>Intelligent Insights</h2>
+        <div style="padding: 15px; background: #1f1f1f; border-radius: 8px; font-size: 14px; line-height: 1.8;">
+            <div style="margin: 8px 0;">Charge compliance rate is <strong>36.5%</strong> (74/203 decks correctly charged)</div>
+            <div style="margin: 8px 0;"><strong>52 decks</strong> were overcharged (total 10684kg over tolerance)</div>
+            <div style="margin: 8px 0;"><strong>76 decks</strong> were undercharged (total 18423kg under tolerance)</div>
+            <div style="margin: 8px 0;">Drilling accuracy: <strong>93.6%</strong> (190/203 holes drilled within tolerance)</div>
+            <div style="margin: 8px 0;"><strong>4 uploads</strong> recorded between April 16-18, 2026, with final modifications by Tinus Strauss on May 7, 2026</div>
+            <div style="margin: 8px 0;">Block contains <strong>203 holes</strong> with <strong>203 decks</strong> planned for blast</div>
+        </div>
+    </div>
+    
+    <div style="text-align: center; padding: 20px; color: #666; font-size: 12px;">
+        Generated by Hermes Agent | XPLOLOG Block History Report | Gamsberg Site
+    </div>
+</div>
+</body>
+</html>
