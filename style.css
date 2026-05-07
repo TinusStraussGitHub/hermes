@@ -1497,3 +1497,13 @@ body::before {
   color: var(--text-tertiary);
   text-align: right;
 }
+
+/* Collapsible Sections */
+.section-content {
+  transition: opacity 0.3s ease;
+  opacity: 1;
+}
+
+.section-content.collapsed {
+  display: none;
+}

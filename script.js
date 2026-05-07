@@ -4,7 +4,6 @@ const DATA_BASE = 'data/';
 
 // State
 let isDarkMode = false;
-let allInsightsCollapsed = true;
 let notes = [];
 let decryptedPassword = null;
 let weeklyScheduleData = null;
@@ -103,14 +102,85 @@ async function loadAllData() {
   }
   
   await Promise.all([
-    loadSchedule(),
     loadWeather(),
+    loadSchedule(),
     loadKnowledge(),
     loadInsights(),
     loadStandup(),
     loadAiNews(),
     loadBibleVerse()
   ]);
+}
+
+// Toggle section visibility
+function toggleSection(sectionName) {
+  const section = document.getElementById(sectionName + 'Section');
+  const toggleText = document.getElementById(sectionName + 'ToggleText');
+  
+  if (!section || !toggleText) return;
+  
+  section.classList.toggle('collapsed');
+  toggleText.textContent = section.classList.contains('collapsed') ? 'Expand' : 'Collapse';
+}
+
+// Load Weather
+async function loadWeather() {
+  try {
+    const response = await fetch(DATA_BASE + 'weather.enc.json');
+    if (!response.ok) throw new Error('Failed to load weather');
+    const encrypted = await response.json();
+    const data = await decryptData(encrypted, decryptedPassword);
+    renderWeather(data);
+  } catch (error) {
+    console.error('Weather load error:', error);
+    const container = document.getElementById('weatherWidget');
+    if (container) {
+      container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No weather data available</p>';
+    }
+  }
+}
+
+function renderWeather(data) {
+  const container = document.getElementById('weatherWidget');
+  if (!container) return;
+  
+  if (!data || !data.current) {
+    container.innerHTML = '<p style="color: var(--text-tertiary); padding: 20px; text-align: center;">No weather data available</p>';
+    return;
+  }
+  
+  const forecastHTML = data.forecast ? data.forecast.map(day => `
+    <div style="text-align: center; padding: 8px;">
+      <div style="font-size: 12px; color: var(--text-secondary); margin-bottom: 4px;">${day.day}</div>
+      <div style="font-size: 24px; margin: 4px 0;">${day.icon || '☀️'}</div>
+      <div style="font-size: 14px; font-weight: 500;">${day.high}°</div>
+      <div style="font-size: 12px; color: var(--text-tertiary);">${day.low}°</div>
+    </div>
+  `).join('') : '';
+  
+  container.innerHTML = `
+    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+      <div style="flex: 1; min-width: 200px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+          <span style="font-size: 48px;">${data.current.icon || '🌤️'}</span>
+          <div>
+            <div style="font-size: 36px; font-weight: 300; color: var(--text-primary);">${data.current.temp}°C</div>
+            <div style="font-size: 14px; color: var(--text-secondary);">${data.current.condition || 'Unknown'}</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; font-size: 13px; color: var(--text-tertiary);">
+          <span>💧 ${data.current.humidity || '--'}%</span>
+          <span>💨 ${data.current.wind || '--'} km/h</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        ${forecastHTML}
+      </div>
+    </div>
+    <div style="font-size: 11px; color: var(--text-tertiary); margin-top: 12px; text-align: right;">
+      Last updated: ${data.last_updated || 'Unknown'}
+    </div>
+  `;
 }
 
 // Decrypt data
@@ -406,9 +476,6 @@ function renderInsights(insights) {
     return;
   }
   
-  allInsightsCollapsed = true;
-  document.getElementById('toggleAllText').textContent = 'Expand All';
-  
   container.innerHTML = insightsArray.map((insight, idx) => `
     <div class="insight-item" style="animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1) ${idx * 0.1}s backwards;">
       <div class="insight-header" onclick="toggleInsight(${idx})">
@@ -427,32 +494,6 @@ function toggleInsight(idx) {
   const toggle = document.getElementById(`insightToggle${idx}`);
   content.classList.toggle('expanded');
   toggle.style.transform = content.classList.contains('expanded') ? 'rotate(180deg)' : 'rotate(0deg)';
-  
-  const allContents = document.querySelectorAll('.insight-content');
-  const allToggles = document.querySelectorAll('.insight-toggle');
-  const anyExpanded = Array.from(allContents).some(c => c.classList.contains('expanded'));
-  allInsightsCollapsed = !anyExpanded;
-  document.getElementById('toggleAllText').textContent = allInsightsCollapsed ? 'Expand All' : 'Collapse All';
-}
-
-function toggleAllInsights() {
-  const contents = document.querySelectorAll('.insight-content');
-  const toggles = document.querySelectorAll('.insight-toggle');
-  const text = document.getElementById('toggleAllText');
-  
-  allInsightsCollapsed = !allInsightsCollapsed;
-  
-  contents.forEach((content, idx) => {
-    if (allInsightsCollapsed) {
-      content.classList.remove('expanded');
-      toggles[idx].style.transform = 'rotate(0deg)';
-    } else {
-      content.classList.add('expanded');
-      toggles[idx].style.transform = 'rotate(180deg)';
-    }
-  });
-  
-  text.textContent = allInsightsCollapsed ? 'Expand All' : 'Collapse All';
 }
 
 // Load AI News

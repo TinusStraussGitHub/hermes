@@ -72,49 +72,74 @@
     
     <!-- Dashboard Grid - Reordered as requested -->
     <div class="dashboard-grid">
-      <!-- AI Insights Section (First - Collapsed by Default) -->
+      <!-- Weather Section (Always Expanded) -->
+      <div class="modern-card" style="animation-delay: 0.05s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">🌤️</span>
+            Weather
+          </h2>
+        </div>
+        <div id="weatherWidget">
+          <div class="loading">Loading weather...</div>
+        </div>
+      </div>
+      
+      <!-- AI Insights Section (Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.1s;">
         <div class="section-header">
           <h2>
             <span class="icon orange">🤖</span>
             AI Insights
           </h2>
-          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleAllInsights()">
-            <span id="toggleAllText">Expand All</span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('insights')">
+            <span id="insightsToggleText">Expand</span>
           </button>
         </div>
-        <div id="insightsList">
-          <div class="loading">Loading insights...</div>
+        <div id="insightsSection" class="section-content collapsed">
+          <div id="insightsList">
+            <div class="loading">Loading insights...</div>
+          </div>
         </div>
       </div>
       
-      <!-- AI News Section -->
+      <!-- AI News Section (Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.15s;">
         <div class="section-header">
           <h2>
             <span class="icon blue">📰</span>
             AI News
           </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('aiNews')">
+            <span id="aiNewsToggleText">Expand</span>
+          </button>
         </div>
-        <div id="aiNewsList">
-          <div class="loading">Loading AI news...</div>
+        <div id="aiNewsSection" class="section-content collapsed">
+          <div id="aiNewsList">
+            <div class="loading">Loading AI news...</div>
+          </div>
         </div>
       </div>
       
-      <!-- Bible Verse Section -->
+      <!-- Bible Verse Section (Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.18s;">
         <div class="section-header">
           <h2>
             <span class="icon purple">📖</span>
             Daily Verse
           </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('bibleVerse')">
+            <span id="bibleVerseToggleText">Expand</span>
+          </button>
         </div>
-        <div id="bibleVerseContainer">
-          <div class="loading">Loading verse...</div>
+        <div id="bibleVerseSection" class="section-content collapsed">
+          <div id="bibleVerseContainer">
+            <div class="loading">Loading verse...</div>
+          </div>
         </div>
       </div>
       
-      <!-- Weekly Schedule Section (Second) -->
+      <!-- Weekly Schedule Section (Second - EXPANDED by default) -->
       <div class="modern-card" style="animation-delay: 0.2s;">
         <div class="section-header">
           <h2>
@@ -125,13 +150,15 @@
             ← Back to Week
           </button>
         </div>
-        <div id="scheduleView">
-          <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
-          <div id="scheduleList"></div>
+        <div id="scheduleSection" class="section-content">
+          <div id="scheduleView">
+            <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
+            <div id="scheduleList"></div>
+          </div>
         </div>
       </div>
       
-      <!-- Knowledge Base Section (Third) -->
+      <!-- Knowledge Base Section (Third - Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.3s;">
         <div class="section-header">
           <h2>
@@ -139,17 +166,22 @@
             Knowledge Base
           </h2>
           <span style="font-size: 14px; color: var(--text-tertiary);" id="noteCount"></span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('knowledge')">
+            <span id="knowledgeToggleText">Expand</span>
+          </button>
         </div>
-        <div class="search-wrapper">
-          <span class="search-icon">🔍</span>
-          <input type="text" class="search-input" id="searchInput" placeholder="Search knowledge..." oninput="searchNotes()">
-        </div>
-        <div id="knowledgeList" class="knowledge-grid">
-          <div class="loading">Loading knowledge base...</div>
+        <div id="knowledgeSection" class="section-content collapsed">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search knowledge..." oninput="searchNotes()">
+          </div>
+          <div id="knowledgeList" class="knowledge-grid">
+            <div class="loading">Loading knowledge base...</div>
+          </div>
         </div>
       </div>
       
-      <!-- BME Team Standup Tracker -->
+      <!-- BME Team Standup Tracker (Collapsed by Default) -->
       <div class="modern-card" style="animation-delay: 0.45s;">
         <div class="section-header">
           <h2>
@@ -157,9 +189,14 @@
             Team Standup Tracker
           </h2>
           <span style="font-size: 14px; color: var(--text-tertiary);" id="standupLastUpdated"></span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('standup')">
+            <span id="standupToggleText">Expand</span>
+          </button>
         </div>
-        <div id="standupBoard" class="kanban-board">
-          <div class="loading">Loading team standup data...</div>
+        <div id="standupSection" class="section-content collapsed">
+          <div id="standupBoard" class="kanban-board">
+            <div class="loading">Loading team standup data...</div>
+          </div>
         </div>
       </div>
       
