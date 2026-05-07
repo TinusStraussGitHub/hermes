@@ -231,20 +231,10 @@ function renderDaySchedule(dayData) {
     return;
   }
   
-  // Filter to only upcoming events (events with time >= current time)
-  const now = new Date();
-  const currentTime = now.getHours() * 60 + now.getMinutes();
-  
-  let upcomingEvents = dayData.events.filter(event => {
-    if (!event.time) return true; // Include events without time
-    const [hours, minutes] = event.time.split(':').map(Number);
-    const eventTime = hours * 60 + minutes;
-    return eventTime >= currentTime;
-  });
-  
-  // Limit to 5 events unless showAllEvents is true
-  const displayEvents = showAllEvents ? upcomingEvents : upcomingEvents.slice(0, 5);
-  const hasMoreEvents = upcomingEvents.length > 5 && !showAllEvents;
+  // Show ALL events for the selected day (no time filtering)
+  // The day button already shows the correct count
+  const displayEvents = showAllEvents ? dayData.events : dayData.events.slice(0, 5);
+  const hasMoreEvents = dayData.events.length > 5 && !showAllEvents;
   
   container.innerHTML = `
     ${displayEvents.map((event, idx) => `
@@ -257,10 +247,10 @@ function renderDaySchedule(dayData) {
     `).join('')}
     ${hasMoreEvents ? `
       <button onclick="toggleShowAllEvents()" class="modern-btn secondary" style="margin-top: 12px; width: 100%;">
-        Show All Events (${upcomingEvents.length - 5} more)
+        Show All Events (${dayData.events.length - 5} more)
       </button>
     ` : ''}
-    ${showAllEvents && upcomingEvents.length > 5 ? `
+    ${showAllEvents && dayData.events.length > 5 ? `
       <button onclick="toggleShowAllEvents()" class="modern-btn secondary" style="margin-top: 12px; width: 100%;">
         Show Less
       </button>
