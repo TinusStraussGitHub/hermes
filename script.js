@@ -1,5 +1,5 @@
 // Configuration
-const PASSWORD_HASH = '5f26acbec5d43ca191b9859e2aa887868091fc51c5e57df4eee9d72bfc6f19b0'; // SHA-256 of 'tinus1979'
+const PASSWORD_HASH = '21930c0854d25f9222d95fd4237f475d3e403e2161194a04b087a14302ce05ee'; // SHA-256 of 'tinus2026'
 const DATA_BASE = 'data/';
 
 // State
@@ -98,7 +98,7 @@ function updateThemeIcon() {
 // Load all data
 async function loadAllData() {
   if (!decryptedPassword) {
-    decryptedPassword = 'tinus1979';
+    decryptedPassword = 'tinus2026';
   }
   
   await Promise.all([
