@@ -157,6 +157,14 @@ function formatDate(seconds) {
   return d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }) + ', ' + d.toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 }
 
+// Get operation type from upload - defaults to 'add' for new uploads
+function getOperationType(upload) {
+  const op = (upload.metadata?.operationType || upload.operationType || '').toLowerCase();
+  if (op.includes('delete')) return 'delete';
+  if (op.includes('update')) return 'update';
+  return 'add'; // Default to add
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', async function() {
   const data = await loadData();
@@ -165,9 +173,18 @@ document.addEventListener('DOMContentLoaded', async function() {
   // Generate current date for header
   document.getElementById('generated-date').textContent = new Date().toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }) + ', ' + new Date().toLocaleTimeString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
 
-  // Calculate summary stats - all uploads are "add" operations
+  // Calculate summary stats by operation type
   let totalHoles = 0;
-  uploads.forEach(u => totalHoles += (u.holes?.length || 0));
+  let addCount = 0, updateCount = 0, deleteCount = 0;
+  
+  uploads.forEach(u => {
+    const holes = u.holes?.length || 0;
+    totalHoles += holes;
+    const op = getOperationType(u);
+    if (op === 'delete') deleteCount += holes;
+    else if (op === 'update') updateCount += holes;
+    else addCount += holes;
+  });
 
   // Render summary cards
   document.getElementById('summary-cards').innerHTML = `
@@ -181,21 +198,21 @@ document.addEventListener('DOMContentLoaded', async function() {
     <div class="bg-white shadow-xl p-md border-b-4 border-[#4CAF50] flex items-center justify-between">
       <div>
         <p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-[#2E7D32]">Additions</p>
-        <h3 class="font-h2 text-h2 text-ore">${totalHoles}</h3>
+        <h3 class="font-h2 text-h2 text-ore">${addCount}</h3>
       </div>
       <span class="material-symbols-outlined text-[#4CAF50] text-4xl" data-icon="add_circle">add_circle</span>
     </div>
     <div class="bg-white shadow-xl p-md border-b-4 border-[#2196F3] flex items-center justify-between">
       <div>
         <p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-[#1565C0]">Updates</p>
-        <h3 class="font-h2 text-h2 text-ore">0</h3>
+        <h3 class="font-h2 text-h2 text-ore">${updateCount}</h3>
       </div>
       <span class="material-symbols-outlined text-[#2196F3] text-4xl" data-icon="update">update</span>
     </div>
     <div class="bg-white shadow-xl p-md border-b-4 border-[#F44336] flex items-center justify-between">
       <div>
         <p class="font-label-caps text-label-caps text-on-surface-variant mb-1 uppercase text-[#C62828]">Deletions</p>
-        <h3 class="font-h2 text-h2 text-ore">0</h3>
+        <h3 class="font-h2 text-h2 text-ore">${deleteCount}</h3>
       </div>
       <span class="material-symbols-outlined text-[#F44336] text-4xl" data-icon="delete_forever">delete_forever</span>
     </div>
@@ -205,13 +222,20 @@ document.addEventListener('DOMContentLoaded', async function() {
   let html = '';
   uploads.forEach((upload, i) => {
     const holes = upload.holes || [];
+    const opType = getOperationType(upload);
+    const sectionId = `upload-${i}`;
+    const buttonId = `btn-${i}`;
+    
+    // Color based on operation type
+    const headerColor = opType === 'delete' ? '#F44336' : opType === 'update' ? '#2196F3' : '#4CAF50';
+    const opLabel = opType === 'delete' ? 'DELETE HOLES' : opType === 'update' ? 'UPDATE HOLES' : 'ADD HOLES';
     
     html += `
-    <section class="bg-white border border-quarry shadow-sm">
-      <div class="bg-[#2196F3] text-white px-md py-sm flex justify-between items-center diagonal-cut w-full">
+    <section class="bg-white border border-quarry shadow-sm" id="${sectionId}">
+      <div class="text-white px-md py-sm flex justify-between items-center diagonal-cut w-full" style="background-color: ${headerColor};">
         <h4 class="font-label-caps text-label-caps uppercase tracking-widest flex items-center gap-xs">
           <span class="material-symbols-outlined text-sm" data-icon="history">history</span>
-          Upload Holes (${holes.length})
+          ${opLabel} (${holes.length})
         </h4>
         <span class="font-label-caps text-label-caps">LAST SYNC: ${formatDate(upload.created?._seconds)}</span>
       </div>
@@ -229,7 +253,7 @@ document.addEventListener('DOMContentLoaded', async function() {
               <th class="px-md py-sm font-label-caps text-label-caps text-on-surface-variant">MODIFIED</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-quarry">
+          <tbody class="divide-y divide-quarry" id="tbody-${i}">
     `;
     
     holes.forEach(hole => {
@@ -259,10 +283,10 @@ document.addEventListener('DOMContentLoaded', async function() {
         </table>
       </div>
       <div class="p-sm bg-surface-container-low border-t border-quarry flex justify-between items-center">
-        <span class="font-label-caps text-label-caps text-on-surface-variant">Showing ${holes.length} of ${holes.length} records</span>
-        <button class="font-label-caps text-label-caps text-primary hover:underline flex items-center gap-xs">
+        <span class="font-label-caps text-label-caps text-on-surface-variant">Showing <span id="count-${i}">${holes.length}</span> of ${holes.length} records</span>
+        <button class="font-label-caps text-label-caps text-primary hover:underline flex items-center gap-xs view-all-btn" data-section="${sectionId}" data-count="${holes.length}">
           VIEW ALL ${holes.length} RECORDS
-          <span class="material-symbols-outlined text-sm" data-icon="expand_more">expand_more</span>
+          <span class="material-symbols-outlined text-sm">expand_more</span>
         </button>
       </div>
     </section>
@@ -270,6 +294,28 @@ document.addEventListener('DOMContentLoaded', async function() {
   });
 
   document.getElementById('uploads-container').innerHTML = html;
+
+  // Handle View All Records toggle
+  document.querySelectorAll('.view-all-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      const sectionId = this.getAttribute('data-section');
+      const totalCount = parseInt(this.getAttribute('data-count'));
+      const section = document.getElementById(sectionId);
+      const tbody = section.querySelector('tbody');
+      const rows = tbody.querySelectorAll('tr');
+      
+      // Toggle all rows visibility (for extensibility - currently all shown)
+      // This allows future implementation of pagination
+      const icon = this.querySelector('.material-symbols-outlined');
+      if (icon.textContent === 'expand_more') {
+        icon.textContent = 'expand_less';
+        this.innerHTML = 'COLLAPSE RECORDS <span class="material-symbols-outlined text-sm">expand_less</span>';
+      } else {
+        icon.textContent = 'expand_more';
+        this.innerHTML = `VIEW ALL ${totalCount} RECORDS <span class="material-symbols-outlined text-sm">expand_more</span>`;
+      }
+    });
+  });
 });
 </script>
 </body></html>
