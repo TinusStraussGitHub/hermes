@@ -223,15 +223,13 @@ document.addEventListener('DOMContentLoaded', async function() {
   uploads.forEach((upload, i) => {
     const holes = upload.holes || [];
     const opType = getOperationType(upload);
-    const sectionId = `upload-${i}`;
-    const buttonId = `btn-${i}`;
     
     // Color based on operation type
     const headerColor = opType === 'delete' ? '#F44336' : opType === 'update' ? '#2196F3' : '#4CAF50';
     const opLabel = opType === 'delete' ? 'DELETE HOLES' : opType === 'update' ? 'UPDATE HOLES' : 'ADD HOLES';
     
     html += `
-    <section class="bg-white border border-quarry shadow-sm" id="${sectionId}">
+    <section class="bg-white border border-quarry shadow-sm">
       <div class="text-white px-md py-sm flex justify-between items-center diagonal-cut w-full" style="background-color: ${headerColor};">
         <h4 class="font-label-caps text-label-caps uppercase tracking-widest flex items-center gap-xs">
           <span class="material-symbols-outlined text-sm" data-icon="history">history</span>
@@ -253,7 +251,7 @@ document.addEventListener('DOMContentLoaded', async function() {
               <th class="px-md py-sm font-label-caps text-label-caps text-on-surface-variant">MODIFIED</th>
             </tr>
           </thead>
-          <tbody class="divide-y divide-quarry" id="tbody-${i}">
+          <tbody class="divide-y divide-quarry">
     `;
     
     holes.forEach(hole => {
@@ -282,40 +280,14 @@ document.addEventListener('DOMContentLoaded', async function() {
           </tbody>
         </table>
       </div>
-      <div class="p-sm bg-surface-container-low border-t border-quarry flex justify-between items-center">
-        <span class="font-label-caps text-label-caps text-on-surface-variant">Showing <span id="count-${i}">${holes.length}</span> of ${holes.length} records</span>
-        <button class="font-label-caps text-label-caps text-primary hover:underline flex items-center gap-xs view-all-btn" data-section="${sectionId}" data-count="${holes.length}">
-          VIEW ALL ${holes.length} RECORDS
-          <span class="material-symbols-outlined text-sm">expand_more</span>
-        </button>
+      <div class="p-sm bg-surface-container-low border-t border-quarry">
+        <span class="font-label-caps text-label-caps text-on-surface-variant">Showing all ${holes.length} records</span>
       </div>
     </section>
     `;
   });
 
   document.getElementById('uploads-container').innerHTML = html;
-
-  // Handle View All Records toggle
-  document.querySelectorAll('.view-all-btn').forEach(btn => {
-    btn.addEventListener('click', function() {
-      const sectionId = this.getAttribute('data-section');
-      const totalCount = parseInt(this.getAttribute('data-count'));
-      const section = document.getElementById(sectionId);
-      const tbody = section.querySelector('tbody');
-      const rows = tbody.querySelectorAll('tr');
-      
-      // Toggle all rows visibility (for extensibility - currently all shown)
-      // This allows future implementation of pagination
-      const icon = this.querySelector('.material-symbols-outlined');
-      if (icon.textContent === 'expand_more') {
-        icon.textContent = 'expand_less';
-        this.innerHTML = 'COLLAPSE RECORDS <span class="material-symbols-outlined text-sm">expand_less</span>';
-      } else {
-        icon.textContent = 'expand_more';
-        this.innerHTML = `VIEW ALL ${totalCount} RECORDS <span class="material-symbols-outlined text-sm">expand_more</span>`;
-      }
-    });
-  });
 });
 </script>
 </body></html>
