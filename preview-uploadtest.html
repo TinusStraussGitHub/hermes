@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XPLOLOG Block History - UploadTest</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    :root {
+      --bme-red: #BF0000;
+      --bme-orange: #FF4E00;
+      --ore-bg: #141414;
+      --charcoal: #3F3D3D;
+    }
+    body { background: #0a0a0a; color: #e5e5e5; font-family: 'Figtree', -apple-system, sans-serif; }
+    .header { background: linear-gradient(135deg, var(--bme-red), var(--bme-orange)); padding: 30px; text-align: center; }
+    .header h1 { font-size: 28px; margin: 0; color: white; }
+    .header .block-name { font-size: 20px; margin-top: 8px; color: rgba(255,255,255,0.9); }
+    .container { max-width: 1600px; margin: 0 auto; padding: 20px; }
+    .upload-section { background: var(--charcoal); border-radius: 12px; margin-bottom: 24px; overflow: hidden; }
+    .upload-header { background: #1a1a1a; padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+    .upload-title { font-size: 18px; font-weight: 600; color: white; }
+    .upload-stats { display: flex; gap: 20px; font-size: 14px; }
+    .stat { display: flex; align-items: center; gap: 6px; }
+    .stat-add { color: #4ade80; }
+    .stat-update { color: #60a5fa; }
+    .stat-delete { color: #f87171; }
+    .upload-content { padding: 20px; display: none; }
+    .upload-content.active { display: block; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    th { background: var(--bme-red); color: white; padding: 10px 8px; text-align: left; font-weight: 600; text-transform: uppercase; font-size: 10px; }
+    td { padding: 8px; border-bottom: 1px solid #2a2a2a; }
+    tr:hover { background: rgba(255,255,255,0.05); }
+    .section-title { color: var(--bme-orange); font-size: 14px; font-weight: 600; margin: 16px 0 8px; padding-bottom: 4px; border-bottom: 1px solid var(--bme-red); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>XPLOLOG Block History Report</h1>
+    <div class="block-name">Block: UploadTest | QA Site</div>
+  </div>
+  <div class="container" id="content">
+    <div class="loading">Loading block history...</div>
+  </div>
+  <script>
+    async function loadData() {
+      const response = await fetch('/opt/data/xplolog/block_history_UploadTest.json');
+      const data = await response.json();
+      renderPage(data);
+    }
+    function toggleExpand(header) {
+      const content = header.nextElementSibling;
+      content.classList.toggle('active');
+    }
+    function renderPage(data) {
+      document.getElementById('content').innerHTML = generateHTML(data);
+    }
+    function generateHTML(data) {
+      const uploads = data.uploads || [];
+      let html = '<div style="margin-bottom: 20px; color: #888;">Total Holes: ' + uploads.reduce((sum, u) => sum + (u.holes?.length || 0), 0) + ' | Uploads: ' + uploads.length + '</div>';
+      uploads.forEach((upload, i) => {
+        const holes = upload.holes || [];
+        html += '<div class="upload-section"><div class="upload-header" onclick="toggleExpand(this)">';
+        html += '<div class="upload-title">Upload #' + (i+1) + '</div>';
+        html += '<div class="upload-stats"><span class="stat">Total: ' + holes.length + '</span></div></div>';
+        html += '<div class="upload-content"><table><thead><tr>';
+        html += '<th>Hole Name</th><th>Type</th><th>Depth</th><th>Diameter</th><th>Decks</th><th>Charge</th><th>Product</th></tr></thead><tbody>';
+        holes.forEach(hole => {
+          html += '<tr>';
+          html += '<td>' + (hole.name || '-') + '</td>';
+          html += '<td>' + (hole.type || '-') + '</td>';
+          html += '<td>' + (hole.plannedDepthRecord?.value || '-') + '</td>';
+          html += '<td>' + (hole.plannedDiameterRecord?.value || '-') + '</td>';
+          html += '<td>' + (hole.decks?.length || 0) + '</td>';
+          html += '<td>' + (hole.decks?.[0]?.plannedChargeRecord?.value || '-') + '</td>';
+          html += '<td>' + ((hole.decks?.[0]?.plannedChargeRecord?.product || '-')).substring(0, 15) + '</td>';
+          html += '</tr>';
+        });
+        html += '</tbody></table></div></div>';
+      });
+      return html;
+    }
+    loadData();
+  </script>
+</body>
+</html>
