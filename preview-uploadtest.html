@@ -47,9 +47,11 @@
         html += '<div class="upload-section"><div class="upload-header" onclick="toggleExpand(this)">';
         html += '<div class="upload-title">Upload #' + (i+1) + ' <span class="toggle">▶</span></div>';
         html += '<div class="upload-stats"><span>🟢 Add: ' + holes.filter(h => h.operation === 'add' || h.operation === 'ADDED').length + '</span> <span>🔵 Update: ' + holes.filter(h => h.operation === 'update' || h.operation === 'UPDATED').length + '</span> <span>🔴 Delete: ' + holes.filter(h => h.operation === 'delete' || h.operation === 'DELETED').length + '</span></div></div>';
-        html += '<div class="upload-content"><table><thead><tr><th>Hole Name</th><th>Type</th><th>Depth</th><th>Diameter</th><th>Decks</th><th>Charge</th><th>Product</th></tr></thead><tbody>';
+        html += '<div class="upload-content"><table><thead><tr><th>Hole Name</th><th>Type</th><th>Depth</th><th>Drill Angle</th><th>Diameter</th><th>Decks</th><th>Depth Over</th><th>Depth Under</th><th>Charge</th><th>Product</th><th>Charge Over</th><th>Charge Under</th></tr></thead><tbody>';
         holes.forEach(hole => {
-          html += '<tr><td>' + (hole.name || '-') + '</td><td>' + (hole.type || '-') + '</td><td>' + (hole.plannedDepthRecord?.value || '-') + '</td><td>' + (hole.plannedDiameterRecord?.value || '-') + '</td><td>' + (hole.decks?.length || 0) + '</td><td>' + (hole.decks?.[0]?.plannedChargeRecord?.value || '-') + '</td><td>' + ((hole.decks?.[0]?.plannedChargeRecord?.product || '-')).substring(0, 15) + '</td></tr>';
+          const depthRec = hole.plannedDepthRecord || {};
+          const chargeRec = hole.decks?.[0]?.plannedChargeRecord || {};
+          html += '<tr><td>' + (hole.name || '-') + '</td><td>' + (hole.type || '-') + '</td><td>' + (depthRec.value || '-') + '</td><td>' + (depthRec.drillAngle || '-') + '</td><td>' + (hole.plannedDiameterRecord?.value || '-') + '</td><td>' + (hole.decks?.length || 0) + '</td><td>' + (depthRec.overTolerance || '-') + '</td><td>' + (depthRec.underTolerance || '-') + '</td><td>' + (chargeRec.value || '-') + '</td><td>' + ((chargeRec.product || '-')).substring(0, 15) + '</td><td>' + (chargeRec.overTolerance || '-') + '</td><td>' + (chargeRec.underTolerance || '-') + '</td></tr>';
         });
         html += '</tbody></table></div></div>';
       });

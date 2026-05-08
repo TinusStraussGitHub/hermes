@@ -1,0 +1,25 @@
+<svg width="400" height="100" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="100" fill="#FFFFFF"/>
+  
+  <!-- Left accent bar (BME Red) -->
+  <rect x="0" y="0" width="8" height="100" fill="#BF0000"/>
+  
+  <!-- Main title -->
+  <text x="20" y="40" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="#141414">
+    XPLOLOG
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="20" y="65" font-family="Arial, sans-serif" font-size="16" fill="#3F3D3D">
+    Block History Report
+  </text>
+  
+  <!-- Bottom accent bar (BME Inferno) -->
+  <rect x="20" y="75" width="200" height="3" fill="#FF4E00"/>
+  
+  <!-- BME Branding note -->
+  <text x="20" y="90" font-family="Arial, sans-serif" font-size="10" fill="#D7CFCD">
+    BME Brand Guidelines 2025 Compliant
+  </text>
+</svg>
