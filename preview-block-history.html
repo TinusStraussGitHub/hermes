@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>XPLOLOG Block History Report | BME Blasting Solutions</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                "red-sand": "#BF0000",
+                "beyond-red": "#FF0000",
+                "inferno": "#FF4E00",
+                "ore": "#141414",
+                "charcoal": "#3F3D3D",
+                "quarry": "#D7CFCD"
+              }
+            }
+          }
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+          font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Hanken Grotesk', sans-serif; }
+        .diagonal-cut { clip-path: polygon(0 0, 100% 0, 95% 100%, 0% 100%); }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-900 min-h-screen">
+    <!-- Main Canvas -->
+    <main class="flex flex-col min-h-screen">
+        <!-- Top AppBar -->
+        <header class="bg-red-sand w-full top-0 z-40 border-b border-red-900 shadow-md flex justify-between items-center px-8 py-4">
+            <div class="flex items-center gap-4">
+                <h1 class="font-black text-white tracking-tighter text-2xl">XPLOLOG</h1>
+                <div class="h-6 w-px bg-white/20 hidden md:block"></div>
+                <p class="text-[12px] text-white/90 hidden md:block tracking-[0.2em]">OPERATIONAL DATA SYSTEMS</p>
+            </div>
+            <div class="flex items-center gap-4">
+                <a href="./index.html" class="text-white/70 hover:text-white text-sm">Dashboard</a>
+            </div>
+        </header>
+        
+        <!-- Content Header Section -->
+        <section class="relative bg-ore pt-8 pb-12 px-8 overflow-hidden">
+            <div class="relative z-10 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                <div class="max-w-3xl">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="w-8 h-1 bg-beyond-red"></span>
+                        <p class="text-xs text-primary uppercase">Gamsberg Site Operations</p>
+                    </div>
+                    <h2 class="text-white uppercase tracking-tight mb-1 text-4xl font-black">Block History Report</h2>
+                    <p class="text-lg text-quarry">Block Reference: <span class="text-white font-bold tracking-widest">WPW_960_T13_PB2</span></p>
+                </div>
+                <div class="bg-charcoal/50 backdrop-blur-md p-4 border-l-4 border-beyond-red">
+                    <p class="text-xs text-quarry mb-1 uppercase">Generated At</p>
+                    <p class="text-2xl text-white">5/8/2026, 05:25:10 AM</p>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Summary Section -->
+        <section class="px-8 -mt-8 relative z-20">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                <div class="bg-white shadow-xl p-4 border-b-4 border-beyond-red flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-600 mb-1 uppercase">Active Upload</p>
+                        <h3 class="text-2xl text-ore font-bold">Upload #4</h3>
+                    </div>
+                    <span class="material-symbols-outlined text-beyond-red text-4xl">upload</span>
+                </div>
+                <div class="bg-white shadow-xl p-4 border-b-4 border-green-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-600 mb-1 uppercase text-green-700">Additions</p>
+                        <h3 class="text-2xl text-ore font-bold">406</h3>
+                    </div>
+                    <span class="material-symbols-outlined text-green-500 text-4xl">add_circle</span>
+                </div>
+                <div class="bg-white shadow-xl p-4 border-b-4 border-blue-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-600 mb-1 uppercase text-blue-700">Updates</p>
+                        <h3 class="text-2xl text-ore font-bold">97</h3>
+                    </div>
+                    <span class="material-symbols-outlined text-blue-500 text-4xl">update</span>
+                </div>
+                <div class="bg-white shadow-xl p-4 border-b-4 border-red-500 flex items-center justify-between">
+                    <div>
+                        <p class="text-xs text-gray-600 mb-1 uppercase text-red-700">Deletions</p>
+                        <h3 class="text-2xl text-ore font-bold">0</h3>
+                    </div>
+                    <span class="material-symbols-outlined text-red-500 text-4xl">delete_forever</span>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Main Content Area -->
+        <div class="p-8 flex flex-col gap-8">
+            <!-- Update Holes Section -->
+            <section class="bg-white border border-gray-300 shadow-sm">
+                <div class="bg-blue-500 text-white px-4 py-2 flex justify-between items-center diagonal-cut w-full">
+                    <h4 class="text-xs uppercase tracking-widest flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">history</span>
+                        Update Holes (97)
+                    </h4>
+                    <span class="text-xs">LATEST SYNC: JUST NOW</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-300">
+                            <tr>
+                                <th class="px-4 py-2 text-xs text-gray-600">HOLE NAME</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">TYPE</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">DEPTH</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">DIAM</th>
+                                <th class="px-4 py-2 text-xs text-gray-600 text-center">DECKS</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">CHARGE</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">PRODUCT</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">MODIFIED</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">D2</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">15.1 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">290.60 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">F21</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">15.8 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">311.64 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">D15</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">16.3 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">324.84 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">E5</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">15.5 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">301.07 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">E17</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">15.8 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">311.64 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">F14</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">16.6 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">332.77 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">E3</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.6 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">277.51 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">C5</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">15.6 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">303.69 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">C19</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">16.1 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">319.56 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">D9</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">16.6 m</td>
+                                <td class="px-4 py-2">171 mm</td>
+                                <td class="px-4 py-2 text-center">1</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">332.77 kg</td>
+                                <td class="px-4 py-2"><span class="bg-gray-200 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/18/2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-2 bg-gray-50 border-t border-gray-200 flex justify-center">
+                    <button class="text-xs text-red-sand hover:underline flex items-center gap-1">
+                        VIEW ALL 97 RECORDS
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+                    </button>
+                </div>
+            </section>
+            
+            <!-- Add Holes Section -->
+            <section class="bg-white border border-gray-300 shadow-sm">
+                <div class="bg-green-500 text-white px-4 py-2 flex justify-between items-center diagonal-cut w-full">
+                    <h4 class="text-xs uppercase tracking-widest flex items-center gap-1">
+                        <span class="material-symbols-outlined text-sm">add_box</span>
+                        Add Holes (406)
+                    </h4>
+                    <span class="text-xs">NEW ENTRIES DETECTED</span>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead class="bg-gray-50 border-b border-gray-300">
+                            <tr>
+                                <th class="px-4 py-2 text-xs text-gray-600">HOLE NAME</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">TYPE</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">DEPTH</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">DIAM</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">CHARGE</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">PRODUCT</th>
+                                <th class="px-4 py-2 text-xs text-gray-600">MODIFIED</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200">
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">A9</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">4.9 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">47.33 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">A18</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">4.7 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">44.06 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">B48</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.6 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">207.09 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">B2</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.1 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">198.32 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">B46</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.4 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">203.58 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">A49</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">4.9 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">47.33 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">B45</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.4 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">203.58 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">B13</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">14.3 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">201.82 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">A54</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">5.7 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">60.94 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                            <tr class="hover:bg-gray-50 transition-colors">
+                                <td class="px-4 py-2 font-medium text-ore">A30</td>
+                                <td class="px-4 py-2 text-gray-600">Production</td>
+                                <td class="px-4 py-2">4.2 m</td>
+                                <td class="px-4 py-2">140 mm</td>
+                                <td class="px-4 py-2 font-medium text-red-sand">35.55 kg</td>
+                                <td class="px-4 py-2"><span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs font-bold">INNOVEX™ 100</span></td>
+                                <td class="px-4 py-2 text-gray-600">04/20/2026</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="p-2 bg-gray-50 border-t border-gray-200 flex justify-center">
+                    <button class="text-xs text-red-sand hover:underline flex items-center gap-1">
+                        VIEW ALL 406 NEW RECORDS
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+                    </button>
+                </div>
+            </section>
+        </div>
+        
+        <!-- Footer -->
+        <footer class="bg-ore w-full py-6 px-8 flex flex-col md:flex-row justify-between items-center gap-4 border-t border-charcoal mt-auto">
+            <div class="flex items-center gap-4">
+                <span class="text-white font-bold tracking-widest text-2xl">BME</span>
+                <span class="text-quarry text-sm">| Industrial Excellence</span>
+            </div>
+            <p class="text-quarry text-sm">© 2026 BME Blasting Solutions - Industrial Excellence</p>
+        </footer>
+    </main>
+</body>
+</html>
