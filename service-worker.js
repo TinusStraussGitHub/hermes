@@ -17,8 +17,9 @@ const urlsToCache = [
   './icon-512.png',
   './data/standup.enc.json',
   './data/ai-news.enc.json',
-  './data/bible-verse.enc.json'
-];
+  './data/bible-verse.enc.json',
+    './preview-uploadtest2.html'
+  ];
 
 // Install event - cache resources
 self.addEventListener('install', event => {

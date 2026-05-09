@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>UploadTest2 - Upload History</title>
+  <style>
+    @media print {
+      body { margin: 0; padding: 20px; }
+      .no-print { display: none; }
+    }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #f9fafb;
+      color: #1f2937;
+      line-height: 1.5;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .header {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+      color: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+    .header h1 {
+      margin: 0 0 8px 0;
+      font-size: 28px;
+    }
+    .header .subtitle {
+      opacity: 0.8;
+      font-size: 14px;
+    }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-top: 20px;
+    }
+    .stat {
+      background: rgba(255,255,255,0.1);
+      padding: 12px;
+      border-radius: 8px;
+    }
+    .stat .value {
+      font-size: 20px;
+      font-weight: 600;
+    }
+    .stat .label {
+      font-size: 11px;
+      opacity: 0.7;
+      text-transform: uppercase;
+    }
+    .content {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    .section-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #e5e7eb;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 12px; }
+      .header { padding: 16px; }
+      .content { padding: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>UploadTest2</h1>
+      <div class="subtitle">Block Upload History Report</div>
+      <div class="stats">
+        <div class="stat">
+          <div class="value">4</div>
+          <div class="label">Total Holes</div>
+        </div>
+        <div class="stat">
+          <div class="value">4</div>
+          <div class="label">Total Decks</div>
+        </div>
+        <div class="stat">
+          <div class="value">5m</div>
+          <div class="label">Burden / 6m Spacing</div>
+        </div>
+        <div class="stat">
+          <div class="value">2022-06-03 08:58:18</div>
+          <div class="label">Planned Blast Date</div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="content">
+      <div class="section-title">Upload Timeline (8 uploads)</div>
+      
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 07:46:18</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 2</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;0.5m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=6.00, Y=1.18, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 1</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;0.5m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=16.00, Y=1.18, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 07:50:41</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 07:54:52</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #10b981; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Holes Added</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 07:55:28</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 4</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=15.75, Y=9.07, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 3</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=5.75, Y=9.07, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 07:55:29</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 10:54:22</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #2563eb; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Initial Upload</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 11:37:28</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole -</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">-</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> -m (&plusmn;-m)</div>
+        <div><strong>Diameter:</strong> -mm</div>
+        <div><strong>Decks:</strong> 0</div>
+        <div><strong>Drill Angle:</strong> -°</div>
+        <div><strong>Drill Bearing:</strong> -°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=-, Y=-, Z=-
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    <br>
+  <div style="margin-bottom: 32px;">
+    <div style="display: flex; align-items: center; margin-bottom: 12px;">
+      <span style="background: #f59e0b; color: white; padding: 6px 14px; border-radius: 20px; font-weight: 500;">Holes Updated</span>
+      <span style="margin-left: 12px; color: #6b7280; font-size: 14px;">2026-05-08 12:04:29</span>
+      <span style="margin-left: 8px; color: #9ca3af; font-size: 14px;">by Tinus Strauss</span>
+    </div>
+    <div style="margin-left: 8px;">
+      
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 2</span><span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">14 changes</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=8.07, Y=2.08, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 4</span><span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">14 changes</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 15m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 167mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=13.38, Y=16.62, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 3</span><span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">14 changes</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 15m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 167mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=3.38, Y=16.62, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 361.66</span>
+        </div>
+      </div>
+            </div></div>
+    <div style="border: 1px solid #e5e7eb; border-radius: 8px; margin: 12px 0; background: #fafafa;">
+      <div style="background: #f3f4f6; padding: 10px 14px; border-bottom: 1px solid #e5e7eb; font-weight: 600; display: flex; align-items: center;">
+        <span>Hole 1</span><span style="background: #f59e0b; color: white; padding: 2px 8px; border-radius: 12px; font-size: 11px; margin-left: 8px;">14 changes</span>
+        <span style="margin-left: auto; font-size: 12px; color: #6b7280; font-weight: normal;">Production</span>
+      </div>
+      <div style="padding: 12px 14px; display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; font-size: 13px;">
+        <div><strong>Depth:</strong> 10m (&plusmn;1m)</div>
+        <div><strong>Diameter:</strong> 165mm</div>
+        <div><strong>Decks:</strong> 1</div>
+        <div><strong>Drill Angle:</strong> 90°</div>
+        <div><strong>Drill Bearing:</strong> 0°</div>
+      </div>
+      <div style="padding: 0 14px 12px; font-size: 12px; color: #6b7280;">
+        <strong>Location:</strong> X=18.07, Y=2.08, Z=16
+      </div>
+    <div style="border-top: 1px solid #e5e7eb; padding: 8px 14px;">
+      <div style="background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 8px 12px; margin: 6px 0;">
+        <div style="font-weight: 500; font-size: 12px; margin-bottom: 4px;">Deck 1</div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 4px; font-size: 11px; color: #4b5563;">
+          <span>Stemming: 2m</span>
+          <span>Charge: 220</span>
+        </div>
+      </div>
+            </div></div>
+    </div>
+  </div>
+    
+    </div>
+  </div>
+</body>
+</html>
+    
