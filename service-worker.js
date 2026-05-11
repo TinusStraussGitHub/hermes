@@ -1,4 +1,3 @@
-// Service Worker for Hermes Dashboard PWA
 // Service Worker for Personal Insights Hub PWA
 const CACHE_NAME = 'personal-insights-hub-v1';
 // Only cache local resources (no external CDNs to avoid CORS issues)
@@ -19,8 +18,7 @@ const urlsToCache = [
   './data/ai-news.enc.json',
   './data/bible-verse.enc.json',
   './preview-uploadtest.html',
-  './preview-uploadtest2.html',
-  './preview-WPW_960_T13_PB2.html'
+  './preview-uploadtest2.html'
 ];
 
 // Install event - cache resources
