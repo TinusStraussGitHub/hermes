@@ -18,7 +18,8 @@ const urlsToCache = [
   './data/ai-news.enc.json',
   './data/bible-verse.enc.json',
   './preview-uploadtest.html',
-  './preview-uploadtest2.html'
+  './preview-uploadtest2.html',
+  './preview-starship-launch12.html'
 ];
 
 // Install event - cache resources
