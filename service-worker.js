@@ -1,5 +1,5 @@
 // Service Worker for Personal Insights Hub PWA
-const CACHE_NAME = 'personal-insights-hub-v1';
+const CACHE_NAME = 'personal-insights-hub-v2';
 // Only cache local resources (no external CDNs to avoid CORS issues)
 const urlsToCache = [
   './',
@@ -22,6 +22,17 @@ const urlsToCache = [
   './preview-starship-launch12.html'
 ];
 
+  // Data files that should always be fetched from network first
+  const DATA_FILES = [
+    'schedule.enc.json',
+    'weather.enc.json',
+    'insights.enc.json',
+    'standup.enc.json',
+    'ai-news.enc.json',
+    'bible-verse.enc.json',
+    'knowledge.enc.json'
+  ];
+
 // Install event - cache resources
 self.addEventListener('install', event => {
   event.waitUntil(
@@ -40,47 +51,63 @@ self.addEventListener('install', event => {
   );
 });
 
-// Fetch event - serve from cache, fallback to network
+// Fetch event - network-first for data files, cache-first for static assets
 self.addEventListener('fetch', event => {
   // Skip cross-origin requests (like external APIs)
   if (!event.request.url.startsWith(self.location.origin)) {
     return;
   }
-  
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Cache hit - return response
-        if (response) {
-          return response;
-        }
-        
-        // Clone the request
-        const fetchRequest = event.request.clone();
-        
-        return fetch(fetchRequest).then(response => {
-          // Check if we received a valid response
+
+  const isDataFile = DATA_FILES.some(df => event.request.url.endsWith(df));
+
+  if (isDataFile) {
+    // NETWORK FIRST for data files — always get fresh data
+    event.respondWith(
+      fetch(event.request)
+        .then(response => {
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-          
-          // Clone the response
+          // Update cache with fresh data
           const responseToCache = response.clone();
-          
           caches.open(CACHE_NAME)
             .then(cache => {
               cache.put(event.request, responseToCache);
             });
-          
           return response;
-        }).catch(() => {
-          // If both cache and network fail, return a fallback for HTML requests
-          if (event.request.headers.get('accept').includes('text/html')) {
-            return caches.match('./index.html');
+        })
+        .catch(() => {
+          // Network failed — fall back to cache
+          return caches.match(event.request);
+        })
+    );
+  } else {
+    // CACHE FIRST for static assets (HTML, CSS, JS, images)
+    event.respondWith(
+      caches.match(event.request)
+        .then(response => {
+          if (response) {
+            return response;
           }
-        });
-      })
-  );
+          const fetchRequest = event.request.clone();
+          return fetch(fetchRequest).then(response => {
+            if (!response || response.status !== 200 || response.type !== 'basic') {
+              return response;
+            }
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME)
+              .then(cache => {
+                cache.put(event.request, responseToCache);
+              });
+            return response;
+          }).catch(() => {
+            if (event.request.headers.get('accept').includes('text/html')) {
+              return caches.match('./index.html');
+            }
+          });
+        })
+    );
+  }
 });
 
 // Activate event - clean up old caches
