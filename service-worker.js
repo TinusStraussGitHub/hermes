@@ -19,7 +19,8 @@ const urlsToCache = [
   './data/bible-verse.enc.json',
   './preview-uploadtest.html',
   './preview-uploadtest2.html',
-  './preview-starship-launch12.html'
+  './preview-starship-launch12.html',
+  './preview-drilling-analytics.html'
 ];
 
   // Data files that should always be fetched from network first
