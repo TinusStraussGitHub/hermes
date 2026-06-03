@@ -1,5 +1,5 @@
 // Service Worker for Personal Insights Hub PWA
-const CACHE_NAME = 'personal-insights-hub-v2';
+const CACHE_NAME = 'personal-insights-hub-v3';
 // Only cache local resources (no external CDNs to avoid CORS issues)
 const urlsToCache = [
   './',
@@ -58,7 +58,9 @@ self.addEventListener('install', event => {
 // Fetch event - network-first for data files, cache-first for static assets
 self.addEventListener('fetch', event => {
   // Skip cross-origin requests (like external APIs)
-  if (!event.request.url.startsWith(self.location.origin)) {
+  // EXCEPT for OpenStreetMap which we allow for the map iframe
+  const isOSM = event.request.url.includes('openstreetmap.org');
+  if (!event.request.url.startsWith(self.location.origin) && !isOSM) {
     return;
   }
 
