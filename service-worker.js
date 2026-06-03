@@ -22,7 +22,8 @@ const urlsToCache = [
   './preview-starship-launch12.html',
   './preview-drilling-analytics.html',
   './preview-blastmap-marketing.html',
-  './data/blastmap-marketing-preview.mp4'
+  './data/blastmap-marketing-preview.mp4',
+  './preview-xplolog.html'
 ];
 
   // Data files that should always be fetched from network first

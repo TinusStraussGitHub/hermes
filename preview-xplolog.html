@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>XPLOLOG - Logger Tracking Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Roboto', sans-serif;
+      background: #f5f7fa;
+      color: #141414;
+    }
+    .navbar {
+      background: #9e2f2f;
+      color: white;
+      padding: 0 24px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .navbar-left { font-weight: 700; font-size: 20px; }
+    .navbar-center { display: flex; gap: 32px; }
+    .navbar-center a { color: white; text-decoration: none; font-size: 14px; }
+    .navbar-center a:hover { opacity: 0.8; }
+    .navbar-right { display: flex; align-items: center; gap: 12px; }
+    .avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: #fff; color: #9e2f2f;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600; font-size: 12px;
+    }
+    .section-header {
+      background: #7a8696;
+      color: white;
+      padding: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .section-header h1 { font-size: 28px; font-weight: 700; }
+    .section-header .location { font-size: 14px; opacity: 0.9; }
+    .summary-card {
+      background: white;
+      margin: 24px;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .summary-card .title { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+    .summary-card .subtitle { font-size: 13px; color: #666; }
+    .summary-card .count { font-size: 48px; font-weight: 700; color: #9e2f2f; }
+    .main-content { display: flex; gap: 24px; padding: 0 24px 24px; }
+    .map-container { flex: 0 0 60%; background: #e8ecf1; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); position: relative; overflow: hidden; height: 400px; }
+    .map-placeholder { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; color: #666; position: relative; }
+    .zoom-controls { position: absolute; top: 16px; right: 16px; display: flex; flex-direction: column; gap: 8px; }
+    .zoom-btn { width: 36px; height: 36px; background: white; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 18px; font-weight: 600; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+    .map-overlay { position: absolute; bottom: 16px; left: 16px; background: white; padding: 12px 16px; border-radius: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.15); }
+    .map-overlay .device { font-weight: 600; font-size: 14px; margin-bottom: 4px; }
+    .map-overlay .coords { font-size: 12px; color: #666; }
+    .marker { position: absolute; width: 20px; height: 20px; background: #30d158; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px #30d158; top: 40%; left: 30%; }
+    .table-container { flex: 0 0 40%; background: white; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); overflow: hidden; }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: #f8f9fb; padding: 16px 12px; text-align: left; font-size: 12px; font-weight: 600; color: #444; text-transform: uppercase; letter-spacing: 0.5px; }
+    td { padding: 16px 12px; font-size: 14px; border-top: 1px solid #eee; }
+    tr:hover { background: #fafbfc; }
+    .badge { display: inline-block; padding: 4px 12px; border-radius: 12px; font-size: 12px; font-weight: 500; }
+    .badge-online { background: #d4edda; color: #155724; }
+    .badge-offline { background: #e2e3e5; color: #383d41; }
+    .action-link { color: #9e2f2f; text-decoration: none; font-size: 13px; margin-right: 8px; }
+    .action-link.ping { color: #007AFF; }
+    .action-link:hover { text-decoration: underline; }
+    @media (max-width: 768px) {
+      .main-content { flex-direction: column; }
+      .map-container, .table-container { flex: 0 0 100%; height: 300px; }
+      .navbar-center { display: none; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <div class="navbar-left">XPLOLOG</div>
+    <div class="navbar-center">
+      <a href="#">Blocks</a>
+      <a href="#">Reports</a>
+      <a href="#">Import file</a>
+      <a href="#">Manage</a>
+      <a href="#">Help</a>
+    </div>
+    <div class="navbar-right">
+      <span class="avatar">GM</span>
+      <span>Godfrey Marosha</span>
+      <span>▼</span>
+    </div>
+  </nav>
+
+  <div class="section-header">
+    <h1>Logger Tracking</h1>
+    <span class="location">kansanshiqa</span>
+  </div>
+
+  <div class="summary-card">
+    <div>
+      <div class="title">Active Logger devices</div>
+      <div class="subtitle">Live GPS records synced from Firebase.</div>
+    </div>
+    <div class="count">3</div>
+  </div>
+
+  <div class="main-content">
+    <div class="map-container">
+      <div class="map-placeholder">
+        <div class="marker"></div>
+        <div class="zoom-controls">
+          <button class="zoom-btn">+</button>
+          <button class="zoom-btn">−</button>
+        </div>
+        <div class="map-overlay">
+          <div class="device">Google sdk_gphone64_x86_64</div>
+          <div class="coords">37.4219983, -122.084 | Alt: 5m</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="table-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Device</th>
+            <th>User</th>
+            <th>Location</th>
+            <th>Accuracy</th>
+            <th>Last updated</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Google sdk_gphone64_x86_64</td>
+            <td>Godfrey The Man Marosha</td>
+            <td>Lat: 37.4219983<br>Long: -122.084<br>Alt: 5m</td>
+            <td>5m</td>
+            <td>03-06-2026 13:35</td>
+            <td><span class="badge badge-online">Online</span></td>
+            <td>
+              <a href="#" class="action-link">View</a>
+              <a href="#" class="action-link">Open map</a>
+              <a href="#" class="action-link ping">Ping</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Samsung SM-S938B</td>
+            <td>Godfrey Marosha</td>
+            <td>Lat: -26.8714875<br>Long: 27.8546479<br>Alt: 1511.6m</td>
+            <td>100m</td>
+            <td>03-06-2026 13:13</td>
+            <td><span class="badge badge-offline">Offline</span></td>
+            <td>
+              <a href="#" class="action-link">View</a>
+              <a href="#" class="action-link">Open map</a>
+              <a href="#" class="action-link ping">Ping</a>
+            </td>
+          </tr>
+          <tr>
+            <td>Google sdk_gphone64_arm64</td>
+            <td>Thlogi Manye</td>
+            <td>Lat: -25.8347467<br>Long: 28.1127483<br>Alt: 0m</td>
+            <td>100m</td>
+            <td>25-05-2026 09:33</td>
+            <td><span class="badge badge-offline">Offline</span></td>
+            <td>
+              <a href="#" class="action-link">View</a>
+              <a href="#" class="action-link">Open map</a>
+              <a href="#" class="action-link ping">Ping</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</body>
+</html>
