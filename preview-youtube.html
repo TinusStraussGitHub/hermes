@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - YouTube</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 1000;
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        .back-link:hover { color: var(--text-primary); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .search-section { margin-bottom: 24px; }
+        .search-form { display: flex; gap: 12px; margin-bottom: 16px; }
+        .search-form input {
+            flex: 1;
+            padding: 12px 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+        .search-form button {
+            padding: 12px 24px;
+            background: var(--gradient-blue);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .search-form button:hover { opacity: 0.9; }
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 18px;
+            text-align: center;
+            padding: 20px;
+        }
+        .quick-videos {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 16px;
+            margin-top: 24px;
+        }
+        .quick-video-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .quick-video-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .quick-video-card img {
+            width: 100%;
+            border-radius: 4px;
+            margin-bottom: 8px;
+        }
+        .quick-video-card h4 {
+            font-size: 13px;
+            margin: 0 0 4px 0;
+            color: var(--text-primary);
+        }
+        .quick-video-card p {
+            font-size: 12px;
+            margin: 0;
+            color: var(--text-tertiary);
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    <div class="container">
+        <div class="header" style="background: var(--gradient-blue); margin-bottom: 24px;">
+            <h1>🎥 YouTube Access</h1>
+            <p>Search and watch YouTube videos</p>
+        </div>
+        
+        <div class="modern-card">
+            <div class="section-content">
+                <div class="search-section">
+                    <form class="search-form" onsubmit="searchYouTube(event)">
+                        <input type="text" id="searchInput" placeholder="Search YouTube videos..." required>
+                        <button type="submit">Search</button>
+                    </form>
+                    
+                    <div class="video-container" id="videoContainer">
+                        <div class="video-placeholder">
+                            Enter a search term or paste a YouTube URL to get started
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modern-card" style="margin-top: 24px;">
+            <div class="section-header">
+                <h2>Popular Developer Channels</h2>
+            </div>
+            <div class="section-content">
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Quick access to popular programming and tech channels:</p>
+                <div class="quick-videos" id="quickVideos">
+                    <div class="quick-video-card" onclick="loadChannel('UCsBjURr0k7Y7F5xKt6c9p8A')">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTrkFvP3GfOM0U7KbZy7Y6bY7Z6X7J7Y7Y7Y7Y7Y=s160-c-k-c0x00ffffff-no-rj" alt="Fireship">
+                        <h4>Fireship</h4>
+                        <p>Web development, JavaScript, tutorials</p>
+                    </div>
+                    <div class="quick-video-card" onclick="loadChannel('UCSJb-Gc4hzpG7LBtQxFPyGJg')">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z=s160-c-k-c0x00ffffff-no-rj" alt="ThePrimeagen">
+                        <h4>ThePrimeagen</h4>
+                        <p>Systems programming, Rust, performance</p>
+                    </div>
+                    <div class="quick-video-card" onclick="loadChannel('UCs6nmQViDpUw0nuIx9c_WvA')">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z=s160-c-k-c0x00ffffff-no-rj" alt="TechLead">
+                        <h4>TechLead</h4>
+                        <p>Programming, career, tech news</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function searchYouTube(event) {
+            event.preventDefault();
+            const query = document.getElementById('searchInput').value.trim();
+            if (!query) return;
+            
+            // Check if it's a YouTube URL
+            const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+            
+            if (urlMatch) {
+                loadVideo(urlMatch[1]);
+            } else {
+                // Search query - use YouTube search
+                const searchUrl = `https://www.youtube.com/embed?search=${encodeURIComponent(query)}`;
+                document.getElementById('videoContainer').innerHTML = `<iframe src="${searchUrl}" allowfullscreen></iframe>`;
+            }
+        }
+        
+        function loadVideo(videoId) {
+            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            document.getElementById('videoContainer').innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+        }
+        
+        function loadChannel(channelId) {
+            const channelUrl = `https://www.youtube.com/embed?listType=user&list=${channelId}`;
+            document.getElementById('videoContainer').innerHTML = `<iframe src="${channelUrl}" allowfullscreen></iframe>`;
+        }
+        
+        // Allow Enter key in search
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                searchYouTube({ preventDefault: () => {} });
+            }
+        });
+    </script>
+</body>
+</html>
