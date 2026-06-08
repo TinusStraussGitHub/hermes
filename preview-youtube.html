@@ -42,37 +42,24 @@
             font-weight: 500;
         }
         .search-form button:hover { opacity: 0.9; }
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            margin-bottom: 24px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: var(--bg-primary);
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .action-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-tertiary);
-            font-size: 18px;
-            text-align: center;
-            padding: 20px;
+            gap: 12px;
+            margin-top: 16px;
+            flex-wrap: wrap;
+        }
+        .action-btn {
+            padding: 10px 16px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .action-btn:hover {
+            background: var(--bg-hover);
         }
         .quick-videos {
             display: grid;
@@ -107,6 +94,15 @@
             margin: 0;
             color: var(--text-tertiary);
         }
+        .info-box {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            margin-top: 16px;
+        }
+        .info-box strong { color: var(--text-primary); }
+        .info-box p { color: var(--text-secondary); margin: 8px 0 0 0; }
     </style>
 </head>
 <body>
@@ -121,14 +117,18 @@
             <div class="section-content">
                 <div class="search-section">
                     <form class="search-form" onsubmit="searchYouTube(event)">
-                        <input type="text" id="searchInput" placeholder="Search YouTube videos..." required>
-                        <button type="submit">Search</button>
+                        <input type="text" id="searchInput" placeholder="Search YouTube videos (e.g., 'WWDC 2026', 'Matt Wolfe')..." required>
+                        <button type="submit">Search on YouTube</button>
                     </form>
                     
-                    <div class="video-container" id="videoContainer">
-                        <div class="video-placeholder">
-                            Enter a search term or paste a YouTube URL to get started
-                        </div>
+                    <div class="info-box">
+                        <strong>📌 How to use:</strong>
+                        <p>Enter a search term above or click a quick-link below to open YouTube in a new tab. YouTube embedding is blocked on this site, so videos will open directly on youtube.com.</p>
+                    </div>
+                    
+                    <div class="action-buttons" id="actionButtons" style="display: none; margin-top: 16px;">
+                        <a href="#" id="openVideoBtn" class="action-btn" target="_blank">▶ Open Video on YouTube</a>
+                        <button class="action-btn" onclick="clearSearch()">Clear Search</button>
                     </div>
                 </div>
             </div>
@@ -139,23 +139,28 @@
                 <h2>Popular Developer Channels</h2>
             </div>
             <div class="section-content">
-                <p style="color: var(--text-secondary); margin-bottom: 16px;">Quick access to popular programming and tech channels:</p>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Click to go directly to channel on YouTube:</p>
                 <div class="quick-videos" id="quickVideos">
-                    <div class="quick-video-card" onclick="loadChannel('UCsBjURr0k7Y7F5xKt6c9p8A')">
+                    <a href="https://www.youtube.com/@fireship" target="_blank" class="quick-video-card" style="text-decoration: none;">
                         <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTrkFvP3GfOM0U7KbZy7Y6bY7Z6X7J7Y7Y7Y7Y7Y=s160-c-k-c0x00ffffff-no-rj" alt="Fireship">
                         <h4>Fireship</h4>
                         <p>Web development, JavaScript, tutorials</p>
-                    </div>
-                    <div class="quick-video-card" onclick="loadChannel('UCSJb-Gc4hzpG7LBtQxFPyGJg')">
+                    </a>
+                    <a href="https://www.youtube.com/@ThePrimeagen" target="_blank" class="quick-video-card" style="text-decoration: none;">
                         <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z=s160-c-k-c0x00ffffff-no-rj" alt="ThePrimeagen">
                         <h4>ThePrimeagen</h4>
                         <p>Systems programming, Rust, performance</p>
-                    </div>
-                    <div class="quick-video-card" onclick="loadChannel('UCs6nmQViDpUw0nuIx9c_WvA')">
-                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z=s160-c-k-c0x00ffffff-no-rj" alt="TechLead">
-                        <h4>TechLead</h4>
-                        <p>Programming, career, tech news</p>
-                    </div>
+                    </a>
+                    <a href="https://www.youtube.com/@mreflow" target="_blank" class="quick-video-card" style="text-decoration: none;">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Y=s160-c-k-c0x00ffffff-no-rj" alt="Matt Wolfe">
+                        <h4>Matt Wolfe</h4>
+                        <p>AI tools, news, tutorials</p>
+                    </a>
+                    <a href="https://www.youtube.com/@matthewberman" target="_blank" class="quick-video-card" style="text-decoration: none;">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Z=s160-c-k-c0x00ffffff-no-rj" alt="Matthew Berman">
+                        <h4>Matthew Berman</h4>
+                        <p>AI news, coding, tutorials</p>
+                    </a>
                 </div>
             </div>
         </div>
@@ -171,31 +176,18 @@
             const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
             
             if (urlMatch) {
-                loadVideo(urlMatch[1]);
+                // Open video directly
+                window.open(`https://youtu.be/${urlMatch[1]}`, '_blank');
             } else {
-                // Search query - use YouTube search
-                const searchUrl = `https://www.youtube.com/embed?search=${encodeURIComponent(query)}`;
-                document.getElementById('videoContainer').innerHTML = `<iframe src="${searchUrl}" allowfullscreen></iframe>`;
+                // Search on YouTube
+                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
             }
         }
         
-        function loadVideo(videoId) {
-            const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
-            document.getElementById('videoContainer').innerHTML = `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('actionButtons').style.display = 'none';
         }
-        
-        function loadChannel(channelId) {
-            const channelUrl = `https://www.youtube.com/embed?listType=user&list=${channelId}`;
-            document.getElementById('videoContainer').innerHTML = `<iframe src="${channelUrl}" allowfullscreen></iframe>`;
-        }
-        
-        // Allow Enter key in search
-        document.getElementById('searchInput').addEventListener('keypress', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                searchYouTube({ preventDefault: () => {} });
-            }
-        });
     </script>
 </body>
 </html>
