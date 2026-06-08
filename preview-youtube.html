@@ -21,6 +21,14 @@
         }
         .back-link:hover { color: var(--text-primary); }
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+        .warning-box {
+            background: #ff6b6b22;
+            border: 1px solid #ff6b6b;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .warning-box strong { color: #ff6b6b; }
         .search-section { margin-bottom: 24px; }
         .search-form { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
         .search-form input {
@@ -41,48 +49,6 @@
             border-radius: 8px;
             cursor: pointer;
             font-weight: 500;
-        }
-        .btn-secondary {
-            padding: 12px 24px;
-            background: var(--bg-card);
-            color: var(--text-primary);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .video-container {
-            position: relative;
-            width: 100%;
-            padding-bottom: 56.25%;
-            height: 0;
-            margin-bottom: 24px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #000;
-        }
-        .video-container iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border: none;
-        }
-        .video-placeholder {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-tertiary);
-            font-size: 16px;
-            text-align: center;
-            padding: 20px;
-            background: var(--bg-primary);
         }
         .quick-videos {
             display: grid;
@@ -117,16 +83,7 @@
             margin: 0;
             color: var(--text-tertiary);
         }
-        .info-note {
-            background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 12px;
-            font-size: 13px;
-            color: var(--text-secondary);
-        }
-        .popup-note {
+        .info-box {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
@@ -135,7 +92,7 @@
             font-size: 13px;
             color: var(--text-secondary);
         }
-        .popup-note strong { color: var(--text-primary); }
+        .info-box strong { color: var(--text-primary); }
     </style>
 </head>
 <body>
@@ -143,27 +100,27 @@
     <div class="container">
         <div class="header" style="background: var(--gradient-blue); margin-bottom: 24px;">
             <h1>🎥 YouTube Access</h1>
-            <p>Search and watch YouTube videos</p>
+            <p>Watch YouTube videos</p>
+        </div>
+        
+        <div class="warning-box">
+            <strong>⚠️ Network Notice:</strong> Fortinet firewall on your network blocks YouTube access. Videos cannot be embedded here. Use the links below to open in a new tab (may work depending on your network policy) or access YouTube through a different connection.
         </div>
         
         <div class="modern-card">
             <div class="section-content">
                 <div class="search-section">
                     <form class="search-form" onsubmit="searchYouTube(event)">
-                        <input type="text" id="searchInput" placeholder="Enter YouTube URL or search term..." required>
-                        <button type="submit">Search on YouTube</button>
-                        <button type="button" class="btn-secondary" onclick="openYouTubePopup()">Popup Player</button>
+                        <input type="text" id="searchInput" placeholder="Search term..." required>
+                        <button type="submit">Search YouTube</button>
                     </form>
                     
-                    <div class="video-container" id="videoContainer">
-                        <div class="video-placeholder" id="placeholder">
-                            Enter a YouTube URL or search term<br>
-                            <small style="color: var(--text-secondary); margin-top: 8px; display: block;">Examples: youtu.be/nz4h3H1MmTg or "WWDC 2026"</small>
-                        </div>
-                    </div>
-                    
-                    <div class="popup-note">
-                        <strong>Tip:</strong> Use "Popup Player" button for videos that won't embed. Popup windows bypass most blocking.
+                    <div class="info-box">
+                        <strong>Recent Searches:</strong><br>
+                        <a href="https://www.youtube.com/results?search_query=WWDC+2026" target="_blank" style="color: var(--text-primary);">• WWDC 2026</a> &nbsp;|&nbsp;
+                        <a href="https://www.youtube.com/results?search_query=Matt+Wolfe" target="_blank" style="color: var(--text-primary);">• Matt Wolfe AI</a> &nbsp;|&nbsp;
+                        <a href="https://www.youtube.com/results?search_query=Mathew+Berman" target="_blank" style="color: var(--text-primary);">• Mathew Berman</a> &nbsp;|&nbsp;
+                        <a href="https://www.youtube.com/results?search_query=Apple+WWDC+2026" target="_blank" style="color: var(--text-primary);">• Apple WWDC 2026</a>
                     </div>
                 </div>
             </div>
@@ -171,40 +128,55 @@
         
         <div class="modern-card" style="margin-top: 24px;">
             <div class="section-header">
-                <h2>Popular Channels & Videos</h2>
+                <h2>Quick Links - Videos</h2>
             </div>
             <div class="section-content">
-                <p style="color: var(--text-secondary); margin-bottom: 16px;">Click to watch:</p>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Click to open on YouTube (may be blocked by Fortinet):</p>
                 <div class="quick-videos" id="quickVideos">
-                    <div class="quick-video-card" onclick="openYouTubePopup('nz4h3H1MmTg')">
+                    <a href="https://www.youtube.com/watch?v=nz4h3H1MmTg" target="_blank" class="quick-video-card">
                         <img src="https://i.ytimg.com/vi/nz4h3H1MmTg/hqdefault.jpg" alt="Matt Wolfe">
                         <h4>Matt Wolfe: MS AI</h4>
                         <p>Microsoft updates</p>
-                    </div>
-                    <div class="quick-video-card" onclick="openYouTubePopup('udS9osDCJKo')">
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=udS9osDCJKo" target="_blank" class="quick-video-card">
                         <img src="https://i.ytimg.com/vi/udS9osDCJKo/hqdefault.jpg" alt="Mathew Berman">
                         <h4>Mathew Berman</h4>
                         <p>Perplexity AI</p>
-                    </div>
-                    <div class="quick-video-card" onclick="openYouTubePopup('08uMw4_BWOA')">
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=08uMw4_BWOA" target="_blank" class="quick-video-card">
                         <img src="https://i.ytimg.com/vi/08uMw4_BWOA/hqdefault.jpg" alt="AI Layoffs">
                         <h4>AI Layoffs</h4>
                         <p>Matt Wolfe Short</p>
-                    </div>
-                    <div class="quick-video-card" onclick="openYouTubePopup('-kxk_e1eA5o')">
+                    </a>
+                    <a href="https://www.youtube.com/watch?v=-kxk_e1eA5o" target="_blank" class="quick-video-card">
                         <img src="https://i.ytimg.com/vi/-kxk_e1eA5o/hqdefault.jpg" alt="WWDC">
                         <h4>WWDC 2026</h4>
                         <p>Apple Event</p>
-                    </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="modern-card" style="margin-top: 24px;">
+            <div class="section-header">
+                <h2>Favorite Channels</h2>
+            </div>
+            <div class="section-content">
+                <div class="quick-videos">
                     <a href="https://www.youtube.com/@mreflow" target="_blank" class="quick-video-card">
                         <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Y=s160-c-k-c0x00ffffff-no-rj" alt="Matt Wolfe">
                         <h4>Matt Wolfe (@mreflow)</h4>
-                        <p>AI News Channel</p>
+                        <p>AI Tools & News</p>
                     </a>
                     <a href="https://www.youtube.com/@matthewberman" target="_blank" class="quick-video-card">
                         <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Z=s160-c-k-c0x00ffffff-no-rj" alt="Mathew Berman">
-                        <h4>Mathew Berman</h4>
-                        <p>AI News Channel</p>
+                        <h4>Matthew Berman</h4>
+                        <p>AI News & Coding</p>
+                    </a>
+                    <a href="https://www.youtube.com/@fireship" target="_blank" class="quick-video-card">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTrkFvP3GfOM0U7KbZy7Y6bY7Z6X7J7Y7Y7Y7Y7Y=s160-c-k-c0x00ffffff-no-rj" alt="Fireship">
+                        <h4>Fireship</h4>
+                        <p>Developer Education</p>
                     </a>
                 </div>
             </div>
@@ -216,52 +188,8 @@
             event.preventDefault();
             const query = document.getElementById('searchInput').value.trim();
             if (!query) return;
-            
-            // Check if it's a YouTube URL
-            const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-            
-            if (urlMatch) {
-                // Load video in iframe
-                loadVideo(urlMatch[1]);
-            } else {
-                // Search on YouTube
-                window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
-            }
+            window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
         }
-        
-        function loadVideo(videoId) {
-            const container = document.getElementById('videoContainer');
-            // Try embed with nocookie domain (less likely to be blocked)
-            container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-        }
-        
-        function openYouTubePopup(videoId) {
-            const query = videoId || document.getElementById('searchInput').value.trim();
-            let url;
-            
-            if (videoId) {
-                url = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
-            } else {
-                const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
-                if (urlMatch) {
-                    url = `https://www.youtube-nocookie.com/embed/${urlMatch[1]}?autoplay=1`;
-                } else {
-                    url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
-                }
-            }
-            
-            window.open(url, 'youtube_popup', 'width=900,height=506,scrollbars=no,resizable=yes');
-        }
-        
-        // Handle Enter key
-        document.addEventListener('DOMContentLoaded', function() {
-            document.getElementById('searchInput').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    e.preventDefault();
-                    searchYouTube({ preventDefault: () => {} });
-                }
-            });
-        });
     </script>
 </body>
 </html>
