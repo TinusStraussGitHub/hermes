@@ -22,9 +22,10 @@
         .back-link:hover { color: var(--text-primary); }
         .container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
         .search-section { margin-bottom: 24px; }
-        .search-form { display: flex; gap: 12px; margin-bottom: 16px; }
+        .search-form { display: flex; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
         .search-form input {
             flex: 1;
+            min-width: 250px;
             padding: 12px 16px;
             border-radius: 8px;
             border: 1px solid var(--border);
@@ -41,68 +42,100 @@
             cursor: pointer;
             font-weight: 500;
         }
-        .search-form button:hover { opacity: 0.9; }
-        .action-buttons {
-            display: flex;
-            gap: 12px;
-            margin-top: 16px;
-            flex-wrap: wrap;
-        }
-        .action-btn {
-            padding: 10px 16px;
+        .btn-secondary {
+            padding: 12px 24px;
             background: var(--bg-card);
-            border: 1px solid var(--border);
-            border-radius: 6px;
             color: var(--text-primary);
-            text-decoration: none;
-            font-size: 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
             cursor: pointer;
         }
-        .action-btn:hover {
-            background: var(--bg-hover);
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            height: 0;
+            margin-bottom: 24px;
+            border-radius: 12px;
+            overflow: hidden;
+            background: #000;
+        }
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        .video-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-tertiary);
+            font-size: 16px;
+            text-align: center;
+            padding: 20px;
+            background: var(--bg-primary);
         }
         .quick-videos {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 16px;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 12px;
             margin-top: 24px;
         }
         .quick-video-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 12px;
+            padding: 8px;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s;
+            text-align: center;
         }
         .quick-video-card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
         .quick-video-card img {
             width: 100%;
             border-radius: 4px;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
         }
         .quick-video-card h4 {
-            font-size: 13px;
-            margin: 0 0 4px 0;
+            font-size: 12px;
+            margin: 0 0 2px 0;
             color: var(--text-primary);
         }
         .quick-video-card p {
-            font-size: 12px;
+            font-size: 11px;
             margin: 0;
             color: var(--text-tertiary);
         }
-        .info-box {
+        .info-note {
             background: var(--bg-card);
             border: 1px solid var(--border);
             border-radius: 8px;
-            padding: 16px;
-            margin-top: 16px;
+            padding: 12px;
+            margin-top: 12px;
+            font-size: 13px;
+            color: var(--text-secondary);
         }
-        .info-box strong { color: var(--text-primary); }
-        .info-box p { color: var(--text-secondary); margin: 8px 0 0 0; }
+        .popup-note {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+        .popup-note strong { color: var(--text-primary); }
     </style>
 </head>
 <body>
@@ -117,18 +150,20 @@
             <div class="section-content">
                 <div class="search-section">
                     <form class="search-form" onsubmit="searchYouTube(event)">
-                        <input type="text" id="searchInput" placeholder="Search YouTube videos (e.g., 'WWDC 2026', 'Matt Wolfe')..." required>
+                        <input type="text" id="searchInput" placeholder="Enter YouTube URL or search term..." required>
                         <button type="submit">Search on YouTube</button>
+                        <button type="button" class="btn-secondary" onclick="openYouTubePopup()">Popup Player</button>
                     </form>
                     
-                    <div class="info-box">
-                        <strong>📌 How to use:</strong>
-                        <p>Enter a search term above or click a quick-link below to open YouTube in a new tab. YouTube embedding is blocked on this site, so videos will open directly on youtube.com.</p>
+                    <div class="video-container" id="videoContainer">
+                        <div class="video-placeholder" id="placeholder">
+                            Enter a YouTube URL or search term<br>
+                            <small style="color: var(--text-secondary); margin-top: 8px; display: block;">Examples: youtu.be/nz4h3H1MmTg or "WWDC 2026"</small>
+                        </div>
                     </div>
                     
-                    <div class="action-buttons" id="actionButtons" style="display: none; margin-top: 16px;">
-                        <a href="#" id="openVideoBtn" class="action-btn" target="_blank">▶ Open Video on YouTube</a>
-                        <button class="action-btn" onclick="clearSearch()">Clear Search</button>
+                    <div class="popup-note">
+                        <strong>Tip:</strong> Use "Popup Player" button for videos that won't embed. Popup windows bypass most blocking.
                     </div>
                 </div>
             </div>
@@ -136,30 +171,40 @@
         
         <div class="modern-card" style="margin-top: 24px;">
             <div class="section-header">
-                <h2>Popular Developer Channels</h2>
+                <h2>Popular Channels & Videos</h2>
             </div>
             <div class="section-content">
-                <p style="color: var(--text-secondary); margin-bottom: 16px;">Click to go directly to channel on YouTube:</p>
+                <p style="color: var(--text-secondary); margin-bottom: 16px;">Click to watch:</p>
                 <div class="quick-videos" id="quickVideos">
-                    <a href="https://www.youtube.com/@fireship" target="_blank" class="quick-video-card" style="text-decoration: none;">
-                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTrkFvP3GfOM0U7KbZy7Y6bY7Z6X7J7Y7Y7Y7Y7Y=s160-c-k-c0x00ffffff-no-rj" alt="Fireship">
-                        <h4>Fireship</h4>
-                        <p>Web development, JavaScript, tutorials</p>
-                    </a>
-                    <a href="https://www.youtube.com/@ThePrimeagen" target="_blank" class="quick-video-card" style="text-decoration: none;">
-                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z=s160-c-k-c0x00ffffff-no-rj" alt="ThePrimeagen">
-                        <h4>ThePrimeagen</h4>
-                        <p>Systems programming, Rust, performance</p>
-                    </a>
-                    <a href="https://www.youtube.com/@mreflow" target="_blank" class="quick-video-card" style="text-decoration: none;">
+                    <div class="quick-video-card" onclick="openYouTubePopup('nz4h3H1MmTg')">
+                        <img src="https://i.ytimg.com/vi/nz4h3H1MmTg/hqdefault.jpg" alt="Matt Wolfe">
+                        <h4>Matt Wolfe: MS AI</h4>
+                        <p>Microsoft updates</p>
+                    </div>
+                    <div class="quick-video-card" onclick="openYouTubePopup('udS9osDCJKo')">
+                        <img src="https://i.ytimg.com/vi/udS9osDCJKo/hqdefault.jpg" alt="Mathew Berman">
+                        <h4>Mathew Berman</h4>
+                        <p>Perplexity AI</p>
+                    </div>
+                    <div class="quick-video-card" onclick="openYouTubePopup('08uMw4_BWOA')">
+                        <img src="https://i.ytimg.com/vi/08uMw4_BWOA/hqdefault.jpg" alt="AI Layoffs">
+                        <h4>AI Layoffs</h4>
+                        <p>Matt Wolfe Short</p>
+                    </div>
+                    <div class="quick-video-card" onclick="openYouTubePopup('-kxk_e1eA5o')">
+                        <img src="https://i.ytimg.com/vi/-kxk_e1eA5o/hqdefault.jpg" alt="WWDC">
+                        <h4>WWDC 2026</h4>
+                        <p>Apple Event</p>
+                    </div>
+                    <a href="https://www.youtube.com/@mreflow" target="_blank" class="quick-video-card">
                         <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Y=s160-c-k-c0x00ffffff-no-rj" alt="Matt Wolfe">
-                        <h4>Matt Wolfe</h4>
-                        <p>AI tools, news, tutorials</p>
+                        <h4>Matt Wolfe (@mreflow)</h4>
+                        <p>AI News Channel</p>
                     </a>
-                    <a href="https://www.youtube.com/@matthewberman" target="_blank" class="quick-video-card" style="text-decoration: none;">
-                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Z=s160-c-k-c0x00ffffff-no-rj" alt="Matthew Berman">
-                        <h4>Matthew Berman</h4>
-                        <p>AI news, coding, tutorials</p>
+                    <a href="https://www.youtube.com/@matthewberman" target="_blank" class="quick-video-card">
+                        <img src="https://yt3.googleusercontent.com/ytc/AIf8ZTr5X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6X7Z6Z=s160-c-k-c0x00ffffff-no-rj" alt="Mathew Berman">
+                        <h4>Mathew Berman</h4>
+                        <p>AI News Channel</p>
                     </a>
                 </div>
             </div>
@@ -176,18 +221,47 @@
             const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
             
             if (urlMatch) {
-                // Open video directly
-                window.open(`https://youtu.be/${urlMatch[1]}`, '_blank');
+                // Load video in iframe
+                loadVideo(urlMatch[1]);
             } else {
                 // Search on YouTube
                 window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`, '_blank');
             }
         }
         
-        function clearSearch() {
-            document.getElementById('searchInput').value = '';
-            document.getElementById('actionButtons').style.display = 'none';
+        function loadVideo(videoId) {
+            const container = document.getElementById('videoContainer');
+            // Try embed with nocookie domain (less likely to be blocked)
+            container.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&rel=0" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
         }
+        
+        function openYouTubePopup(videoId) {
+            const query = videoId || document.getElementById('searchInput').value.trim();
+            let url;
+            
+            if (videoId) {
+                url = `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1`;
+            } else {
+                const urlMatch = query.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+                if (urlMatch) {
+                    url = `https://www.youtube-nocookie.com/embed/${urlMatch[1]}?autoplay=1`;
+                } else {
+                    url = `https://www.youtube.com/results?search_query=${encodeURIComponent(query)}`;
+                }
+            }
+            
+            window.open(url, 'youtube_popup', 'width=900,height=506,scrollbars=no,resizable=yes');
+        }
+        
+        // Handle Enter key
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    searchYouTube({ preventDefault: () => {} });
+                }
+            });
+        });
     </script>
 </body>
 </html>
