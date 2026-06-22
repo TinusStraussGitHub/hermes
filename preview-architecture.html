@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Preview - Multi-Tenant API Routing System Architecture</title>
+<link rel="stylesheet" href="./style.css">
+<style>
+body {
+  font-family: 'JetBrains Mono', monospace;
+  background: #020617;
+  min-height: 100vh;
+  padding: 2rem;
+  color: white;
+}
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.header {
+  margin-bottom: 2rem;
+}
+.header-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 0.5rem;
+}
+.pulse-dot {
+  width: 12px;
+  height: 12px;
+  background: #22d3ee;
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.025em;
+}
+.subtitle {
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-left: 1.75rem;
+}
+.diagram-container {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 1rem;
+  border: 1px solid #1e293b;
+  padding: 1.5rem;
+  overflow-x: auto;
+}
+svg {
+  width: 100%;
+  min-width: 900px;
+  display: block;
+}
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1rem;
+  margin-top: 2rem;
+}
+.card {
+  background: rgba(15, 23, 42, 0.5);
+  border-radius: 0.75rem;
+  border: 1px solid #1e293b;
+  padding: 1.25rem;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+.card-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.card-dot.cyan { background: #22d3ee; }
+.card-dot.emerald { background: #34d399; }
+.card-dot.violet { background: #a78bfa; }
+.card-dot.amber { background: #fbbf24; }
+.card-dot.rose { background: #fb7185; }
+.card h3 {
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.card ul {
+  list-style: none;
+  color: #94a3b8;
+  font-size: 0.75rem;
+}
+.card li {
+  margin-bottom: 0.375rem;
+}
+.footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #475569;
+  font-size: 0.75rem;
+}
+.back-link {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  background: var(--bg-card);
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  z-index: 1000;
+}
+.back-link:hover { color: var(--text-primary); }
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="header-row">
+      <div class="pulse-dot"></div>
+      <h1>Multi-Tenant API Routing System Architecture</h1>
+    </div>
+    <p class="subtitle">Premium Dark Corporate Theme - BME Design System</p>
+  </div>
+
+  <!-- Main Diagram -->
+  <div class="diagram-container">
+    <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+      <!-- Definitions -->
+      <defs>
+        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+          <polygon points="0 0, 10 3.5, 0 7" fill="#64748b"/>
+        </marker>
+        <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+          <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+        </pattern>
+      </defs>
+      
+      <!-- Background Grid -->
+      <rect width="100%" height="100%" fill="url(#grid)" />
+      
+      <!-- ==============================================================
+      STATE 1: INITIAL HANDSHAKE & ROUTE DISCOVERY (TOP PANEL)
+      ============================================================== -->
+      
+      <!-- Client Blocks (Left Side) -->
+      <rect x="80" y="280" width="100" height="50" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="130" y="300" fill="white" font-size="11" font-weight="600" text-anchor="middle">BLASTMAP App</text>
+      <text x="130" y="316" fill="#94a3b8" font-size="9" text-anchor="middle">Primary Application</text>
+      
+      <rect x="200" y="280" width="140" height="50" rx="6" fill="#1e293b" stroke="#94a3b8" stroke-width="1.5"/>
+      <text x="270" y="300" fill="white" font-size="11" font-weight="600" text-anchor="middle">3rd Party Client</text>
+      <text x="270" y="316" fill="#94a3b8" font-size="9" text-anchor="middle">External Partner</text>
+      
+      <!-- XPLOLOG Gateway (Crimson Red Rectangle) -->
+      <rect x="400" y="265" width="200" height="70" rx="8" fill="#BF0000" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="500" y="290" fill="white" font-size="11" font-weight="600" text-anchor="middle">XPLOLOG Gateway</text>
+      <text x="500" y="308" fill="#94a3b8" font-size="9" text-anchor="middle">(Dynamic Service Broker)</text>
+      
+      <!-- Decision Diamond -->
+      <polygon points="550,265 590,305 550,345 510,305" fill="#ffffff" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="550" y="285" fill="#1e293b" font-size="11" font-weight="600" text-anchor="middle">Target Site Found?</text>
+      
+      <!-- "No" Branch -->
+      <line x1="550" y1="345" x2="550" y2="380" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <text x="565" y="385" fill="#1e293b" font-size="9" text-anchor="start">No</text>
+      
+      <rect x="550" y="380" width="120" height="50" rx="6" fill="#f0f0f0" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="610" y="400" fill="#1e293b" font-size="11" font-weight="600" text-anchor="middle">401 Unrecognized Target Error</text>
+      
+      <!-- "Yes" Branch -->
+      <line x1="550" y1="305" x2="750" y2="305" stroke="#1e293b" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <text x="755" y="308" fill="#1e293b" font-size="9" text-anchor="start">Yes</text>
+      
+      <!-- Target Project Partition Instance (Burgundy Container) -->
+      <rect x="750" y="265" width="180" height="120" rx="8" fill="#8B0000" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="840" y="290" fill="white" font-size="11" font-weight="600" text-anchor="middle">Target Project Partition Instance</text>
+      
+      <!-- Target Firebase Project (Dark Red Block) -->
+      <rect x="770" y="290" width="140" height="50" rx="6" fill="#8B0000" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="840" y="310" fill="white" font-size="11" font-weight="600" text-anchor="middle">Target Firebase Project</text>
+      <text x="840" y="325" fill="#94a3b8" font-size="9" text-anchor="middle">(Executes Local Auth Check & Generates Token)</text>
+      
+      <!-- Return Token Arrow (Bright Blue) -->
+      <line x1="840" y1="340" x2="550" y2="340" stroke="#60A5FA" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <text x="795" y="345" fill="#60A5FA" font-size="9" text-anchor="middle">4. Return token if verified</text>
+      
+      <!-- Gateway to Bottom Panel -->
+      <line x1="550" y1="370" x2="550" y2="450" stroke="#60A5FA" stroke-width="1.5" marker-end="url(#arrowhead)"/>
+      <text x="565" y="455" fill="#60A5FA" font-size="9" text-anchor="start">5. Return target URL + token</text>
+      
+      <!-- ==============================================================
+      STATE 2: SUBSEQUENT DIRECT LOW-LATENCY API OPERATIONS (BOTTOM PANEL)
+      ============================================================== -->
+      
+      <!-- Client Runtime Cache -->
+      <rect x="80" y="500" width="180" height="50" rx="6" fill="#f0f0f0" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="170" y="520" fill="#1e293b" font-size="11" font-weight="600" text-anchor="end">Client Runtime Cache</text>
+      <text x="170" y="535" fill="#94a3b8" font-size="9" text-anchor="end">Stores Target Base URL and Access Token</text>
+      
+      <!-- Green Direct Arrow -->
+      <path d="M 260 525 C 600 510, 700 515, 820 525" fill="none" stroke="#34D399" stroke-width="2" marker-end="url(#arrowhead)"/>
+      <text x="540" y="530" fill="#34D399" font-size="9" text-anchor="middle">7. DIRECT Transaction API Calls (Gateway Bypassed)</text>
+      
+      <!-- Dashed Gray Line (Gateway Bypassed) -->
+      <line x1="820" y1="525" x2="750" y2="305" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrowhead)"/>
+      <text x="810" y="415" fill="#94a3b8" font-size="8" text-anchor="start">Gateway Bypassed for High Volume Traffic</text>
+      
+      <!-- Target Firebase Project API Operations -->
+      <rect x="820" y="500" width="180" height="60" rx="6" fill="#8B0000" stroke="#1e293b" stroke-width="1.5"/>
+      <text x="910" y="520" fill="white" font-size="11" font-weight="600" text-anchor="middle">Target Firebase Project API</text>
+      <text x="910" y="535" fill="#94a3b8" font-size="9" text-anchor="middle">Direct Operations (e.g., /getBlocks, /postBlock)</text>
+      
+      <!-- ==============================================================
+      LEGEND
+      ============================================================== -->
+      
+      <!-- Legend -->
+      <text x="80" y="70" fill="white" font-size="10" font-weight="600">Legend</text>
+      
+      <rect x="80" y="82" width="16" height="10" rx="2" fill="#BF0000" stroke="#22d3ee" stroke-width="1"/>
+      <text x="102" y="90" fill="#94a3b8" font-size="8">Frontend</text>
+      
+      <rect x="80" y="98" width="16" height="10" rx="2" fill="#34d399" stroke="#fbbf24" stroke-width="1"/>
+      <text x="102" y="106" fill="#94a3b8" font-size="8">Backend</text>
+      
+      <rect x="80" y="114" width="16" height="10" rx="2" fill="#fbbf24" stroke="#fbbf24" stroke-width="1"/>
+      <text x="102" y="122" fill="#94a3b8" font-size="8">Cloud Service</text>
+      
+      <rect x="80" y="130" width="16" height="10" rx="2" fill="#a78bfa" stroke="#a78bfa" stroke-width="1"/>
+      <text x="102" y="138" fill="#94a3b8" font-size="8">Database</text>
+      
+      <rect x="80" y="146" width="16" height="10" rx="2" fill="#fb7185" stroke="#fb7185" stroke-width="1"/>
+      <text x="102" y="154" fill="#94a3b8" font-size="8">Security</text>
+      
+      <line x="80" y="168" x2="100" y2="168" stroke="#fb7185" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="105" y="171" fill="#94a3b8" font-size="8">Auth Flow</text>
+      
+      <rect x="80" y="182" width="16" height="10" rx="2" fill="transparent" stroke="#fb7185" stroke-width="1" stroke-dasharray="3,3"/>
+      <text x="105" y="186" fill="#94a3b8" font-size="8">Security Group</text>
+      
+    </svg>
+  </div>
+  
+  <!-- Info Cards -->
+  <div class="cards">
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot rose"></div>
+        <h3>System Overview</h3>
+      </div>
+      <ul>
+        <li>• Multi-tenant API routing architecture</li>
+        <li>• Secure credential validation flow</li>
+        <li>• Dynamic service broker pattern</li>
+        <li>• Firebase-based authentication layer</li>
+        <li>• High-performance direct API operations</li>
+      </ul>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot amber"></div>
+        <h3>Key Components</h3>
+      </div>
+      <ul>
+        <li>• XPLOLOG Gateway (Dynamic Service Broker)</li>
+        <li>• Target Firebase Project (Auth & Token Generation)</li>
+        <li>• Client Runtime Cache (Stores credentials and tokens)</li>
+        <li>• Multi-tenant API endpoints</li>
+        <li>• Secure authentication and authorization</li>
+      </ul>
+    </div>
+    
+    <div class="card">
+      <div class="card-header">
+        <div class="card-dot violet"></div>
+        <h3>Security & Compliance</h3>
+      </div>
+      <ul>
+        <li>• OAuth 2.0 + PKCE authentication flow</li>
+        <li>• JWT token validation with PKCE</li>
+        <li>• 401 error handling for invalid targets</li>
+        <li>• Token expiration and refresh mechanism</li>
+        <li>• Audit logging for all API operations</li>
+      </ul>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <p class="footer">
+    Multi-Tenant API Routing System • BME Enterprise Architecture • June 2026
+  </p>
+</div>
+
+<!-- Back Button -->
+<a href="./index.html" class="back-link">← Back to Dashboard</a>
+</body>
+</html>
