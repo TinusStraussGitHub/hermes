@@ -24,6 +24,7 @@ const urlsToCache = [
   './preview-drilling-analytics.html',
   './preview-architecture.html',
   './preview-blastmap-marketing.html',
+  './preview-unit-converter.html',
   './data/blastmap-marketing-preview.mp4'
 ];
 

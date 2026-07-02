@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preview - Unit Converter</title>
+    <link rel="stylesheet" href="./style.css">
+    <style>
+        .back-link {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 0.9rem;
+            z-index: 1000;
+            background: var(--bg-card);
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border);
+        }
+        .back-link:hover { color: var(--text-primary); }
+        .container { max-width: 900px; margin: 80px auto 40px; padding: 20px; }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 16px;
+            border-bottom: 3px solid #BF0000;
+            margin-bottom: 30px;
+        }
+        .header h1 {
+            font-size: 28px;
+            color: #BF0000;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin: 0;
+        }
+        .converter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .converter-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            transition: all 0.3s ease;
+        }
+        .converter-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+        .converter-card h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .converter-card h3 .icon {
+            font-size: 20px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .input-group label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        .input-group input {
+            padding: 12px 16px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+            font-family: inherit;
+            transition: border-color 0.3s ease;
+        }
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-light);
+        }
+        .result-display {
+            margin-top: 12px;
+            padding: 12px 16px;
+            background: var(--accent-light);
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--accent);
+            text-align: center;
+            min-height: 24px;
+        }
+        .result-display:empty {
+            background: transparent;
+            padding: 0;
+            min-height: 0;
+        }
+        .swap-btn {
+            background: var(--gradient-blue);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px auto;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .swap-btn:hover {
+            transform: rotate(180deg);
+        }
+        .swap-btn-row {
+            display: flex;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .footer {
+            border-top: 2px solid #BF0000;
+            padding-top: 12px;
+            margin-top: 30px;
+            text-align: center;
+            color: var(--text-tertiary);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <a href="./index.html" class="back-link">← Back to Dashboard</a>
+    <div class="container">
+        <div class="header">
+            <h1>📏 Unit Converter</h1>
+        </div>
+
+        <div class="converter-grid">
+            <!-- Length: Meters ↔ Feet -->
+            <div class="converter-card">
+                <h3><span class="icon">📏</span> Length (m ↔ ft)</h3>
+                <div class="input-group">
+                    <label for="meters">Meters</label>
+                    <input type="number" id="meters" placeholder="Enter meters..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('meters', 'feet')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="feet">Feet</label>
+                    <input type="number" id="feet" placeholder="Enter feet..." step="any">
+                </div>
+                <div class="result-display" id="lengthResult"></div>
+            </div>
+
+            <!-- Length: Millimeters ↔ Inches -->
+            <div class="converter-card">
+                <h3><span class="icon">📐</span> Length (mm ↔ in)</h3>
+                <div class="input-group">
+                    <label for="millimeters">Millimeters</label>
+                    <input type="number" id="millimeters" placeholder="Enter millimeters..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('millimeters', 'inches')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="inches">Inches</label>
+                    <input type="number" id="inches" placeholder="Enter inches..." step="any">
+                </div>
+                <div class="result-display" id="mmInResult"></div>
+            </div>
+
+            <!-- Mass: Kilograms ↔ Pounds -->
+            <div class="converter-card">
+                <h3><span class="icon">⚖️</span> Mass (kg ↔ lb)</h3>
+                <div class="input-group">
+                    <label for="kilograms">Kilograms</label>
+                    <input type="number" id="kilograms" placeholder="Enter kilograms..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('kilograms', 'pounds')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="pounds">Pounds</label>
+                    <input type="number" id="pounds" placeholder="Enter pounds..." step="any">
+                </div>
+                <div class="result-display" id="massResult"></div>
+            </div>
+
+            <!-- Volume: Liters ↔ Gallons -->
+            <div class="converter-card">
+                <h3><span class="icon">🧴</span> Volume (L ↔ gal)</h3>
+                <div class="input-group">
+                    <label for="liters">Liters</label>
+                    <input type="number" id="liters" placeholder="Enter liters..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('liters', 'gallons')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="gallons">Gallons</label>
+                    <input type="number" id="gallons" placeholder="Enter gallons..." step="any">
+                </div>
+                <div class="result-display" id="volumeResult"></div>
+            </div>
+
+            <!-- Temperature: Celsius ↔ Fahrenheit -->
+            <div class="converter-card">
+                <h3><span class="icon">🌡️</span> Temperature (°C ↔ °F)</h3>
+                <div class="input-group">
+                    <label for="celsius">Celsius</label>
+                    <input type="number" id="celsius" placeholder="Enter Celsius..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('celsius', 'fahrenheit')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="fahrenheit">Fahrenheit</label>
+                    <input type="number" id="fahrenheit" placeholder="Enter Fahrenheit..." step="any">
+                </div>
+                <div class="result-display" id="tempResult"></div>
+            </div>
+
+            <!-- Area: Square Meters ↔ Square Feet -->
+            <div class="converter-card">
+                <h3><span class="icon">▢</span> Area (m² ↔ ft²)</h3>
+                <div class="input-group">
+                    <label for="sqmeters">Square Meters</label>
+                    <input type="number" id="sqmeters" placeholder="Enter square meters..." step="any">
+                </div>
+                <div class="swap-btn-row">
+                    <button class="swap-btn" onclick="swapUnits('sqmeters', 'sqfeet')">&#8593;&#8595;</button>
+                </div>
+                <div class="input-group">
+                    <label for="sqfeet">Square Feet</label>
+                    <input type="number" id="sqfeet" placeholder="Enter square feet..." step="any">
+                </div>
+                <div class="result-display" id="areaResult"></div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Unit Converter • Metric-Imperial Preview Page • BME Insights Hub</p>
+        </div>
+    </div>
+
+    <script>
+        // Conversion factors
+        const FACTORS = {
+            meters_feet: 3.28084,
+            millimeters_inches: 25.4,
+            kilograms_pounds: 2.20462,
+            liters_gallons: 3.78541,
+            sqmeters_sqfeet: 10.7639
+        };
+
+        // Conversion functions
+        function convertMetersToFeet(m) { return m * FACTORS.meters_feet; }
+        function convertFeetToMeters(f) { return f / FACTORS.meters_feet; }
+        function convertMMToInches(mm) { return mm / FACTORS.millimeters_inches; }
+        function convertInchesToMM(inches) { return inches * FACTORS.millimeters_inches; }
+        function convertKgToLb(kg) { return kg * FACTORS.kilograms_pounds; }
+        function convertLbToKg(lb) { return lb / FACTORS.kilograms_pounds; }
+        function convertLitersToGal(L) { return L * FACTORS.liters_gallons; }
+        function convertGalToLiters(gal) { return gal / FACTORS.liters_gallons; }
+        function convertCToF(c) { return c * 9/5 + 32; }
+        function convertFToC(f) { return (f - 32) * 5/9; }
+
+        // Input event listeners
+        document.getElementById('meters').addEventListener('input', (e) => {
+            const m = parseFloat(e.target.value);
+            if (!isNaN(m)) {
+                document.getElementById('feet').value = convertMetersToFeet(m).toFixed(4);
+                document.getElementById('lengthResult').textContent = `${m} m = ${convertMetersToFeet(m).toFixed(4)} ft`;
+            } else {
+                document.getElementById('feet').value = '';
+                document.getElementById('lengthResult').textContent = '';
+            }
+        });
+
+        document.getElementById('feet').addEventListener('input', (e) => {
+            const f = parseFloat(e.target.value);
+            if (!isNaN(f)) {
+                document.getElementById('meters').value = convertFeetToMeters(f).toFixed(4);
+                document.getElementById('lengthResult').textContent = `${f} ft = ${convertFeetToMeters(f).toFixed(4)} m`;
+            } else {
+                document.getElementById('meters').value = '';
+                document.getElementById('lengthResult').textContent = '';
+            }
+        });
+
+        document.getElementById('millimeters').addEventListener('input', (e) => {
+            const mm = parseFloat(e.target.value);
+            if (!isNaN(mm)) {
+                document.getElementById('inches').value = convertMMToInches(mm).toFixed(4);
+                document.getElementById('mmInResult').textContent = `${mm} mm = ${convertMMToInches(mm).toFixed(4)} in`;
+            } else {
+                document.getElementById('inches').value = '';
+                document.getElementById('mmInResult').textContent = '';
+            }
+        });
+
+        document.getElementById('inches').addEventListener('input', (e) => {
+            const inVal = parseFloat(e.target.value);
+            if (!isNaN(inVal)) {
+                document.getElementById('millimeters').value = convertInchesToMM(inVal).toFixed(4);
+                document.getElementById('mmInResult').textContent = `${inVal} in = ${convertInchesToMM(inVal).toFixed(4)} mm`;
+            } else {
+                document.getElementById('millimeters').value = '';
+                document.getElementById('mmInResult').textContent = '';
+            }
+        });
+
+        document.getElementById('kilograms').addEventListener('input', (e) => {
+            const kg = parseFloat(e.target.value);
+            if (!isNaN(kg)) {
+                document.getElementById('pounds').value = convertKgToLb(kg).toFixed(4);
+                document.getElementById('massResult').textContent = `${kg} kg = ${convertKgToLb(kg).toFixed(4)} lb`;
+            } else {
+                document.getElementById('pounds').value = '';
+                document.getElementById('massResult').textContent = '';
+            }
+        });
+
+        document.getElementById('pounds').addEventListener('input', (e) => {
+            const lb = parseFloat(e.target.value);
+            if (!isNaN(lb)) {
+                document.getElementById('kilograms').value = convertLbToKg(lb).toFixed(4);
+                document.getElementById('massResult').textContent = `${lb} lb = ${convertLbToKg(lb).toFixed(4)} kg`;
+            } else {
+                document.getElementById('kilograms').value = '';
+                document.getElementById('massResult').textContent = '';
+            }
+        });
+
+        document.getElementById('liters').addEventListener('input', (e) => {
+            const L = parseFloat(e.target.value);
+            if (!isNaN(L)) {
+                document.getElementById('gallons').value = convertLitersToGal(L).toFixed(4);
+                document.getElementById('volumeResult').textContent = `${L} L = ${convertLitersToGal(L).toFixed(4)} gal`;
+            } else {
+                document.getElementById('gallons').value = '';
+                document.getElementById('volumeResult').textContent = '';
+            }
+        });
+
+        document.getElementById('gallons').addEventListener('input', (e) => {
+            const gal = parseFloat(e.target.value);
+            if (!isNaN(gal)) {
+                document.getElementById('liters').value = convertGalToLiters(gal).toFixed(4);
+                document.getElementById('volumeResult').textContent = `${gal} gal = ${convertGalToLiters(gal).toFixed(4)} L`;
+            } else {
+                document.getElementById('liters').value = '';
+                document.getElementById('volumeResult').textContent = '';
+            }
+        });
+
+        document.getElementById('celsius').addEventListener('input', (e) => {
+            const c = parseFloat(e.target.value);
+            if (!isNaN(c)) {
+                document.getElementById('fahrenheit').value = convertCToF(c).toFixed(2);
+                document.getElementById('tempResult').textContent = `${c} °C = ${convertCToF(c).toFixed(2)} °F`;
+            } else {
+                document.getElementById('fahrenheit').value = '';
+                document.getElementById('tempResult').textContent = '';
+            }
+        });
+
+        document.getElementById('fahrenheit').addEventListener('input', (e) => {
+            const f = parseFloat(e.target.value);
+            if (!isNaN(f)) {
+                document.getElementById('celsius').value = convertFToC(f).toFixed(2);
+                document.getElementById('tempResult').textContent = `${f} °F = ${convertFToC(f).toFixed(2)} °C`;
+            } else {
+                document.getElementById('celsius').value = '';
+                document.getElementById('tempResult').textContent = '';
+            }
+        });
+
+        document.getElementById('sqmeters').addEventListener('input', (e) => {
+            const m2 = parseFloat(e.target.value);
+            if (!isNaN(m2)) {
+                document.getElementById('sqfeet').value = convertSqMetersToSqFeet(m2).toFixed(4);
+                document.getElementById('areaResult').textContent = `${m2} m² = ${convertSqMetersToSqFeet(m2).toFixed(4)} ft²`;
+            } else {
+                document.getElementById('sqfeet').value = '';
+                document.getElementById('areaResult').textContent = '';
+            }
+        });
+
+        document.getElementById('sqfeet').addEventListener('input', (e) => {
+            const ft2 = parseFloat(e.target.value);
+            if (!isNaN(ft2)) {
+                document.getElementById('sqmeters').value = convertSqFeetToSqMeters(ft2).toFixed(4);
+                document.getElementById('areaResult').textContent = `${ft2} ft² = ${convertSqFeetToSqMeters(ft2).toFixed(4)} m²`;
+            } else {
+                document.getElementById('sqmeters').value = '';
+                document.getElementById('areaResult').textContent = '';
+            }
+        });
+
+        function convertSqMetersToSqFeet(m2) { return m2 * FACTORS.sqmeters_sqfeet; }
+        function convertSqFeetToSqMeters(ft2) { return ft2 / FACTORS.sqmeters_sqfeet; }
+
+        // Swap units function
+        function swapUnits(fromId, toId) {
+            const fromInput = document.getElementById(fromId);
+            const toInput = document.getElementById(toId);
+            const temp = fromInput.value;
+            fromInput.value = toInput.value;
+            toInput.value = temp;
+            
+            // Trigger input event to update conversions
+            fromInput.dispatchEvent(new Event('input'));
+        }
+    </script>
+</body>
+</html>
