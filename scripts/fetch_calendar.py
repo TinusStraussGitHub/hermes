@@ -8,6 +8,56 @@ import re
 import json
 import urllib.request
 from datetime import datetime, timedelta
+try:
+    from zoneinfo import ZoneInfo
+    _HAVE_ZONEINFO = True
+except Exception:  # pragma: no cover - extremely old interpreters
+    _HAVE_ZONEINFO = False
+    ZoneInfo = None  # type: ignore
+
+# SAST as a real timezone (UTC+2, no DST) for astimezone conversions.
+SAST_TZ = ZoneInfo('Africa/Johannesburg') if _HAVE_ZONEINFO else None
+
+# Windows timezone names (as emitted by Outlook iCal) -> IANA zone.
+# Using IANA via zoneinfo makes DST automatic (e.g. London BST in summer).
+WINDOWS_TO_IANA = {
+    'South Africa Standard Time': 'Africa/Johannesburg',
+    'GMT Standard Time': 'Europe/London',          # UK: GMT in winter, BST (+1) in summer
+    'Greenwich Standard Time': 'Africa/Monrovia',
+    'W. Europe Standard Time': 'Europe/Berlin',
+    'Romance Standard Time': 'Europe/Paris',
+    'Central European Standard Time': 'Europe/Budapest',
+    'E. Europe Standard Time': 'Europe/Chisinau',
+    'Russia Time Zone 1': 'Europe/Kaliningrad',
+    'Russian Standard Time': 'Europe/Moscow',
+    'UTC': 'UTC',
+    'E. Australia Standard Time': 'Australia/Brisbane',
+    'AUS Eastern Standard Time': 'Australia/Sydney',
+    'AUS Central Standard Time': 'Australia/Adelaide',
+    'Cen. Australia Standard Time': 'Australia/Adelaide',
+    'W. Australia Standard Time': 'Australia/Perth',
+    'New Zealand Standard Time': 'Pacific/Auckland',
+    'India Standard Time': 'Asia/Kolkata',
+    'China Standard Time': 'Asia/Shanghai',
+    'Tokyo Standard Time': 'Asia/Tokyo',
+    'Korea Standard Time': 'Asia/Seoul',
+    'Singapore Standard Time': 'Asia/Singapore',
+    'SE Asia Standard Time': 'Asia/Bangkok',
+    'Eastern Standard Time': 'America/New_York',
+    'Central Standard Time': 'America/Chicago',
+    'Mountain Standard Time': 'America/Denver',
+    'Pacific Standard Time': 'America/Los_Angeles',
+    'SA Western Standard Time': 'America/Bogota',
+    'SA Pacific Standard Time': 'America/Bogota',
+    'US Eastern Standard Time': 'America/New_York',
+    'US Central Standard Time': 'America/Chicago',
+    'US Mountain Standard Time': 'America/Denver',
+    'US Pacific Standard Time': 'America/Los_Angeles',
+    'Egypt Standard Time': 'Africa/Cairo',
+    'Israel Standard Time': 'Asia/Jerusalem',
+    'Arabian Standard Time': 'Asia/Dubai',
+    'Fiji Standard Time': 'Pacific/Fiji',
+}
 
 # Configuration
 ICAL_URL = "https://outlook.office365.com/owa/calendar/b230ba720b3547b89d4e6e79b215ea28@bme.co.za/d273434a0b6347ef8a4b6cbe8e22a74411145327051186904376/calendar.ics"
@@ -114,12 +164,12 @@ def get_tz_offset(tz_name):
 def parse_ical_datetime(dt_str, tz_name=None):
     """
     Parse iCal datetime string and convert to SAST.
-    
+
     Handles:
     - YYYYMMDD (all-day event)
     - YYYYMMDDTHHMMSS (floating time — assumed SAST)
     - YYYYMMDDTHHMMSSZ (UTC time)
-    - With TZID prefix (converted from that timezone to SAST)
+    - With TZID prefix (converted from that timezone to SAST, DST-aware)
     """
     dt_str = dt_str.strip()
 
@@ -143,16 +193,29 @@ def parse_ical_datetime(dt_str, tz_name=None):
     is_utc = dt_str.strip().endswith('Z')
 
     if is_utc:
-        # UTC time → add 2 hours for SAST
-        dt = dt + timedelta(hours=SAST_UTC_OFFSET)
+        # UTC time -> convert via zoneinfo to SAST (DST-safe)
+        dt_aware = dt.replace(tzinfo=ZoneInfo('UTC')) if _HAVE_ZONEINFO else dt
+        if _HAVE_ZONEINFO:
+            dt = dt_aware.astimezone(SAST_TZ).replace(tzinfo=None)
     elif tz_name and tz_name != 'NONE':
-        # Has a TZID — convert from that timezone to SAST
-        tz_offset = get_tz_offset(tz_name)
-        # SAST = UTC+2, tz = UTC+tz_offset
-        # SAST_time = tz_time + (2 - tz_offset)
-        delta = SAST_UTC_OFFSET - tz_offset
-        if delta != 0:
-            dt = dt + timedelta(hours=delta)
+        # Has a TZID -> convert from that timezone to SAST (DST-aware)
+        if _HAVE_ZONEINFO:
+            iana = WINDOWS_TO_IANA.get(tz_name)
+            if iana is None:
+                # fall back to static offset dict
+                tz_offset = get_tz_offset(tz_name)
+                delta = SAST_UTC_OFFSET - tz_offset
+                if delta:
+                    dt = dt + timedelta(hours=delta)
+            else:
+                dt_aware = dt.replace(tzinfo=ZoneInfo(iana))
+                dt = dt_aware.astimezone(SAST_TZ).replace(tzinfo=None)
+        else:
+            # zoneinfo unavailable: static fallback
+            tz_offset = get_tz_offset(tz_name)
+            delta = SAST_UTC_OFFSET - tz_offset
+            if delta:
+                dt = dt + timedelta(hours=delta)
     # else: floating time (no Z, no TZID) — already in local/SAST, no conversion
 
     return dt, True
