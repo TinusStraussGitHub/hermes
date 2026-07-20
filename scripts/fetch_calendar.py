@@ -9,6 +9,12 @@ import json
 import urllib.request
 from datetime import datetime, timedelta
 try:
+    from dateutil.rrule import rrulestr
+    from dateutil.parser import parse as dtparse
+    _HAVE_DATEUTIL = True
+except Exception:  # pragma: no cover
+    _HAVE_DATEUTIL = False
+try:
     from zoneinfo import ZoneInfo
     _HAVE_ZONEINFO = True
 except Exception:  # pragma: no cover - extremely old interpreters
@@ -221,12 +227,59 @@ def parse_ical_datetime(dt_str, tz_name=None):
     return dt, True
 
 
+def parse_ical_to_utc(dt_str, tz_name=None):
+    """
+    Parse an iCal datetime into a timezone-AWARE UTC datetime (the true instant),
+    without baking in the SAST offset. Used for RRULE expansion with dateutil,
+    which requires DTSTART/UNTIL to both be tz-aware UTC.
+    Returns (utc_datetime, is_timed, tz_aware_dtstart) where tz_aware_dtstart is
+    the SAST-aware original (for fallback single-occurrence use).
+    """
+    dt_str = dt_str.strip()
+
+    # All-day event
+    if 'T' not in dt_str:
+        d = datetime.strptime(dt_str, "%Y%m%d")
+        return d, False, d
+
+    dt_str_clean = dt_str.rstrip('Z')
+    for fmt in ["%Y%m%dT%H%M%S", "%Y%m%dT%H%M"]:
+        try:
+            naive = datetime.strptime(dt_str_clean, fmt)
+            break
+        except ValueError:
+            continue
+    else:
+        return None, False, None
+
+    is_utc = dt_str.strip().endswith('Z')
+
+    if is_utc:
+        aware = naive.replace(tzinfo=ZoneInfo('UTC')) if _HAVE_ZONEINFO else naive
+    elif tz_name and tz_name != 'NONE' and _HAVE_ZONEINFO:
+        iana = WINDOWS_TO_IANA.get(tz_name)
+        if iana is None:
+            tz_offset = get_tz_offset(tz_name)
+            aware = naive - timedelta(hours=tz_offset)  # to UTC
+            aware = aware.replace(tzinfo=ZoneInfo('UTC'))
+        else:
+            aware = naive.replace(tzinfo=ZoneInfo(iana))
+    else:
+        # floating -> assume SAST
+        aware = naive.replace(tzinfo=SAST_TZ) if _HAVE_ZONEINFO else naive
+
+    utc = aware.astimezone(ZoneInfo('UTC')) if _HAVE_ZONEINFO else aware
+    return utc, True, aware
+
+
 def fetch_ical():
     """Fetch iCal data from Outlook URL"""
     try:
         req = urllib.request.Request(ICAL_URL, headers={'User-Agent': 'Mozilla/5.0'})
         with urllib.request.urlopen(req, timeout=30) as response:
-            return response.read().decode('utf-8')
+            raw = response.read().decode('utf-8')
+        # RFC5545 line unfolding: a line beginning with a space/tab continues the previous
+        return re.sub(r'\r?\n[ \t]', '', raw)
     except Exception as e:
         print(f"Error fetching iCal: {e}")
         return None
@@ -242,6 +295,7 @@ def parse_events(ical_data):
         summary_match = re.search(r'SUMMARY:(.+)', block)
         dtstart_match = re.search(r'DTSTART(?:;[^:]*)*:(.+)', block)
         dtend_match = re.search(r'DTEND(?:;[^:]*)*:(.+)', block)
+        rrule_match = re.search(r'RRULE:(.+)', block)
 
         if not summary_match or not dtstart_match:
             continue
@@ -253,40 +307,86 @@ def parse_events(ical_data):
         tz_match = re.search(r'TZID=([^:]+):', dtstart_match.group(0))
         tz_name = tz_match.group(1) if tz_match else None
 
-        # Parse start time (converted to SAST)
+        # Parse start time (converted to SAST, naive — used for display/fallback)
         dtstart, is_timed = parse_ical_datetime(dtstart_str, tz_name)
         if not dtstart:
             continue
 
-        # Skip if before today or after max_date
-        if dtstart < today or dtstart > max_date:
-            continue
+        # Zone-aware instant for RRULE expansion (keeps per-occurrence DST correct).
+        # Use the original-zone-aware dtstart so dateutil applies DST on the right dates.
+        _, _, dtstart_aware = parse_ical_to_utc(dtstart_str, tz_name)
 
-        # Calculate duration
-        duration = "1h"  # default
-        if dtend_match:
-            dtend_str = dtend_match.group(1).strip()
-            # Extract TZID from DTEND line
-            tz_end_match = re.search(r'TZID=([^:]+):', dtend_match.group(0))
-            tz_end_name = tz_end_match.group(1) if tz_end_match else tz_name
-            dtend, _ = parse_ical_datetime(dtend_str, tz_end_name)
-            if dtend:
-                diff = dtend - dtstart
-                hours = diff.total_seconds() / 3600
-                if hours < 1:
-                    duration = f"{int(diff.total_seconds() / 60)}m"
-                else:
-                    duration = f"{hours}h"
+        # Collect exception dates (EXDATE) to skip expanded occurrences
+        exdates = set()
+        for ex in re.finditer(r'EXDATE(?:;[^:]*)*:(.+)', block):
+            for part in ex.group(1).split(','):
+                part = part.strip()
+                if not part:
+                    continue
+                try:
+                    exd, _ = parse_ical_datetime(part, tz_name)
+                    if exd:
+                        exdates.add(exd.date())
+                except Exception:
+                    continue
 
-        # Format time string
-        time_str = f"{dtstart.hour:02d}:{dtstart.minute:02d}" if is_timed else ""
+        # Determine the set of occurrence start datetimes to emit
+        if rrule_match and _HAVE_DATEUTIL and dtstart_aware is not None:
+            try:
+                rrule_text = rrule_match.group(1).strip()
+                rule_dtstart = dtstart_aware
+                if not is_timed:
+                    # All-day event: rrulestr needs UNTIL without trailing Z
+                    # when dtstart is a naive date.
+                    rrule_text = rrule_text.replace('Z;', ';').replace('Z', '')
+                rule = rrulestr(rrule_text, dtstart=rule_dtstart)
+                occurrences = []
+                for occ in rule:
+                    # occ is tz-aware in the source zone (DST correct per date);
+                    # convert to SAST for display
+                    occ_sast = occ.astimezone(SAST_TZ).replace(tzinfo=None) if _HAVE_ZONEINFO else occ.replace(tzinfo=None)
+                    if not is_timed:
+                        occ_sast = datetime(occ_sast.year, occ_sast.month, occ_sast.day)
+                    if today <= occ_sast <= max_date and occ_sast.date() not in exdates:
+                        occurrences.append(occ_sast)
+                # De-duplicate
+                seen = set()
+                occ_list = []
+                for occ in occurrences:
+                    key = (occ.year, occ.month, occ.day, occ.hour, occ.minute)
+                    if key not in seen:
+                        seen.add(key)
+                        occ_list.append(occ)
+            except Exception as e:
+                print(f"  WARNING: RRULE parse failed for '{title}': {e}")
+                occ_list = [dtstart] if today <= dtstart <= max_date else []
+        else:
+            # Non-recurring (or dateutil missing): single occurrence
+            occ_list = [dtstart] if today <= dtstart <= max_date else []
 
-        events.append({
-            'title': title,
-            'time': time_str,
-            'duration': duration,
-            'datetime': dtstart
-        })
+        for occ_start in occ_list:
+            # Calculate duration (reuse master DTEND for all occurrences)
+            duration = "1h"  # default
+            if dtend_match:
+                tz_end_match = re.search(r'TZID=([^:]+):', dtend_match.group(0))
+                tz_end_name = tz_end_match.group(1) if tz_end_match else tz_name
+                dtend, _ = parse_ical_datetime(dtend_match.group(1).strip(), tz_end_name)
+                if dtend:
+                    diff = dtend - occ_start
+                    hours = diff.total_seconds() / 3600
+                    if hours < 1:
+                        duration = f"{int(diff.total_seconds() / 60)}m"
+                    else:
+                        duration = f"{hours}h"
+
+            time_str = f"{occ_start.hour:02d}:{occ_start.minute:02d}" if is_timed else ""
+
+            events.append({
+                'title': title,
+                'time': time_str,
+                'duration': duration,
+                'datetime': occ_start
+            })
 
     return events
 
