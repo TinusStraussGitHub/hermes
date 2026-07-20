@@ -392,18 +392,28 @@ def parse_events(ical_data):
 
 
 def group_by_day(events):
-    """Group events by day of week"""
+    """Group events by day of week, collapsing recurring duplicates.
+
+    Recurring series expand to many dated occurrences; on a weekly view we only
+    need one entry per (weekday, time, title). So we dedupe on that key.
+    """
     day_order = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
     days = {day: [] for day in day_order}
+    seen = {day: set() for day in day_order}
 
     for event in events:
         day_name = event['datetime'].strftime('%A')
-        if day_name in days:
-            days[day_name].append({
-                'time': event['time'],
-                'title': event['title'],
-                'duration': event['duration']
-            })
+        if day_name not in days:
+            continue
+        key = (event['time'], event['title'])
+        if key in seen[day_name]:
+            continue  # skip duplicate (same meeting on another week)
+        seen[day_name].add(key)
+        days[day_name].append({
+            'time': event['time'],
+            'title': event['title'],
+            'duration': event['duration']
+        })
 
     # Sort events within each day by time
     for day in days:
