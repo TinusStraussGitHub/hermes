@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BME Quote BMP-0053</title>
+<style>
+  @page {
+    size: A4;
+    margin: 15mm;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Segoe UI', Arial, Helvetica, sans-serif;
+    color: #141414;
+    font-size: 11pt;
+    line-height: 1.5;
+    background: #fff;
+  }
+
+  /* Header */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding-bottom: 16px;
+    border-bottom: 3px solid #BF0000;
+    margin-bottom: 20px;
+  }
+  .header-left { background: white; padding: 2px; }
+  .header-left svg { height: 52px; width: auto; }
+  .header-right {
+    text-align: right;
+  }
+  .header-right h1 {
+    font-size: 22pt;
+    color: #BF0000;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .header-right .quote-label {
+    font-size: 9pt;
+    color: #666;
+    margin-top: 2px;
+  }
+  .header-right .quote-number {
+    font-size: 14pt;
+    font-weight: 700;
+    color: #141414;
+  }
+
+  /* Info section */
+  .info-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    gap: 20px;
+  }
+  .info-box {
+    flex: 1;
+    background: #f8f8f8;
+    border-left: 3px solid #BF0000;
+    padding: 12px 16px;
+    border-radius: 0 4px 4px 0;
+  }
+  .info-box h3 {
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #BF0000;
+    margin-bottom: 6px;
+  }
+  .info-box p {
+    font-size: 10pt;
+    line-height: 1.6;
+  }
+  .info-box .big { font-size: 11pt; font-weight: 600; }
+
+  /* Items table */
+  .items-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  .items-table thead th {
+    background: #141414;
+    color: #fff;
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 12px;
+    text-align: left;
+  }
+  .items-table thead th:last-child,
+  .items-table thead th:nth-last-child(2) {
+    text-align: right;
+  }
+  .items-table tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 10pt;
+    vertical-align: top;
+  }
+  .items-table tbody td:last-child,
+  .items-table tbody td:nth-last-child(2) {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .items-table tbody tr:nth-child(even) {
+    background: #fafafa;
+  }
+  .items-table tbody tr:hover {
+    background: #f0f0f0;
+  }
+  .item-name {
+    font-weight: 600;
+    color: #141414;
+  }
+  .item-desc {
+    font-size: 8.5pt;
+    color: #666;
+    margin-top: 2px;
+  }
+  .qty-badge {
+    display: inline-block;
+    background: #BF0000;
+    color: #fff;
+    font-size: 8pt;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  /* Features list in table */
+  .feature-list {
+    list-style: none;
+    padding: 0;
+    margin: 4px 0 0 0;
+  }
+  .feature-list li {
+    font-size: 8pt;
+    color: #555;
+    padding: 1px 0;
+    padding-left: 12px;
+    position: relative;
+  }
+  .feature-list li::before {
+    content: "▸";
+    position: absolute;
+    left: 0;
+    color: #BF0000;
+    font-size: 8pt;
+  }
+
+  /* Totals */
+  .totals-section {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 24px;
+  }
+  .totals-box {
+    width: 320px;
+    border: 2px solid #141414;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .totals-box .total-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 16px;
+    font-size: 10pt;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  .totals-box .total-row:last-child {
+    border-bottom: none;
+  }
+  .totals-box .grand-total {
+    background: #141414;
+    color: #fff;
+    font-size: 13pt;
+    font-weight: 700;
+    padding: 12px 16px;
+  }
+  .totals-box .grand-total .zar {
+    font-size: 10pt;
+    font-weight: 400;
+    opacity: 0.85;
+  }
+  .totals-box .sub-total {
+    font-weight: 600;
+    background: #f8f8f8;
+  }
+
+  /* Terms */
+  .terms {
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+  }
+  .terms h3 {
+    font-size: 9pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #BF0000;
+    margin-bottom: 8px;
+  }
+  .terms ul {
+    list-style: none;
+    padding: 0;
+  }
+  .terms ul li {
+    font-size: 9pt;
+    color: #444;
+    padding: 2px 0;
+    padding-left: 14px;
+    position: relative;
+  }
+  .terms ul li::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #BF0000;
+    font-weight: 700;
+  }
+
+  /* Footer */
+  .footer {
+    border-top: 2px solid #BF0000;
+    padding-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: flex-end;
+  }
+  .footer-right {
+    text-align: right;
+  }
+  .footer-right .bme-name {
+    font-size: 11pt;
+    font-weight: 700;
+    color: #BF0000;
+  }
+
+  /* Validity banner */
+  .validity-banner {
+    background: #BF0000;
+    color: #fff;
+    text-align: center;
+    font-size: 8.5pt;
+    padding: 6px;
+    border-radius: 4px;
+    margin-bottom: 16px;
+    letter-spacing: 0.5px;
+  }
+
+  @media print {
+    body { background: #fff; }
+    .items-table tbody tr:hover { background: transparent; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<div class="header">
+  <div class="header-left">
+    <svg id="Layer_1" data-name="Layer 1" viewBox="0 0 1000 295" version="1.1" sodipodi:docname="BME_Primary Logo_Charcoal.svg" inkscape:version="1.3.2 (091e20e, 2023-11-25, custom)" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg">
+  <rect width="1000" height="295" fill="white"/>
+  <polygon style="fill:#bf0000;stroke-width:0px" points="215.89,83.85 0.5,289.96 167.64,0.47"/>
+  <polygon style="fill:#bf0000;stroke-width:0px" points="334.77,289.96 286.64,206.58 0.5,289.96"/>
+  <polygon style="fill:#ff0000;stroke-width:0px" points="301.45,168.39 0.5,289.96 256.35,90.27"/>
+  <path style="fill:#141414;stroke-width:0px" d="M500.46,132.98c-17.27-.84-33.41,3.93-46.75,12.65v-55.35l-35.7,10.45v189.23h28.5l7.2-12.74c12.33,8.05,27.05,12.74,42.84,12.74,45.16,0,81.53-38.31,78.34-84.13-2.74-39.33-35.05-70.93-74.43-72.85ZM500.94,254.04c-27.06,2.7-49.71-19.95-47.01-47.01,2-20.03,18.2-36.23,38.23-38.23,27.06-2.7,49.71,19.95,47.01,47.01-2,20.03-18.2,36.23-38.23,38.23Z"/>
+  <path style="fill:#141414;stroke-width:0px" d="M762.57,133.4c-20.76-.99-39.61,7.51-52.57,21.53-12.27-13.28-29.83-21.6-49.29-21.6-13.02,0-25.19,3.73-35.49,10.17l-5.74-9.95h-25.91v156.98h35.7v-89.15c0-16.91,12.97-31.48,29.86-32.31,18.05-.89,33.03,13.54,33.03,31.4v90.07h35.7v-89.16c0-16.91,12.97-31.48,29.86-32.31,18.05-.89,33.03,13.54,33.03,31.4v90.07h35.7v-88.72c0-36.04-27.86-66.69-63.87-68.41Z"/>
+  <path style="fill:#141414;stroke-width:0px" d="M981.37,274.66c-6.77,4.59-13.66,8.14-20.68,10.64-9.79,3.49-20.78,5.23-32.99,5.23-15.12,0-28.83-3.53-41.14-10.61-12.31-7.07-22.05-16.47-29.21-28.2-7.17-11.72-10.76-24.95-10.76-39.68s3.44-27.76,10.32-39.68c6.88-11.92,16.23-21.37,28.05-28.34,11.82-6.98,24.9-10.47,39.25-10.47s27.47,3.54,38.81,10.61c11.34,7.08,20.25,16.72,26.75,28.92,6.49,12.21,9.74,26.16,9.74,41.86v10.46h-112.21c1.74,6.01,4.65,11.44,8.72,16.28,4.07,4.85,9.01,8.58,14.83,11.19,5.81,2.62,12.11,3.93,18.89,3.93s12.79-1.02,18.61-3.05c5.81-2.03,11.53-5.28,15.6-9.16M886.71,199.42h73.84c-1.55-6-4.12-11.29-7.7-15.84-3.59-4.55-7.9-8.09-12.94-10.61-5.04-2.52-10.47-3.78-16.28-3.78-6.2,0-11.82,1.22-16.86,3.63-5.04,2.43-9.26,5.91-12.65,10.47-3.39,4.56-5.86,9.93-7.41,16.13Z"/>
+</svg>
+  </div>
+  <div class="header-right">
+    <h1>Quotation</h1>
+    <div class="quote-label">Quote Number</div>
+    <div class="quote-number">BMP-0053</div>
+  </div>
+</div>
+
+<!-- Info Grid -->
+<div class="info-grid">
+  <div class="info-box">
+    <h3>Prepared For</h3>
+    <p class="big">Test Client</p>
+    <p>Test Mining (Pty) Ltd</p>
+    <p>test@example.com</p>
+    <p></p>
+  </div>
+  <div class="info-box">
+    <h3>Quote Details</h3>
+    <p><strong>Date:</strong> 12 June 2026</p>
+    <p><strong>Valid Until:</strong> 12 July 2026</p>
+    <p><strong>Prepared by:</strong> Tinus Strauss</p>
+    <p><strong>Reference:</strong> </p>
+  </div>
+</div>
+
+<!-- Validity Banner -->
+<div class="validity-banner">
+  This quotation is valid for 30 days from the date of issue.
+</div>
+
+<!-- Items Table -->
+<table class="items-table">
+  <thead>
+    <tr>
+      <th style="width:45%">Item Description</th>
+      <th style="width:10%">Qty</th>
+      <th style="width:20%">Unit Price (ZAR)</th>
+      <th style="width:25%">Total (USD)</th>
+    </tr>
+  </thead>
+  <tbody>
+        <tr>
+      <td>
+        <div class="item-name">BLASTMAP STANDARD</div>
+        <div class="item-desc">Standard blasting pattern design software &mdash; <strong>1 Year License</strong></div>
+        <ul class='feature-list'><li>Timing Analysis</li><li>Vibration Prediction</li><li>Instantaneous Information on Point</li><li>Plot Contours</li><li>Vector Timing Tool</li></ul>
+      </td>
+      <td><span class="qty-badge">1</span></td>
+      <td>R 50,666.00</td>
+      <td><strong>R 50,666.00</strong></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Totals -->
+<div class="totals-section">
+  <div class="totals-box">
+    <div class="total-row">
+      <span>Subtotal</span>
+      <span>$3,090.00</span>
+    </div>
+    
+    <div class="total-row grand-total">
+      <span>
+        TOTAL 
+      </span>
+      <span>
+        $3,090.00
+        <div class="zar">R 50,666.00</div>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Terms -->
+<div class="terms">
+  <h3>BLASTMAP and XPLOLOG Terms &amp; Conditions</h3>
+  <ul>
+    <li>A BLASTMAP and XPLOLOG license is valid for a period of twelve (12) months from the date of activation.</li>
+    <li>The license renewal fee is subject to an annual increase, as determined by BME at the time of renewal.</li>
+    <li>Access to the software shall be provided only after receipt of a signed quotation and a Purchase Order. All payments must be made within thirty (30) days from the invoice date.</li>
+    <li>The pricing contained herein is valid for a period of seven (7) days from the date of receipt and may be adjusted due to exchange rate movements.</li>
+    <li>One free online training session is provided.</li>
+  </ul>
+  <p style="font-size: 9pt; color: #444; margin-top: 10px;">Download the BME Blasting Guide for free on your phone from the Google Play Store or iOS App Store.</p>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-right">
+    <div class="bme-name">BME</div>
+  </div>
+</div>
+
+</body>
+</html>

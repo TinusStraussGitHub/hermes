@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Insights Hub</title>
+  
+  <!-- PWA Support -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  
+  <!-- Styles -->
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" href="icon-192.png" type="image/png">
+  <link rel="shortcut icon" href="icon-192.png">
+  
+  <!-- Prevent indexing -->
+  <meta name="robots" content="noindex, nofollow">
+  
+  <style>
+    .js-enabled .no-js { display: none; }
+    .no-js { text-align: center; padding: 40px; color: var(--text-secondary); }
+  </style>
+</head>
+<body>
+  <script>document.documentElement.classList.add('js-enabled');</script>
+  
+  <!-- Login Modal -->
+  <div id="loginModal" class="modal-overlay active">
+    <div class="modal-content">
+      <div style="font-size: 48px; margin-bottom: 16px;">🔐</div>
+      <h2>Personal Insights Hub</h2>
+      <p>Enter your password to access the dashboard</p>
+      <input type="password" id="passwordInput" placeholder="Password" 
+             onkeydown="if(event.key==='Enter') checkPassword()">
+      <button onclick="checkPassword()">Unlock Dashboard</button>
+      <p id="loginError" style="color: #ff3b30; margin-top: 12px; font-size: 14px; display: none;">
+        Incorrect password. Please try again.
+      </p>
+    </div>
+  </div>
+  
+  <!-- Main App (hidden until authenticated) -->
+  <div id="app" style="display: none;">
+    <!-- Glass Header -->
+    <header class="glass-header">
+      <div style="max-width: 1400px; margin: 0 auto; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <img src="icon-192.png" alt="Personal Insights Hub" style="width: 36px; height: 36px;">
+          <h1 style="font-size: 20px; font-weight: 600; letter-spacing: -0.02em;">Personal Insights Hub</h1>
+        </div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <button onclick="toggleDarkMode()" class="modern-btn icon-btn" id="themeToggle" title="Toggle dark mode">
+            <span id="themeIcon">🌙</span>
+          </button>
+          <button onclick="logout()" class="modern-btn secondary" style="font-size: 13px; padding: 8px 16px;">
+            Logout
+          </button>
+        </div>
+      </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <h1 class="hero-title">Good <span id="timeOfDay">day</span>, Tinus</h1>
+      <p class="hero-subtitle">Here's what's happening with your day</p>
+    </section>
+    
+    <!-- Dashboard Grid - Calendar first as requested -->
+    <div class="dashboard-grid">
+<!-- Weekly Schedule Section (Second - EXPANDED by default) -->
+      <div class="modern-card" style="animation-delay: 0.2s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">📅</span>
+            <span id="scheduleTitle">Weekly Schedule</span>
+          </h2>
+          <button id="backToWeekBtn" class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px; display: none;" onclick="showWeeklyView()">
+            ← Back to Week
+          </button>
+        </div>
+        <div id="scheduleSection" class="section-content">
+          <div id="scheduleView">
+            <div id="weeklyCalendar" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-bottom: 20px;"></div>
+            <div id="scheduleList"></div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Weather Section (Always Expanded) -->
+      <div class="modern-card" style="animation-delay: 0.05s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">🌤️</span>
+            Weather
+          </h2>
+        </div>
+        <div id="weatherInfo">
+          <div class="loading">Loading weather...</div>
+        </div>
+      </div>
+      
+      <!-- AI Insights Section (Collapsed by Default) -->
+      <div class="modern-card" style="animation-delay: 0.1s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon orange">🤖</span>
+            AI Insights
+          </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('insights')">
+            <span id="insightsToggleText">Expand</span>
+          </button>
+        </div>
+        <div id="insightsSection" class="section-content collapsed">
+          <div id="insightsList">
+            <div class="loading">Loading insights...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- AI News Section (Collapsed by Default) -->
+      <div class="modern-card" style="animation-delay: 0.15s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon blue">📰</span>
+            AI News
+          </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('aiNews')">
+            <span id="aiNewsToggleText">Expand</span>
+          </button>
+        </div>
+        <div id="aiNewsSection" class="section-content collapsed">
+          <div id="aiNewsList">
+            <div class="loading">Loading AI news...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Bible Verse Section (Collapsed by Default) -->
+      <div class="modern-card" style="animation-delay: 0.18s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon purple">📖</span>
+            Daily Verse
+          </h2>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('bibleVerse')">
+            <span id="bibleVerseToggleText">Expand</span>
+          </button>
+        </div>
+        <div id="bibleVerseSection" class="section-content collapsed">
+          <div id="bibleVerseContainer">
+            <div class="loading">Loading verse...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Knowledge Base Section (Third - Collapsed by Default) -->
+      <div class="modern-card" style="animation-delay: 0.3s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon green">📚</span>
+            Knowledge Base
+          </h2>
+          <span style="font-size: 14px; color: var(--text-tertiary);" id="noteCount"></span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('knowledge')">
+            <span id="knowledgeToggleText">Expand</span>
+          </button>
+        </div>
+        <div id="knowledgeSection" class="section-content collapsed">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" id="searchInput" placeholder="Search knowledge..." oninput="searchNotes()">
+          </div>
+          <div id="knowledgeList" class="knowledge-grid">
+            <div class="loading">Loading knowledge base...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- BME Team Standup Tracker (Collapsed by Default) -->
+      <div class="modern-card" style="animation-delay: 0.45s;">
+        <div class="section-header">
+          <h2>
+            <span class="icon orange">👥</span>
+            Team Standup Tracker
+          </h2>
+          <span style="font-size: 14px; color: var(--text-tertiary);" id="standupLastUpdated"></span>
+          <button class="modern-btn secondary" style="font-size: 13px; padding: 6px 14px;" onclick="toggleSection('standup')">
+            <span id="standupToggleText">Expand</span>
+          </button>
+        </div>
+        <div id="standupSection" class="section-content collapsed">
+          <div id="standupBoard" class="kanban-board">
+            <div class="loading">Loading team standup data...</div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Quick Links (Bottom Most) -->
+      <div class="modern-card" style="animation-delay: 0.4s; grid-column: 1 / -1;">
+        <div class="section-header">
+          <h2>
+            <span class="icon purple">🔗</span>
+            Quick Links
+          </h2>
+        </div>
+        <div class="quick-links" style="justify-content: center;">
+          <a href="https://www.blastmap.co.za" target="_blank" class="quick-link">
+            💎 BlastMap
+          </a>
+          <a href="https://www.bme.co.za" target="_blank" class="quick-link">
+            🏢 BME
+          </a>
+          <a href="https://github.com/TinusStraussGitHub" target="_blank" class="quick-link">
+            💻 GitHub
+          </a>
+          <a href="#" onclick="openObsidianVault(); return false;" class="quick-link">
+            📝 Obsidian
+          </a>
+          <div style="width: 100%; height: 1px; background: var(--border-color); margin: 16px 0;"></div>
+          <small style="color: var(--text-tertiary); width: 100%; text-align: center; display: block; margin-bottom: 8px;">Preview Pages</small>
+          <a href="./preview-youtube.html" target="_blank" class="quick-link">
+            🎥 YouTube
+          </a>
+          <a href="./preview-operator-flow.html" target="_blank" class="quick-link">
+            📄 Operator Flow
+          </a>
+          <a href="./preview-fleet-dashboard.html" target="_blank" class="quick-link">
+            🚛 Fleet Dashboard
+          </a>
+          <a href="./preview-rustenberg-server.html" target="_blank" class="quick-link">
+            � View Rustenberg Server
+          </a>
+          <a href="./preview-uploadtest.html" target="_blank" class="quick-link">
+            📊 UploadTest (QA)
+          </a>
+          <a href="./preview-uploadtest2.html" target="_blank" class="quick-link">
+            📊 UploadTest2 History
+          </a>
+          <a href="./preview-starship-launch12.html" target="_blank" class="quick-link">
+            � Rocket Starship Flight 12
+          </a>
+          <a href="./preview-drilling-analytics.html" target="_blank" class="quick-link">
+            📊 Drilling Analytics
+          </a>
+        </div>
+      </div>
+    </div>
+    
+  <!-- Footer -->
+  <footer class="modern-footer">
+    <p>Personal Insights Hub • Protected by client-side encryption • Data updated daily at 6:00 AM</p>
+  </footer>
+</div>
+  
+  <!-- Note Modal -->
+  <div id="noteModal" class="modal-overlay" onclick="closeNoteModal(event)">
+    <div class="modal-content" style="position: relative;">
+      <button class="modal-close" onclick="closeNoteModal()">✕</button>
+      <h2 id="noteModalTitle" style="font-size: 24px; font-weight: 600; margin-bottom: 16px; padding-right: 40px;"></h2>
+      <div id="noteModalContent" style="color: var(--text-secondary); line-height: 1.8;"></div>
+      <div id="noteModalTags" style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 20px;"></div>
+    </div>
+  </div>
+  
+  <!-- Scripts -->
+  <script src="marked.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    // Update time of day greeting
+    function updateGreeting() {
+      const hour = new Date().getHours();
+      const greeting = document.getElementById('timeOfDay');
+      if (hour < 12) greeting.textContent = 'morning';
+      else if (hour < 17) greeting.textContent = 'afternoon';
+      else greeting.textContent = 'evening';
+    }
+    updateGreeting();
+  </script>
+</body>
+</html>

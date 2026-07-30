@@ -1,0 +1,108 @@
+{
+  "product_name": "BLASTMAP",
+  "license_term": "1 Year",
+  "versions": {
+    "FREE": {
+      "name": "BLASTMAP FREE",
+      "description": "Free version with basic pattern design",
+      "price_usd": 0,
+      "features": [
+        "Basic pattern design",
+        "Standard hole layouts",
+        "PDF export"
+      ]
+    },
+    "STD": {
+      "name": "BLASTMAP STANDARD",
+      "description": "Standard blasting pattern design software",
+      "price_usd": 3041.15,
+      "features": [
+        "Timing Analysis",
+        "Vibration Prediction",
+        "Instantaneous Information on Point",
+        "Plot Contours",
+        "Vector Timing Tool"
+      ]
+    },
+    "UNDERGROUND": {
+      "name": "BLASTMAP UNDERGROUND",
+      "description": "Underground blasting pattern design software",
+      "price_usd": 3101.6423,
+      "features": [
+        "Timing Analysis",
+        "Vibration Prediction",
+        "Instantaneous Information on Point",
+        "Fragmentation Prediction",
+        "Plot Contours",
+        "Vector Timing Tool"
+      ]
+    },
+    "PREMIUM": {
+      "name": "BLASTMAP PREMIUM",
+      "description": "Advanced blasting pattern design software",
+      "price_usd": 5100.063989,
+      "features": [
+        "Timing Analysis",
+        "Vibration Prediction",
+        "Instantaneous Information on Point",
+        "Fragmentation Prediction",
+        "Plot Contours",
+        "Burden Relief",
+        "Blasted Rock Radius Prediction",
+        "Vector Timing Tool",
+        "Ramp Floor"
+      ]
+    }
+  },
+  "products": {
+    "XPLOLOG": {
+      "name": "XPLOLOG",
+      "items": {
+        "android_tablet": {
+          "name": "Android Tablet",
+          "description": "XPLOLOG Android tablet device",
+          "price_usd": 1100.0,
+          "pricing_type": "once-off",
+          "license_term": "1 x device license"
+        },
+        "xplolog_license": {
+          "name": "XPLOLOG License",
+          "description": "XPLOLOG annual license fee",
+          "price_usd": 1900.0,
+          "pricing_type": "annual",
+          "license_term": "per year"
+        }
+      }
+    },
+    "MODULAR": {
+      "name": "BLASTMAP Modules",
+      "items": {
+        "vibration_module": {
+          "name": "Vibration Module",
+          "description": "BLASTMAP Vibration Prediction module add-on",
+          "price_usd": 923.392881,
+          "pricing_type": "annual",
+          "license_term": "1 Year Add-on"
+        }
+      }
+    }
+  },
+  "exchange_rate": {
+    "usd_to_zar": 16.707472,
+    "last_updated": "2026-07-30",
+    "source": "open.er-api.com"
+  },
+  "quote_counter": 85,
+  "company": {
+    "name": "BME",
+    "full_name": "BME",
+    "website": "www.bme.co.za",
+    "product_website": "www.blastmap.co.za"
+  },
+  "brand_colors": {
+    "red": "#BF0000",
+    "dark_red": "#FF0000",
+    "black": "#141414",
+    "white": "#FFFFFF"
+  }
+}

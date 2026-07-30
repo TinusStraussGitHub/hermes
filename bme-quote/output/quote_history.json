@@ -1,0 +1,1929 @@
+[
+  {
+    "quote_number": "BMP-0001",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0001.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0001.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0002",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0002.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0002.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0003",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0003.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0003.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0004",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0004.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0004.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0005",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0005.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0005.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0006",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0006.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0006.html",
+    "subtotal_usd": 4600.0,
+    "vat_usd": 690.0,
+    "total_usd": 5290.0,
+    "total_zar": 86927.21613999999,
+    "exchange_rate": 16.432366,
+    "quote_date": "12 May 2026",
+    "valid_until": "11 June 2026",
+    "client_name": "TOP Mining Services",
+    "client_company": "TOP Mining Services",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0007",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0007.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0007.html",
+    "subtotal_usd": 5300.0,
+    "vat_usd": 795.0,
+    "total_usd": 6095.0,
+    "total_zar": 100678.447285,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Test Client",
+    "client_company": "Test Mining (Pty) Ltd",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      },
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0008",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0008.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0008.html",
+    "subtotal_usd": 2300.0,
+    "vat_usd": 345.0,
+    "total_usd": 2645.0,
+    "total_zar": 43690.646935,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0009",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0009.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0009.html",
+    "subtotal_usd": 3000.0,
+    "vat_usd": 450.0,
+    "total_usd": 3450.0,
+    "total_zar": 56987.80035,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0010",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0010.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0010.html",
+    "subtotal_usd": 3000.0,
+    "vat_usd": 450.0,
+    "total_usd": 3450.0,
+    "total_zar": 56987.80035,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0011",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0011.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0011.html",
+    "subtotal_usd": 2300.0,
+    "vat_usd": 345.0,
+    "total_usd": 2645.0,
+    "total_zar": 43690.646935,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0012",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0012.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0012.html",
+    "subtotal_usd": 3000.0,
+    "vat_usd": 450.0,
+    "total_usd": 3450.0,
+    "total_zar": 56987.80035,
+    "exchange_rate": 16.518203,
+    "quote_date": "13 May 2026",
+    "valid_until": "12 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0013",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0013.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0013.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 463.5,
+    "total_usd": 3553.5,
+    "total_zar": 58329.686199,
+    "exchange_rate": 16.414714,
+    "quote_date": "14 May 2026",
+    "valid_until": "13 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0014",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0014.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0014.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95894.759188,
+    "exchange_rate": 16.414714,
+    "quote_date": "14 May 2026",
+    "valid_until": "13 June 2026",
+    "client_name": "Seadou Diarra",
+    "client_company": "fg-gold",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0015",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0015.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0015.html",
+    "subtotal_usd": 8170.0,
+    "vat_usd": 1225.5,
+    "total_usd": 9395.5,
+    "total_zar": 153109.0586045,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0016",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0016.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0016.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0017",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0017.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0017.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0018",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0018.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0018.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0019",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0019.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0019.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0020",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0020.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0020.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0021",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0021.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0021.html",
+    "subtotal_usd": 5080.0,
+    "vat_usd": 762.0,
+    "total_usd": 5842.0,
+    "total_zar": 95201.22615799999,
+    "exchange_rate": 16.295999,
+    "quote_date": "02 June 2026",
+    "valid_until": "02 July 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0022",
+    "pdf_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0022.pdf",
+    "html_path": "/opt/data/home/hermes/blastmap-quotes/output/BMP-0022.html",
+    "subtotal_usd": 13250.0,
+    "vat_usd": 1987.5,
+    "total_usd": 15237.5,
+    "total_zar": 247458.6608875,
+    "exchange_rate": 16.240109,
+    "quote_date": "03 June 2026",
+    "valid_until": "03 July 2026",
+    "client_name": "Dummy Client",
+    "client_company": "Demo Mining (Pty) Ltd",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 2
+      },
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0023",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0023.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0023.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 1209.0,
+    "total_usd": 9269.0,
+    "total_zar": 153021.670737,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0024",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0024.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0024.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 1209.0,
+    "total_usd": 9269.0,
+    "total_zar": 153021.670737,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0025",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0025.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0025.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 1209.0,
+    "total_usd": 9269.0,
+    "total_zar": 153021.670737,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0026",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0026.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0026.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 1209.0,
+    "total_usd": 9269.0,
+    "total_zar": 153021.670737,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0027",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0027.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0027.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 1209.0,
+    "total_usd": 9269.0,
+    "total_zar": 153021.670737,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0028",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0028.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0028.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0029",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0029.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0029.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0030",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0030.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0030.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0031",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0031.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0031.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0032",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0032.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0032.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0033",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0033.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0033.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0034",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0034.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0034.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0035",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0035.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0035.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0036",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0036.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0036.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0037",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0037.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0037.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0038",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0038.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0038.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0039",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0039.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0039.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0040",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0040.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0040.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0041",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0041.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0041.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0042",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0042.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0042.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0048",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0048.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0048.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 463.5,
+    "total_usd": 3553.5,
+    "total_zar": 58664.635555500005,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Test Final",
+    "client_company": "Verify",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0049",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0049.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0049.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "09 June 2026",
+    "valid_until": "09 July 2026",
+    "client_name": "Mimbula Minerals Limited",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0050",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0050.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0050.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "10 June 2026",
+    "valid_until": "10 July 2026",
+    "client_name": "Mimbula Minerals Limited",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0051",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0051.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0051.html",
+    "subtotal_usd": 8060.0,
+    "vat_usd": 0,
+    "total_usd": 8060.0,
+    "total_zar": 133062.32238,
+    "exchange_rate": 16.508973,
+    "quote_date": "10 June 2026",
+    "valid_until": "10 July 2026",
+    "client_name": "Mimbula Minerals Limited",
+    "client_company": "Mimbula Minerals Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 1
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0052",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0052.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0052.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 463.5,
+    "total_usd": 3553.5,
+    "total_zar": 58265.900874000006,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "Demo Client",
+    "client_company": "Demo Mining (Pty) Ltd",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "quote_number": "BMP-0053",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0053.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0053.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 0,
+    "total_usd": 3090.0,
+    "total_zar": 50666.00076,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "Test Client",
+    "client_company": "Test Mining (Pty) Ltd",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0054",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0054.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0054.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 0,
+    "total_usd": 3090.0,
+    "total_zar": 50666.00076,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "Test Client",
+    "client_company": "Test Mining (Pty) Ltd",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0055",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0055.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0055.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 0,
+    "total_usd": 3090.0,
+    "total_zar": 50666.00076,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "USD Test",
+    "client_company": "USD Mining",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0056",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0056.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0056.html",
+    "subtotal_usd": 3090.0,
+    "vat_usd": 463.5,
+    "total_usd": 3553.5,
+    "total_zar": 58265.900874,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "Both Test",
+    "client_company": "Both Mining",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "both",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0057",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0057.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0057.html",
+    "subtotal_usd": 6000.0,
+    "vat_usd": 0,
+    "total_usd": 6000.0,
+    "total_zar": 98380.584,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "XPLOLOG Test",
+    "client_company": "XPLOLOG Mine",
+    "items": [
+      {
+        "product": "XPLOLOG",
+        "item": "android_tablet",
+        "quantity": 2
+      },
+      {
+        "product": "XPLOLOG",
+        "item": "xplolog_license",
+        "quantity": 2
+      }
+    ],
+    "currency": "both",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0058",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0058.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0058.html",
+    "subtotal_usd": 2324.65,
+    "vat_usd": 348.6975,
+    "total_usd": 2673.3475,
+    "total_zar": 43834.24804749001,
+    "exchange_rate": 16.396764,
+    "quote_date": "12 June 2026",
+    "valid_until": "12 July 2026",
+    "client_name": "Louise Swart",
+    "client_company": "Rock Breaking Demolitions cc",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0059",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0059.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0059.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Kudakwa She Zvayi",
+    "client_company": "RioZim Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0060",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0060.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0060.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Kudakwashe Zvayi",
+    "client_company": "RioZim Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0061",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0061.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0061.html",
+    "subtotal_usd": 25300.0,
+    "vat_usd": 0,
+    "total_usd": 25300.0,
+    "total_zar": 414522.84060000005,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Tinus Strauss",
+    "client_company": "Quote Request",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 5
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0062",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0062.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0062.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Test User",
+    "client_company": "Test Company",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0063",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0063.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0063.html",
+    "subtotal_usd": 25300.0,
+    "vat_usd": 0,
+    "total_usd": 25300.0,
+    "total_zar": 414522.84060000005,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Tinus Strauss",
+    "client_company": "Quote Request",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 5
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0064",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0064.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0064.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Kudakwashe Zvayi",
+    "client_company": "RioZim Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "both",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0065",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0065.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0065.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Kudakwashe Zvayi",
+    "client_company": "RioZim Limited",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0066",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0066.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0066.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 0,
+    "total_usd": 5060.0,
+    "total_zar": 82904.56812000001,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Test",
+    "client_company": "Test Co",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0067",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0067.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0067.html",
+    "subtotal_usd": 2324.65,
+    "vat_usd": 0,
+    "total_usd": 2324.65,
+    "total_zar": 38087.7676443,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Sample Client",
+    "client_company": "Sample Company",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0068",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0068.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0068.html",
+    "subtotal_usd": 2324.65,
+    "vat_usd": 0,
+    "total_usd": 2324.65,
+    "total_zar": 38087.7676443,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Logo Test",
+    "client_company": "Test Co",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "usd",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0069",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0069.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0069.html",
+    "subtotal_usd": 75900.0,
+    "vat_usd": 0,
+    "total_usd": 75900.0,
+    "total_zar": 1243568.5218000002,
+    "exchange_rate": 16.384302,
+    "quote_date": "01 July 2026",
+    "valid_until": "31 July 2026",
+    "client_name": "Quote Request",
+    "client_company": "Quote Request",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 15
+      }
+    ],
+    "currency": "both",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0070",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0070.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0070.html",
+    "subtotal_usd": 9709.3,
+    "vat_usd": 1456.3949999999998,
+    "total_usd": 11165.695,
+    "total_zar": 183247.83564899,
+    "exchange_rate": 16.411682,
+    "quote_date": "02 July 2026",
+    "valid_until": "01 August 2026",
+    "client_name": "Demo-Test",
+    "client_company": "Demo-Test",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 2
+      },
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0071",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0071.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0071.html",
+    "subtotal_usd": 5060.0,
+    "vat_usd": 759.0,
+    "total_usd": 5819.0,
+    "total_zar": 95499.57755799999,
+    "exchange_rate": 16.411682,
+    "quote_date": "02 July 2026",
+    "valid_until": "01 August 2026",
+    "client_name": "Tom Dermody",
+    "client_company": "BLASTMAP PREMIUM License",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "both",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0072",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0072.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0072.html",
+    "subtotal_usd": 32545.100000000002,
+    "vat_usd": 4881.765,
+    "total_usd": 37426.865000000005,
+    "total_zar": 612031.64265264,
+    "exchange_rate": 16.352736,
+    "quote_date": "13 July 2026",
+    "valid_until": "12 August 2026",
+    "client_name": "Pro Blast",
+    "client_company": "Pro Blast",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 14
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0073",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0073.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0073.html",
+    "subtotal_usd": 43491.14,
+    "vat_usd": 6523.670999999999,
+    "total_usd": 50014.811,
+    "total_zar": 817879.000372896,
+    "exchange_rate": 16.352736,
+    "quote_date": "13 July 2026",
+    "valid_until": "12 August 2026",
+    "client_name": "Pro Blast",
+    "client_company": "Pro Blast",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 14
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0074",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0074.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0074.html",
+    "subtotal_usd": 43491.19315568966,
+    "vat_usd": 6523.678973353449,
+    "total_usd": 50014.872129043106,
+    "total_zar": 817879.9999999999,
+    "exchange_rate": 16.352736,
+    "quote_date": "13 July 2026",
+    "valid_until": "12 August 2026",
+    "client_name": "Pro Blast",
+    "client_company": "Pro Blast",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 14
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0075",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0075.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0075.html",
+    "subtotal_usd": 15532.568984174879,
+    "vat_usd": 2329.8853476262316,
+    "total_usd": 17862.45433180111,
+    "total_zar": 292099.99999999994,
+    "exchange_rate": 16.352736,
+    "quote_date": "13 July 2026",
+    "valid_until": "12 August 2026",
+    "client_name": "Pro Blast",
+    "client_company": "Pro Blast",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 5
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0076",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0076.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0076.html",
+    "subtotal_usd": 9129.970667,
+    "vat_usd": 1369.49560005,
+    "total_usd": 10499.46626705,
+    "total_zar": 171695.00000597414,
+    "exchange_rate": 16.352736,
+    "quote_date": "13 July 2026",
+    "valid_until": "12 August 2026",
+    "client_name": "Pro Blast",
+    "client_company": "Pro Blast",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      },
+      {
+        "version": "STD",
+        "quantity": 1
+      },
+      {
+        "product": "MODULAR",
+        "item": "vibration_module",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0077",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0077.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0077.html",
+    "subtotal_usd": 2900.0,
+    "vat_usd": 435.0,
+    "total_usd": 3335.0,
+    "total_zar": 54622.030699999996,
+    "exchange_rate": 16.37842,
+    "quote_date": "15 July 2026",
+    "valid_until": "14 August 2026",
+    "client_name": "Mandlenkosi Jaca",
+    "client_company": "South Deep Gold Mine",
+    "items": [
+      {
+        "version": "UNDERGROUND",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0078",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0078.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0078.html",
+    "subtotal_usd": 2900.0,
+    "vat_usd": 435.0,
+    "total_usd": 3335.0,
+    "total_zar": 54622.030699999996,
+    "exchange_rate": 16.37842,
+    "quote_date": "15 July 2026",
+    "valid_until": "14 August 2026",
+    "client_name": "Mandlenkosi Jaca",
+    "client_company": "South Deep Gold Mine",
+    "items": [
+      {
+        "version": "UNDERGROUND",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0079",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0079.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0079.html",
+    "subtotal_usd": 2900.0,
+    "vat_usd": 435.0,
+    "total_usd": 3335.0,
+    "total_zar": 54622.030699999996,
+    "exchange_rate": 16.37842,
+    "quote_date": "15 July 2026",
+    "valid_until": "14 August 2026",
+    "client_name": "Mandlenkosi Jaca",
+    "client_company": "South Deep Gold Mine",
+    "items": [
+      {
+        "version": "UNDERGROUND",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0080",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0080.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0080.html",
+    "subtotal_usd": 3101.6423,
+    "vat_usd": 465.24634499999996,
+    "total_usd": 3566.888645,
+    "total_zar": 58420.00032104089,
+    "exchange_rate": 16.37842,
+    "quote_date": "15 July 2026",
+    "valid_until": "14 August 2026",
+    "client_name": "Mandlenkosi Jaca",
+    "client_company": "South Deep Gold Mine",
+    "items": [
+      {
+        "version": "UNDERGROUND",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0081",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0081.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0081.html",
+    "subtotal_usd": 3106.513797,
+    "vat_usd": 465.97706955,
+    "total_usd": 3572.49086655,
+    "total_zar": 59687.29112313986,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0082",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0082.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0082.html",
+    "subtotal_usd": 3106.513797,
+    "vat_usd": 465.97706955,
+    "total_usd": 3572.49086655,
+    "total_zar": 59687.29112313986,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0083",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0083.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0083.html",
+    "subtotal_usd": 3117.73,
+    "vat_usd": 467.6595,
+    "total_usd": 3585.3895,
+    "total_zar": 59902.794680344,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0084",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0084.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0084.html",
+    "subtotal_usd": 3041.15,
+    "vat_usd": 456.1725,
+    "total_usd": 3497.3225,
+    "total_zar": 58431.41774372,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0085",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0085.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0085.html",
+    "subtotal_usd": 3041.15,
+    "vat_usd": 456.1725,
+    "total_usd": 3497.3225,
+    "total_zar": 58431.41774372,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  }
+]
