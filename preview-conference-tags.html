@@ -350,17 +350,22 @@
         };
         
         function handleFileSelect(input) {
+            console.log('handleFileSelect called');
             if (input.files && input.files[0]) {
                 const file = input.files[0];
                 
+                console.log('File selected:', file.name, file.size);
+                
                 // Validate file type
                 if (!file.name.toLowerCase().endsWith('.csv')) {
+                    console.log('Invalid file type');
                     showError('Please upload a valid CSV file (Comma Separated Values)');
                     return;
                 }
                 
                 // Validate file size (limit to 10MB)
                 if (file.size > 10 * 1024 * 1024) {
+                    console.log('File too large');
                     showError('File size exceeds 10MB. Please upload a smaller CSV file.');
                     return;
                 }
@@ -415,10 +420,15 @@
         }
         
         function generateTags() {
+            console.log('generateTags() called');
             if (!selectedFile) {
+                console.log('No selected file');
                 showError('Please select a CSV file first.');
                 return;
             }
+            
+            console.log('Selected file:', selectedFile.name);
+            console.log('Selected orientation:', selectedOrientation);
             
             // Show status
             document.getElementById('statusSection').classList.add('show');
@@ -426,19 +436,26 @@
             
             // Disable generate button
             document.getElementById('generateBtn').disabled = true;
+            console.log('Generate button disabled');
             
             // Create FormData to send file to server
             const formData = new FormData();
             formData.append('csvFile', selectedFile);
             formData.append('orientation', selectedOrientation);
             
+            console.log('FormData created, about to fetch /api/generate-conference-tags');
+            
             // Actually call the backend API to generate tags
             fetch('/api/generate-conference-tags', {
                 method: 'POST',
                 body: formData
             })
-            .then(response => response.json())
+            .then(response => {
+                console.log('Fetch response received:', response);
+                return response.json();
+            })
             .then(data => {
+                console.log('API response data:', data);
                 if (data.success) {
                     processTagsSuccess(data);
                 } else {
@@ -447,6 +464,7 @@
                 document.getElementById('generateBtn').disabled = false;
             })
             .catch(error => {
+                console.error('Fetch error:', error);
                 showError('Error generating conference tags: ' + error.message);
                 document.getElementById('generateBtn').disabled = false;
             });
