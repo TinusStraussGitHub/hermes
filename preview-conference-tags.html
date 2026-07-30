@@ -432,32 +432,45 @@
             formData.append('csvFile', selectedFile);
             formData.append('orientation', selectedOrientation);
             
-            // Simulate file processing with a timeout
-            setTimeout(() => {
-                // In a real implementation, this would call a backend endpoint
-                // For this demo, we'll simulate success and show results
-                processTagsSuccess();
-            }, 2000);
+            // Actually call the backend API to generate tags
+            fetch('/api/generate-conference-tags', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    processTagsSuccess(data);
+                } else {
+                    showError(data.error || 'Failed to generate conference tags.');
+                }
+                document.getElementById('generateBtn').disabled = false;
+            })
+            .catch(error => {
+                showError('Error generating conference tags: ' + error.message);
+                document.getElementById('generateBtn').disabled = false;
+            });
         }
         
-        function processTagsSuccess() {
+        function processTagsSuccess(data) {
             // Show status completion
             document.getElementById('statusSection').style.display = 'none';
             
-            // Mark files as generated (simulated)
-            generatedFiles[selectedOrientation] = true;
+            // Mark files as generated
+            generatedFiles.portrait = data.portraitGenerated || false;
+            generatedFiles.landscape = data.landscapeGenerated || false;
             
-            // Update download button URLs (these would be real URLs in production)
-            const portraitFileName = selectedFile.name.replace('.csv', '_portrait_tags.pdf');
-            const landscapeFileName = selectedFile.name.replace('.csv', '_landscape_tags.pdf');
+            // Update download button URLs with real download links
+            const portraitFileName = data.portraitFile || 'conference_tags_portrait.pdf';
+            const landscapeFileName = data.landscapeFile || 'conference_tags_landscape.pdf';
             
-            if (selectedOrientation === 'portrait') {
-                document.getElementById('portraitDownloadBtn').href = '/download/' + encodeURIComponent(portraitFileName);
-                document.getElementById('portraitDownloadBtn').textContent = '📥 Download ' + portraitFileName;
-            } else {
-                document.getElementById('landscapeDownloadBtn').href = '/download/' + encodeURIComponent(landscapeFileName);
-                document.getElementById('landscapeDownloadBtn').textContent = '📄 Download ' + landscapeFileName;
-            }
+            document.getElementById('portraitDownloadBtn').href = data.portraitUrl || '/download/' + encodeURIComponent(portraitFileName);
+            document.getElementById('portraitDownloadBtn').textContent = '📥 Download ' + portraitFileName;
+            document.getElementById('portraitDownloadBtn').style.display = data.portraitGenerated ? 'inline-block' : 'none';
+            
+            document.getElementById('landscapeDownloadBtn').href = data.landscapeUrl || '/download/' + encodeURIComponent(landscapeFileName);
+            document.getElementById('landscapeDownloadBtn').textContent = '📄 Download ' + landscapeFileName;
+            document.getElementById('landscapeDownloadBtn').style.display = data.landscapeGenerated ? 'inline-block' : 'none';
             
             // Show results
             document.getElementById('resultSection').classList.add('show');
@@ -472,19 +485,17 @@
                 return false;
             }
             
-            // In production, this would trigger actual download
-            // For demo, simulate download and show success message
-            const fileName = selectedFile.name.replace('.csv', '_' + orientation + '_tags.pdf');
+            // Trigger actual download
+            const btn = document.getElementById(orientation === 'portrait' ? 'portraitDownloadBtn' : 'landscapeDownloadBtn');
+            const originalText = btn.textContent;
+            btn.textContent = '✅ Downloading...';
             
-            // Show success message
-            const originalText = document.getElementById(orientation === 'portrait' ? 'portraitDownloadBtn' : 'landscapeDownloadBtn').textContent;
-            document.getElementById(orientation === 'portrait' ? 'portraitDownloadBtn' : 'landscapeDownloadBtn').textContent = '✅ Downloaded! ' + fileName;
-            
+            // Reset button text after download attempt
             setTimeout(() => {
-                document.getElementById(orientation === 'portrait' ? 'portraitDownloadBtn' : 'landscapeDownloadBtn').textContent = originalText;
+                btn.textContent = originalText;
             }, 2000);
             
-            return false; // Prevent default link behavior in demo
+            return true; // Allow default download behavior
         }
         
         function showError(message) {
