@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BME Caliper Borehole Processor</title>
+    <meta name="description" content="Client-side processor for BME borehole tracking .LAS files into standardized Excel calipering templates." />
+    <meta property="og:title" content="BME Caliper Borehole Processor" />
+    <meta property="og:description" content="Client-side processor for BME borehole tracking .LAS files into standardized Excel calipering templates." />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- App Container -->
+    <div class="app-container" id="app-container">
+      
+      <!-- Top Navigation / Header -->
+      <header class="app-header" id="app-header">
+        <div class="header-content">
+          <div class="brand-group" id="brand-group">
+            <div class="brand-icon" id="brand-icon">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2v20M8 5h8M7 10h10M6 15h12M9 19h6"/>
+              </svg>
+            </div>
+            <div class="brand-text">
+              <h1 class="brand-title" id="app-title">BME Caliper Borehole Processor</h1>
+              <p class="brand-subtitle" id="app-subtitle">Client-Side .LAS Borehole Tracking & Excel Template Automation</p>
+            </div>
+          </div>
+          
+          <div class="header-actions" id="header-actions">
+            <span class="badge offline-badge" id="offline-badge" title="Service Worker caching status">
+              <span class="badge-dot" id="badge-dot"></span>
+              <span id="offline-status-text">Checking Offline...</span>
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Layout -->
+      <main class="main-content" id="main-content">
+        
+        <!-- Quick Notification Banner (if any) -->
+        <div class="alert-banner hidden" id="alert-banner">
+          <span id="alert-message"></span>
+          <button type="button" class="btn-close" id="btn-close-alert" aria-label="Close notification">&times;</button>
+        </div>
+
+        <!-- Section 1: File Inputs Grid -->
+        <div class="workflow-grid" id="workflow-grid">
+          
+          <!-- Card 1: .LAS Borehole Files Upload -->
+          <div class="card" id="card-las-upload">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-num" id="step-1-badge">1</span>
+                <div>
+                  <h2 class="card-title" id="las-upload-title">Upload .LAS Borehole Files</h2>
+                  <p class="card-subtitle">Select or drop Caliper log files (.las) for the blast block</p>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline btn-xs" id="btn-load-sample">
+                Load 3 Sample Holes
+              </button>
+            </div>
+            
+            <div class="card-body">
+              <div class="dropzone" id="las-dropzone">
+                <input type="file" id="las-file-input" multiple accept=".las,.txt" class="file-input-hidden" />
+                <div class="dropzone-icon">
+                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="12" y1="18" x2="12" y2="12"/>
+                    <line x1="9" y1="15" x2="15" y2="15"/>
+                  </svg>
+                </div>
+                <p class="dropzone-title">Drag & drop <strong>.LAS</strong> files here</p>
+                <p class="dropzone-desc">or click to browse from your computer (multiple files supported, up to 50 holes)</p>
+              </div>
+
+              <!-- Selected Files Container -->
+              <div class="file-list-container hidden" id="las-files-container">
+                <div class="file-list-header">
+                  <span class="file-count" id="las-file-count">0 files loaded</span>
+                  <button type="button" class="btn-link" id="btn-clear-las">Clear all</button>
+                </div>
+                <div class="file-chip-grid" id="las-file-chips">
+                  <!-- Injected via JavaScript -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Excel Template Configuration -->
+          <div class="card" id="card-template">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-num" id="step-2-badge">2</span>
+                <div>
+                  <h2 class="card-title" id="template-title">Excel Caliper Template</h2>
+                  <p class="card-subtitle">Choose standard BME template or upload your custom .xlsx</p>
+                </div>
+              </div>
+              <button type="button" class="btn btn-outline btn-xs" id="btn-download-template" title="Download template spreadsheet file">
+                Download Blank Template
+              </button>
+            </div>
+
+            <div class="card-body">
+              <div class="template-options">
+                <label class="radio-card active" id="option-default-template">
+                  <input type="radio" name="template-choice" value="default" checked id="radio-template-default" />
+                  <div class="radio-content">
+                    <div class="radio-title">Built-in Standard BME Template</div>
+                    <div class="radio-desc">Pre-configured with Information, Table, Graphs, and Sheet1–Sheet50 with standard formulas.</div>
+                  </div>
+                </label>
+
+                <label class="radio-card" id="option-custom-template">
+                  <input type="radio" name="template-choice" value="custom" id="radio-template-custom" />
+                  <div class="radio-content">
+                    <div class="radio-title">Upload Custom Template (.xlsx)</div>
+                    <div class="radio-desc">Provide your mine's exact pre-formatted Excel template file.</div>
+                  </div>
+                </label>
+              </div>
+
+              <div class="custom-template-drop hidden" id="custom-template-zone">
+                <input type="file" id="template-file-input" accept=".xlsx" class="file-input-hidden" />
+                <div class="dropzone-mini" id="template-dropzone">
+                  <span id="template-dropzone-label">Click to select or drop custom <strong>.xlsx</strong> template</span>
+                </div>
+              </div>
+
+              <div class="template-status-bar" id="template-status-bar">
+                <span class="status-indicator active" id="template-status-dot"></span>
+                <span id="template-status-name">Using: Standard BME Caliper Template</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Section 2: Information Sheet & Site Settings -->
+        <div class="card mt-6" id="card-site-settings">
+          <div class="card-header">
+            <div class="card-title-group">
+              <span class="step-num" id="step-3-badge">3</span>
+              <div>
+                <h2 class="card-title" id="site-settings-title">Site & Borehole Calibration Settings</h2>
+                <p class="card-subtitle">Data injected into the workbook's <code>Information</code> sheet (cells C1–C8) and row filters</p>
+              </div>
+            </div>
+            <button type="button" class="btn btn-outline btn-xs" id="btn-reset-settings">Reset Defaults</button>
+          </div>
+
+          <div class="card-body">
+            <form id="settings-form" class="form-grid">
+              
+              <div class="form-group" id="group-client">
+                <label for="input-client" class="form-label">Client Name</label>
+                <input type="text" id="input-client" class="form-control" placeholder="e.g. Anglo American" value="Anglo American" />
+                <span class="form-hint">Cell C1 in Information sheet</span>
+              </div>
+
+              <div class="form-group" id="group-mine">
+                <label for="input-mine" class="form-label">Mine Name</label>
+                <input type="text" id="input-mine" class="form-control" placeholder="e.g. Kolomela Mine" value="Kolomela Mine" />
+                <span class="form-hint">Cell C2 in Information sheet</span>
+              </div>
+
+              <div class="form-group" id="group-block-id">
+                <label for="input-block-id" class="form-label">Block ID</label>
+                <input type="text" id="input-block-id" class="form-control" placeholder="e.g. BLK-2026-09" value="BLK-2026-09" />
+                <span class="form-hint">Cell C3 in Information sheet</span>
+              </div>
+
+              <div class="form-group" id="group-planned-diam">
+                <label for="input-planned-diam" class="form-label">Planned Hole Diameter (mm) <span class="required">*</span></label>
+                <input type="number" step="0.1" id="input-planned-diam" class="form-control" placeholder="165" value="165" required />
+                <span class="form-hint">Cell C4 (Nominal drill bit diameter, e.g. 165 mm)</span>
+              </div>
+
+              <div class="form-group" id="group-final-stemming">
+                <label for="input-final-stemming" class="form-label">Final Stemming (m) <span class="required">*</span></label>
+                <input type="number" step="0.1" id="input-final-stemming" class="form-control" placeholder="1.0" value="1.0" required />
+                <span class="form-hint">Cell C5 (Rows with Depth &lt; this value are removed)</span>
+              </div>
+
+              <div class="form-group" id="group-density">
+                <label for="input-density" class="form-label">Average In-Hole Density (g/cc) <span class="required">*</span></label>
+                <input type="number" step="0.01" id="input-density" class="form-control" placeholder="1.2" value="1.2" required />
+                <span class="form-hint">Cell C6 (Explosive bulk density, default 1.2 g/cc)</span>
+              </div>
+
+              <div class="form-group" id="group-rig-operator">
+                <label for="input-rig-operator" class="form-label">Rig Operator</label>
+                <input type="text" id="input-rig-operator" class="form-control" placeholder="e.g. T. Strauss" value="T. Strauss" />
+                <span class="form-hint">Cell C7 in Information sheet</span>
+              </div>
+
+              <div class="form-group" id="group-date">
+                <label for="input-date" class="form-label">Date of Calipering</label>
+                <input type="date" id="input-date" class="form-control" value="2026-09-10" />
+                <span class="form-hint">Cell C8 in Information sheet</span>
+              </div>
+
+              <div class="form-group" id="group-output-filename">
+                <label for="input-filename" class="form-label">Output Excel Filename</label>
+                <input type="text" id="input-filename" class="form-control" value="Calipering.xlsx" />
+                <span class="form-hint">Name of generated workbook download</span>
+              </div>
+
+            </form>
+          </div>
+        </div>
+
+        <!-- Section 3: Action & Progress Trigger -->
+        <div class="action-card mt-6" id="action-card">
+          <div class="action-bar-content">
+            <div>
+              <h3 class="action-heading" id="action-heading">Ready to Process Caliper Data</h3>
+              <p class="action-subtext" id="action-subtext">Click below to parse .LAS logs, filter out-of-spec readings, sort by depth, inject formulas, and populate Table and Information sheets.</p>
+            </div>
+            <div class="action-buttons">
+              <button type="button" class="btn btn-primary btn-lg" id="btn-process-data">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="5 3 19 12 5 21 5 3"/>
+                </svg>
+                Process &amp; Generate Excel
+              </button>
+            </div>
+          </div>
+
+          <!-- Progress Bar & Status Details -->
+          <div class="progress-section hidden" id="progress-section">
+            <div class="progress-bar-container">
+              <div class="progress-bar-fill" id="progress-bar-fill" style="width: 0%"></div>
+            </div>
+            <div class="progress-details">
+              <span id="progress-status-label">Initializing processor...</span>
+              <span id="progress-percentage">0%</span>
+            </div>
+
+            <div class="log-terminal" id="log-terminal">
+              <!-- Live event log lines inserted here -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Section 4: Results, KPIs, Visualizer, & Download (Visible upon completion) -->
+        <div class="results-container hidden mt-6" id="results-container">
+          
+          <!-- Download Ready Banner -->
+          <div class="success-banner" id="success-banner">
+            <div class="success-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                <polyline points="22 4 12 14.01 9 11.01"/>
+              </svg>
+            </div>
+            <div class="success-info">
+              <h3 class="success-title" id="success-title">Workbook Successfully Generated!</h3>
+              <p class="success-desc" id="success-desc">Data processed according to BME borehole rules. All formulas, depth sorting, and Table summary statistics have been created.</p>
+            </div>
+            <button type="button" class="btn btn-success btn-lg" id="btn-download-result">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              Download Excel (<span id="download-filename-label">Calipering.xlsx</span>)
+            </button>
+          </div>
+
+          <!-- Metric Summary Cards -->
+          <div class="metric-grid mt-6" id="metric-grid">
+            <div class="metric-card" id="metric-holes-card">
+              <div class="metric-label">Holes Processed</div>
+              <div class="metric-value" id="metric-holes-count">0</div>
+              <div class="metric-sub" id="metric-holes-sub">Active worksheets in workbook</div>
+            </div>
+
+            <div class="metric-card" id="metric-depth-card">
+              <div class="metric-label">Total Logged Depth</div>
+              <div class="metric-value" id="metric-total-depth">0.0 <span class="unit">m</span></div>
+              <div class="metric-sub" id="metric-depth-sub">Excluding collar stemming zone</div>
+            </div>
+
+            <div class="metric-card" id="metric-diam-card">
+              <div class="metric-label">Average Measured Diameter</div>
+              <div class="metric-value" id="metric-avg-diam">0.0 <span class="unit">mm</span></div>
+              <div class="metric-sub" id="metric-planned-diam-sub">Target: 165.0 mm</div>
+            </div>
+
+            <div class="metric-card" id="metric-overbreak-card">
+              <div class="metric-label">Average Overbreak</div>
+              <div class="metric-value" id="metric-avg-overbreak">+0.0 <span class="unit">mm</span></div>
+              <div class="metric-sub" id="metric-overbreak-pct">0.0% variance</div>
+            </div>
+          </div>
+
+          <!-- Borehole Profile Visualizer & Data Inspector -->
+          <div class="card mt-6" id="card-visualizer">
+            <div class="card-header">
+              <div class="card-title-group">
+                <span class="step-num-icon">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>
+                  </svg>
+                </span>
+                <div>
+                  <h2 class="card-title" id="visualizer-title">Borehole Profile Visualizer &amp; Log Analysis</h2>
+                  <p class="card-subtitle">Real-time cross-section profile, planned vs measured trace, and cavity detection</p>
+                </div>
+              </div>
+
+              <!-- Hole Selector Pills -->
+              <div class="hole-selector" id="hole-selector">
+                <!-- Injected via script -->
+              </div>
+            </div>
+
+            <div class="card-body">
+              <div class="chart-layout">
+                
+                <!-- Left: Borehole SVG Cross-Section Trace -->
+                <div class="chart-panel" id="chart-panel">
+                  <div class="chart-header">
+                    <div class="chart-legend">
+                      <span class="legend-item"><span class="legend-color legend-planned"></span> Planned (165mm)</span>
+                      <span class="legend-item"><span class="legend-color legend-stemming"></span> Stemming Zone</span>
+                      <span class="legend-item"><span class="legend-color legend-actual"></span> Measured Caliper</span>
+                      <span class="legend-item"><span class="legend-color legend-cavity"></span> Overbreak &gt; 10%</span>
+                    </div>
+                    <span class="chart-zoom-info">Hover points for depth &amp; diameter stats</span>
+                  </div>
+
+                  <div class="svg-chart-container" id="svg-chart-container">
+                    <svg id="borehole-svg" width="100%" height="480" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid meet">
+                      <!-- Drawn dynamically in script.js -->
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Right: Hole Stats & Summary Column -->
+                <div class="hole-stats-panel" id="hole-stats-panel">
+                  <h3 class="stats-panel-title" id="active-hole-name">Borehole: BH_001</h3>
+                  
+                  <div class="stats-list">
+                    <div class="stat-row">
+                      <span class="stat-name">Collar / Top Depth:</span>
+                      <span class="stat-val" id="stat-top-depth">0.0 m</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Total Bottom Depth:</span>
+                      <span class="stat-val" id="stat-bottom-depth">0.0 m</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Calipered Length:</span>
+                      <span class="stat-val" id="stat-calipered-len">0.0 m</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Stemming Cutoff:</span>
+                      <span class="stat-val" id="stat-stemming-val">1.0 m</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Min Measured Diam:</span>
+                      <span class="stat-val" id="stat-min-diam">0.0 mm</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Max Measured Diam:</span>
+                      <span class="stat-val" id="stat-max-diam">0.0 mm</span>
+                    </div>
+                    <div class="stat-row">
+                      <span class="stat-name">Mean Measured Diam:</span>
+                      <span class="stat-val" id="stat-mean-diam">0.0 mm</span>
+                    </div>
+                    <div class="stat-row highlight">
+                      <span class="stat-name">Explosive Column:</span>
+                      <span class="stat-val" id="stat-exp-depth">0.0 m</span>
+                    </div>
+                    <div class="stat-row highlight">
+                      <span class="stat-name">Estimated Exp. Mass:</span>
+                      <span class="stat-val" id="stat-exp-mass">0.0 kg</span>
+                    </div>
+                    <div class="stat-row highlight">
+                      <span class="stat-name">Theoretical Mass:</span>
+                      <span class="stat-val" id="stat-theo-mass">0.0 kg</span>
+                    </div>
+                  </div>
+
+                  <div class="hole-flags" id="hole-flags">
+                    <!-- Cavity alerts or flags -->
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Table Sheet Preview -->
+          <div class="card mt-6" id="card-table-preview">
+            <div class="card-header">
+              <div>
+                <h2 class="card-title" id="table-preview-title">Table Sheet Preview</h2>
+                <p class="card-subtitle">Live representation of the workbook's <code>Table</code> worksheet</p>
+              </div>
+              <span class="badge badge-info" id="badge-table-rows">Synchronized</span>
+            </div>
+
+            <div class="card-body">
+              <div class="table-responsive">
+                <table class="data-table" id="summary-data-table">
+                  <thead>
+                    <tr>
+                      <th>Hole Name</th>
+                      <th>Depth (m)</th>
+                      <th>Mean Diam (mm)</th>
+                      <th>Min Diam (mm)</th>
+                      <th>Max Diam (mm)</th>
+                      <th>Planned Diam (mm)</th>
+                      <th>Overbreak %</th>
+                      <th>Stemming (m)</th>
+                      <th>Exp. Mass (kg)</th>
+                      <th>Theo. Mass (kg)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="summary-table-body">
+                    <!-- Rows generated via script -->
+                  </tbody>
+                  <tfoot id="summary-table-footer">
+                    <!-- MIN, AVE, MAX rows generated via script -->
+                  </tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+      <!-- Documentation & GitHub Pages Guide Modal -->
+      <div class="modal-backdrop hidden" id="docs-modal">
+        <div class="modal-window" id="modal-window">
+          <div class="modal-header">
+            <h3 class="modal-title" id="modal-title">Documentation &amp; Deployment Guide</h3>
+            <button type="button" class="btn-close" id="btn-close-docs" aria-label="Close modal">&times;</button>
+          </div>
+          <div class="modal-body markdown-body" id="docs-markdown-content">
+            <!-- Rendered by marked.min.js -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" id="btn-modal-close-action">Close</button>
+            <button type="button" class="btn btn-primary" id="btn-modal-export-zip">Download GitHub Pages ZIP</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer class="app-footer" id="app-footer">
+        <div class="footer-content">
+          <p class="footer-text">
+            BME Caliper Borehole Data Processing Tool &bull; 100% Client-Side In-Browser Execution &bull; Offline Ready
+          </p>
+          <p class="footer-subtext">
+            Compliant with CWLS LAS 2.0 specifications &bull; Zero server dependencies &bull; Ready for GitHub Pages hosting
+          </p>
+        </div>
+      </footer>
+
+    </div>
+
+    <!-- Local Non-CDN JavaScript Libraries -->
+    <script src="./libs/marked.min.js"></script>
+    <script src="./libs/exceljs.min.js"></script>
+    <script src="./libs/jszip.min.js"></script>
+    <script src="./libs/defaults.js"></script>
+    <script src="./script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,6 @@
+{
+  "name": "BME Caliper Borehole Processor",
+  "description": "Client-side processor for BME borehole tracking .LAS files into standardized Excel calipering templates.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
