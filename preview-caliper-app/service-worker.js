@@ -1,7 +1,7 @@
 // BME Caliper Borehole Processor - Service Worker
 // Offline cache manager
 // IMPORTANT: Bump CACHE_NAME when updating any static assets
-const CACHE_NAME = 'bme-caliper-v1.0.2';
+const CACHE_NAME = 'bme-caliper-v1.0.4';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -46,45 +46,42 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Cache-first with network fallback for offline reliability
+// Fetch Event - Network-first for scripts and pages to prevent stale cache, cache fallback for offline
 self.addEventListener('fetch', (event) => {
   // Only handle GET requests
   if (event.request.method !== 'GET') return;
 
-  event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cached resource immediately, fetch in background to revalidate
-        fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, networkResponse.clone());
-              });
-            }
-          })
-          .catch(() => {
-            // Offline: ignore background fetch error
-          });
-        return cachedResponse;
-      }
+  const url = new URL(event.request.url);
+  const isCodeOrDoc = event.request.mode === 'navigate' || url.pathname.endsWith('.js') || url.pathname.endsWith('.html');
 
-      // If not in cache, fetch from network
-      return fetch(event.request).then((networkResponse) => {
-        if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
+  if (isCodeOrDoc) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
           return networkResponse;
-        }
-        const responseToCache = networkResponse.clone();
-        caches.open(CACHE_NAME).then((cache) => {
-          cache.put(event.request, responseToCache);
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || (event.request.mode === 'navigate' ? caches.match('./index.html') : null)))
+    );
+  } else {
+    event.respondWith(
+      caches.match(event.request).then((cachedResponse) => {
+        if (cachedResponse) return cachedResponse;
+        return fetch(event.request).then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+          return networkResponse;
         });
-        return networkResponse;
-      }).catch(() => {
-        // Fallback to offline root page if navigation request
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
-        }
-      });
-    })
-  );
+      })
+    );
+  }
 });

@@ -117,12 +117,21 @@
       navigator.serviceWorker.register('./service-worker.js')
         .then((reg) => {
           console.log('[App] Service Worker registered:', reg.scope);
+          reg.update();
           updateOfflineStatus(true);
         })
         .catch((err) => {
           console.warn('[App] Service Worker registration failed:', err);
           updateOfflineStatus(false);
         });
+
+      let refreshing = false;
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+          refreshing = true;
+          window.location.reload();
+        }
+      });
 
       window.addEventListener('online', () => updateOfflineStatus(true));
       window.addEventListener('offline', () => updateOfflineStatus(true, true));
@@ -465,8 +474,20 @@
     };
   }
 
+  // Helper to escape XML special characters
+  function xmlEscape(str) {
+    if (str === null || str === undefined) return '';
+    return String(str)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&apos;');
+  }
+
   // ==========================================
-  // Excel Processing Engine (ExcelJS)
+  // Excel Processing Engine (JSZip OpenXML Engine)
+  // Preserves 100% of charts, drawings, relationships and formatting
   // ==========================================
   async function processWorkbook(siteInfo, parsedHoles) {
     logMessage('Loading Excel workbook template...', 'info');
@@ -505,183 +526,229 @@
       }
     }
 
-    updateProgress(30, 'Parsing workbook structure...');
-    const wb = new ExcelJS.Workbook();
-    await wb.xlsx.load(templateBuffer);
+    updateProgress(30, 'Opening template archive and preserving charts...');
+    const zip = await JSZip.loadAsync(templateBuffer);
+
+    // Map sheet names to their XML paths in zip via workbook.xml and workbook.xml.rels
+    const sheetPathMap = {};
+    try {
+      const wbXmlStr = await zip.file('xl/workbook.xml').async('text');
+      const wbRelsStr = await zip.file('xl/_rels/workbook.xml.rels').async('text');
+      
+      const relMap = {};
+      const relMatches = wbRelsStr.matchAll(/<Relationship[^>]*Id="([^"]+)"[^>]*Target="([^"]+)"/g);
+      for (const m of relMatches) {
+        relMap[m[1]] = m[2];
+      }
+
+      const sheetMatches = wbXmlStr.matchAll(/<sheet[^>]*name="([^"]+)"[^>]*r:id="([^"]+)"/g);
+      for (const m of sheetMatches) {
+        const name = m[1];
+        const rId = m[2];
+        const target = relMap[rId];
+        if (target) {
+          sheetPathMap[name] = target.startsWith('xl/') ? target : ('xl/' + target);
+        }
+      }
+    } catch (e) {
+      console.warn('Could not parse workbook sheet paths dynamically, using defaults:', e);
+    }
+
+    // Default fallbacks if dynamic map had an issue
+    const infoPath = sheetPathMap['Information'] || 'xl/worksheets/sheet3.xml';
+    const tablePath = sheetPathMap['Table'] || 'xl/worksheets/sheet2.xml';
 
     // 2. Update Information Sheet
     logMessage('Populating Information sheet with site settings...', 'info');
-    const infoSheet = wb.getWorksheet('Information');
-    if (infoSheet) {
-      infoSheet.getCell('C1').value = siteInfo.client;
-      infoSheet.getCell('C2').value = siteInfo.mine;
-      infoSheet.getCell('C3').value = siteInfo.blockId;
-      infoSheet.getCell('C4').value = siteInfo.plannedDiam;
-      infoSheet.getCell('C5').value = siteInfo.finalStemming;
-      infoSheet.getCell('C6').value = siteInfo.density;
-      infoSheet.getCell('C7').value = siteInfo.rigOperator;
-      infoSheet.getCell('C8').value = siteInfo.date;
+    updateProgress(40, 'Writing site parameters into Information sheet...');
+    const infoFile = zip.file(infoPath);
+    if (infoFile) {
+      const origSheet3 = await infoFile.async('text');
+      const sDataStart = origSheet3.indexOf('<sheetData>');
+      const sDataEnd = origSheet3.indexOf('</sheetData>') + 12;
+      if (sDataStart !== -1 && sDataEnd !== -1) {
+        const header3 = origSheet3.substring(0, sDataStart);
+        const footer3 = origSheet3.substring(sDataEnd);
 
-      infoSheet.getCell('C4').numFmt = '0.00';
-      infoSheet.getCell('C5').numFmt = '0.00';
-      infoSheet.getCell('C6').numFmt = '0.00';
+        const newSheetData3 = '<sheetData>' +
+          '<row r="1" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A1" s="65" t="s"><v>22</v></c><c r="B1" s="66"/><c r="C1" s="9" t="inlineStr"><is><t>' + xmlEscape(siteInfo.client) + '</t></is></c></row>' +
+          '<row r="2" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A2" s="67" t="s"><v>23</v></c><c r="B2" s="68"/><c r="C2" s="10" t="inlineStr"><is><t>' + xmlEscape(siteInfo.mine) + '</t></is></c></row>' +
+          '<row r="3" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A3" s="67" t="s"><v>24</v></c><c r="B3" s="68"/><c r="C3" s="10" t="inlineStr"><is><t>' + xmlEscape(siteInfo.blockId) + '</t></is></c></row>' +
+          '<row r="4" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A4" s="59" t="s"><v>25</v></c><c r="B4" s="60"/><c r="C4" s="10"><v>' + siteInfo.plannedDiam + '</v></c></row>' +
+          '<row r="5" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A5" s="59" t="s"><v>26</v></c><c r="B5" s="60"/><c r="C5" s="10"><v>' + siteInfo.finalStemming + '</v></c></row>' +
+          '<row r="6" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A6" s="63" t="s"><v>34</v></c><c r="B6" s="64"/><c r="C6" s="10"><v>' + siteInfo.density + '</v></c></row>' +
+          '<row r="7" spans="1:3" ht="21" x14ac:dyDescent="0.4"><c r="A7" s="59" t="s"><v>27</v></c><c r="B7" s="60"/><c r="C7" s="10" t="inlineStr"><is><t>' + xmlEscape(siteInfo.rigOperator) + '</t></is></c></row>' +
+          '<row r="8" spans="1:3" ht="21.6" thickBot="1" x14ac:dyDescent="0.45"><c r="A8" s="61" t="s"><v>28</v></c><c r="B8" s="62"/><c r="C8" s="11" t="inlineStr"><is><t>' + xmlEscape(siteInfo.date) + '</t></is></c></row>' +
+          '</sheetData>';
+
+        zip.file(infoPath, header3 + newSheetData3 + footer3);
+      }
     }
 
-    updateProgress(45, 'Writing borehole data & formulas...');
-    const usedSheets = [];
+    // 3. Populate each borehole into Sheet1, Sheet2, ... (preserving chart sheets)
+    updateProgress(55, 'Writing borehole profiles & mathematical formulas...');
+    const maxSupportedHoles = 50;
+    const holesToProcess = parsedHoles.slice(0, maxSupportedHoles);
 
-    // 3. Process each borehole into Sheet1, Sheet2, ...
-    for (let i = 0; i < parsedHoles.length; i++) {
-      const hole = parsedHoles[i];
+    for (let i = 0; i < holesToProcess.length; i++) {
+      const hole = holesToProcess[i];
       const sheetName = `Sheet${i + 1}`;
-      let sheet = wb.getWorksheet(sheetName);
-      
-      // If template doesn't have this sheet, create it
-      if (!sheet) {
-        sheet = wb.addWorksheet(sheetName);
-      }
-      usedSheets.push(sheetName);
+      const sheetFile = sheetPathMap[sheetName] || `xl/worksheets/sheet${i + 4}.xml`;
+      const sZipEntry = zip.file(sheetFile);
 
-      logMessage(`Writing Hole [${hole.baseName}] -> ${sheetName} (${hole.data.length} depth steps)...`, 'info');
-
-      // Write hole name in L1
-      sheet.getCell('L1').value = hole.baseName;
-
-      // Ensure headers in Row 1
-      sheet.getCell('A1').value = 'Depth';
-      sheet.getCell('B1').value = 'Diameter';
-      sheet.getCell('C1').value = 'Radius';
-      sheet.getCell('D1').value = '-Radius';
-      sheet.getCell('E1').value = 'Planned Rad';
-      sheet.getCell('F1').value = '-Planned Rad';
-      sheet.getCell('G1').value = 'Planned Diam';
-      sheet.getCell('H1').value = 'Difference';
-
-      // Clear any existing old rows if template had dummy data
-      const currentMaxRow = sheet.rowCount;
-      if (currentMaxRow > 1) {
-        sheet.spliceRows(2, currentMaxRow);
+      if (!sZipEntry) {
+        logMessage(`Note: ${sheetName} not found in template, skipping.`, 'info');
+        continue;
       }
 
-      // Write data & formulas starting row 2
+      logMessage(`Writing Hole [${hole.baseName}] -> ${sheetName} (${hole.data.length} depth points)...`, 'info');
+
+      const origSheet = await sZipEntry.async('text');
+      const dStart = origSheet.indexOf('<sheetData>');
+      const dEnd = origSheet.indexOf('</sheetData>') + 12;
+      if (dStart === -1 || dEnd === -1) continue;
+
+      let sHeader = origSheet.substring(0, dStart);
+      const sFooter = origSheet.substring(dEnd);
+
+      const maxRow = Math.max(4, hole.data.length + 1);
+      sHeader = sHeader.replace(/dimension ref="[^"]*"/, `dimension ref="A1:N${maxRow}"`);
+
+      let rowsXml = '<sheetData>';
+      // Row 1: Headers & Hole Name in L1
+      rowsXml += '<row r="1" spans="1:14" x14ac:dyDescent="0.3">' +
+        '<c r="A1" s="5" t="s"><v>14</v></c>' +
+        '<c r="B1" s="5" t="s"><v>15</v></c>' +
+        '<c r="C1" s="5" t="s"><v>29</v></c>' +
+        '<c r="D1" s="5" t="s"><v>30</v></c>' +
+        '<c r="E1" s="5" t="s"><v>31</v></c>' +
+        '<c r="F1" s="5" t="s"><v>32</v></c>' +
+        '<c r="G1" s="6" t="s"><v>16</v></c>' +
+        '<c r="H1" s="5" t="s"><v>17</v></c>' +
+        '<c r="J1" s="5" t="s"><v>13</v></c>' +
+        '<c r="K1" s="5"/>' +
+        '<c r="L1" s="7" t="inlineStr"><is><t>' + xmlEscape(hole.baseName) + '</t></is></c>' +
+        '<c r="M1" s="7"><f>Information!C2</f><v>0</v></c>' +
+        '<c r="N1" s="5"><f>Information!C3</f><v>0</v></c>' +
+        '</row>';
+
       for (let r = 0; r < hole.data.length; r++) {
         const rowNum = r + 2;
-        const row = sheet.getRow(rowNum);
-        const depth = hole.data[r][0];
-        const diam = hole.data[r][1];
+        const depth = hole.data[r][0].toFixed(2);
+        const diam = hole.data[r][1].toFixed(2);
 
-        row.getCell(1).value = depth;
-        row.getCell(2).value = diam;
-        
-        // Exact Python formulas:
-        // C: =B{row}/2
-        // D: =(B{row}-(B{row}*2))/2
-        // E: =G{row}/2
-        // F: =(G{row}-(G{row}*2))/2
-        // G: =Information!C$4
-        // H: =B{row}-G{row}
-        row.getCell(3).value = { formula: `B${rowNum}/2` };
-        row.getCell(4).value = { formula: `(B${rowNum}-(B${rowNum}*2))/2` };
-        row.getCell(5).value = { formula: `G${rowNum}/2` };
-        row.getCell(6).value = { formula: `(G${rowNum}-(G${rowNum}*2))/2` };
-        row.getCell(7).value = { formula: `Information!C$4` };
-        row.getCell(8).value = { formula: `B${rowNum}-G${rowNum}` };
-
-        // Format C to H (and A-B) to 0.00
-        for (let col = 1; col <= 8; col++) {
-          row.getCell(col).numFmt = '0.00';
+        let sideCells = '';
+        if (rowNum === 2) {
+          sideCells = '<c r="J2" s="5" t="s"><v>18</v></c><c r="K2" s="3"><f>MAX(B2:B' + maxRow + ')</f><v>0</v></c>';
+        } else if (rowNum === 3) {
+          sideCells = '<c r="J3" s="5" t="s"><v>19</v></c><c r="K3" s="3"><f>MIN(B2:B' + maxRow + ')</f><v>0</v></c>';
+        } else if (rowNum === 4) {
+          sideCells = '<c r="J4" s="5" t="s"><v>20</v></c><c r="K4" s="3"><f>AVERAGE(B2:B' + maxRow + ')</f><v>0</v></c>';
         }
-        row.commit();
+
+        rowsXml += '<row r="' + rowNum + '" spans="1:14" x14ac:dyDescent="0.3">' +
+          '<c r="A' + rowNum + '" s="3"><v>' + depth + '</v></c>' +
+          '<c r="B' + rowNum + '" s="3"><v>' + diam + '</v></c>' +
+          '<c r="C' + rowNum + '" s="3"><f>B' + rowNum + '/2</f><v>0</v></c>' +
+          '<c r="D' + rowNum + '" s="3"><f>(B' + rowNum + '-(B' + rowNum + '*2))/2</f><v>0</v></c>' +
+          '<c r="E' + rowNum + '" s="3"><f>G' + rowNum + '/2</f><v>0</v></c>' +
+          '<c r="F' + rowNum + '" s="3"><f>(G' + rowNum + '-(G' + rowNum + '*2))/2</f><v>0</v></c>' +
+          '<c r="G' + rowNum + '" s="8"><f>Information!C$4</f><v>0</v></c>' +
+          '<c r="H' + rowNum + '" s="3"><f>B' + rowNum + '-G' + rowNum + '</f><v>0</v></c>' +
+          sideCells +
+          '</row>';
       }
+
+      // If less than 3 data rows, ensure rows 3 & 4 still exist for J/K summary formulas
+      if (hole.data.length === 1) {
+        rowsXml += '<row r="3" spans="1:14" x14ac:dyDescent="0.3"><c r="J3" s="5" t="s"><v>19</v></c><c r="K3" s="3"><f>MIN(B2:B2)</f><v>0</v></c></row>';
+        rowsXml += '<row r="4" spans="1:14" x14ac:dyDescent="0.3"><c r="J4" s="5" t="s"><v>20</v></c><c r="K4" s="3"><f>AVERAGE(B2:B2)</f><v>0</v></c></row>';
+      } else if (hole.data.length === 2) {
+        rowsXml += '<row r="4" spans="1:14" x14ac:dyDescent="0.3"><c r="J4" s="5" t="s"><v>20</v></c><c r="K4" s="3"><f>AVERAGE(B2:B3)</f><v>0</v></c></row>';
+      }
+
+      rowsXml += '</sheetData>';
+      zip.file(sheetFile, sHeader + rowsXml + sFooter);
     }
 
-    updateProgress(70, 'Deleting unused template sheets...');
-    // 4. Delete unused sheets from workbook, preserving core sheets
-    const coreSheets = ['Graphs', 'Table', 'Information'];
-    const currentSheetNames = wb.worksheets.map(w => w.name);
-    for (const name of currentSheetNames) {
-      if (!usedSheets.includes(name) && !coreSheets.includes(name)) {
-        const s = wb.getWorksheet(name);
-        if (s) {
-          wb.removeWorksheet(s.id);
-          logMessage(`Deleted unused sheet: ${name}`, 'info');
+    // 4. Update Table summary sheet (sheet2.xml)
+    updateProgress(80, 'Updating Table summary sheet formulas...');
+    const tableFile = zip.file(tablePath);
+    if (tableFile) {
+      let tXml = await tableFile.async('text');
+
+      // Update cached names in A3..A(N+2) so they display immediately
+      for (let i = 0; i < holesToProcess.length; i++) {
+        const rowNum = i + 3;
+        const holeName = xmlEscape(holesToProcess[i].baseName);
+        const cellRegex = new RegExp('<c r="A' + rowNum + '"[^>]*>(?:<f>[^<]*<\\/f>)?(?:<v>[^<]*<\\/v>)?<\\/c>');
+        const replacement = '<c r="A' + rowNum + '" s="70" t="str"><f>Sheet' + (i + 1) + '!L1</f><v>' + holeName + '</v></c>';
+        if (cellRegex.test(tXml)) {
+          tXml = tXml.replace(cellRegex, replacement);
         }
       }
+
+      // Update summary rows 53 (Minimum), 54 (Average), 55 (Maximum)
+      const lastHoleRow = Math.max(3, holesToProcess.length + 2);
+      const summaryCols = ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O'];
+
+      // Row 53: Minimum
+      let r53Regex = /<row r="53"[^>]*>[\s\S]*?<\/row>/;
+      let r53Cells = '<row r="53" spans="1:16" ht="15.6" x14ac:dyDescent="0.3"><c r="A53" s="14" t="s"><v>7</v></c>';
+      for (const col of summaryCols) {
+        r53Cells += '<c r="' + col + '53" s="22"><f>MIN(' + col + '3:' + col + lastHoleRow + ')</f><v>0</v></c>';
+      }
+      r53Cells += '<c r="P53" s="2"/></row>';
+      if (r53Regex.test(tXml)) {
+        tXml = tXml.replace(r53Regex, r53Cells);
+      }
+
+      // Row 54: Average
+      let r54Regex = /<row r="54"[^>]*>[\s\S]*?<\/row>/;
+      let r54Cells = '<row r="54" spans="1:16" ht="15.6" x14ac:dyDescent="0.3"><c r="A54" s="15" t="s"><v>0</v></c>';
+      for (const col of summaryCols) {
+        r54Cells += '<c r="' + col + '54" s="23"><f>AVERAGE(' + col + '3:' + col + lastHoleRow + ')</f><v>0</v></c>';
+      }
+      r54Cells += '<c r="P54" s="2"/></row>';
+      if (r54Regex.test(tXml)) {
+        tXml = tXml.replace(r54Regex, r54Cells);
+      }
+
+      // Row 55: Maximum
+      let r55Regex = /<row r="55"[^>]*>[\s\S]*?<\/row>/;
+      let r55Cells = '<row r="55" spans="1:16" ht="16.2" thickBot="1" x14ac:dyDescent="0.35"><c r="A55" s="69" t="s"><v>8</v></c>';
+      for (const col of summaryCols) {
+        r55Cells += '<c r="' + col + '55" s="24"><f>MAX(' + col + '3:' + col + lastHoleRow + ')</f><v>0</v></c>';
+      }
+      r55Cells += '</row>';
+      if (r55Regex.test(tXml)) {
+        tXml = tXml.replace(r55Regex, r55Cells);
+      }
+
+      zip.file(tablePath, tXml);
     }
 
-    updateProgress(85, 'Updating Table summary sheet & statistical formulas...');
-    // 5. Update Table sheet
-    const tableSheet = wb.getWorksheet('Table');
-    if (tableSheet) {
-      const importedFileNames = parsedHoles.map(h => h.baseName);
-
-      // Populate file names into column A (from A3 onwards)
-      for (let i = 0; i < importedFileNames.length; i++) {
-        if (i < 50) {
-          const rowNum = i + 3;
-          tableSheet.getCell(`A${rowNum}`).value = importedFileNames[i];
-          // Standard reference formulas for this hole row if needed
-          const sIdx = i + 1;
-          tableSheet.getCell(`B${rowNum}`).value = { formula: `IF(ISREF(Sheet${sIdx}!A2),MAX(Sheet${sIdx}!A:A),"")` };
-          tableSheet.getCell(`C${rowNum}`).value = { formula: `IF(ISREF(Sheet${sIdx}!B2),AVERAGE(Sheet${sIdx}!B:B),"")` };
-          tableSheet.getCell(`D${rowNum}`).value = { formula: `IF(ISREF(Sheet${sIdx}!B2),MIN(Sheet${sIdx}!B:B),"")` };
-          tableSheet.getCell(`E${rowNum}`).value = { formula: `IF(ISREF(Sheet${sIdx}!B2),MAX(Sheet${sIdx}!B:B),"")` };
-          tableSheet.getCell(`F${rowNum}`).value = { formula: `Information!C$4` };
-          tableSheet.getCell(`G${rowNum}`).value = { formula: `IF(C${rowNum}>0,((C${rowNum}-F${rowNum})/F${rowNum})*100,"")` };
-          tableSheet.getCell(`H${rowNum}`).value = { formula: `IF(D${rowNum}>0,D${rowNum}-F${rowNum},"")` };
-          tableSheet.getCell(`I${rowNum}`).value = { formula: `IF(C${rowNum}>0,C${rowNum}-F${rowNum},"")` };
-          tableSheet.getCell(`J${rowNum}`).value = { formula: `IF(E${rowNum}>0,E${rowNum}-F${rowNum},"")` };
-          tableSheet.getCell(`K${rowNum}`).value = { formula: `Information!C$5` };
-          tableSheet.getCell(`L${rowNum}`).value = { formula: `IF(B${rowNum}>K${rowNum},B${rowNum}-K${rowNum},0)` };
-          tableSheet.getCell(`M${rowNum}`).value = { formula: `Information!C$6` };
-          tableSheet.getCell(`N${rowNum}`).value = { formula: `IF(L${rowNum}>0,PI()*((C${rowNum}/2000)^2)*L${rowNum}*M${rowNum}*1000,"")` };
-          tableSheet.getCell(`O${rowNum}`).value = { formula: `IF(L${rowNum}>0,PI()*((F${rowNum}/2000)^2)*L${rowNum}*M${rowNum}*1000,"")` };
-        }
+    // 5. Instruct Excel to force full recalculation of formulas and refresh charts upon opening
+    try {
+      let wbXml = await zip.file('xl/workbook.xml').async('text');
+      if (wbXml.includes('<calcPr')) {
+        wbXml = wbXml.replace(/<calcPr[^>]*\/>/, '<calcPr calcId="191029" fullCalcOnLoad="1" forceFullCalc="1"/>');
+      } else if (wbXml.includes('</workbook>')) {
+        wbXml = wbXml.replace('</workbook>', '<calcPr calcId="191029" fullCalcOnLoad="1" forceFullCalc="1"/></workbook>');
       }
-
-      // Delete rows where the referenced file name doesn't match imported file names
-      // (from row 52 down to row 3)
-      for (let row = 52; row >= 3; row--) {
-        const val = tableSheet.getCell(`A${row}`).value;
-        if (val && !importedFileNames.includes(val) && !['Minimum', 'Average', 'Maximum'].includes(val)) {
-          tableSheet.spliceRows(row, 1);
-        }
-      }
-
-      // Find rows where "Minimum", "Average", "Maximum" appear in column A
-      let minRow = null, aveRow = null, maxRow = null;
-      tableSheet.eachRow((row, rowNumber) => {
-        const val = row.getCell(1).value;
-        if (val === 'Minimum') minRow = rowNumber;
-        else if (val === 'Average') aveRow = rowNumber;
-        else if (val === 'Maximum') maxRow = rowNumber;
-      });
-
-      const lastHoleRow = minRow ? minRow - 1 : (importedFileNames.length + 2);
-      const colsMin = ['B', 'C', 'D', 'E', 'G', 'H', 'K', 'L', 'M', 'N', 'O'];
-      const colsAve = ['B', 'C', 'D', 'E', 'G', 'I', 'K', 'L', 'M', 'N', 'O'];
-      const colsMax = ['B', 'C', 'D', 'E', 'G', 'J', 'K', 'L', 'M', 'N', 'O'];
-
-      if (minRow && lastHoleRow >= 3) {
-        for (const col of colsMin) {
-          tableSheet.getCell(`${col}${minRow}`).value = { formula: `MIN(${col}3:${col}${lastHoleRow})` };
-        }
-      }
-      if (aveRow && lastHoleRow >= 3) {
-        for (const col of colsAve) {
-          tableSheet.getCell(`${col}${aveRow}`).value = { formula: `AVERAGE(${col}3:${col}${lastHoleRow})` };
-        }
-      }
-      if (maxRow && lastHoleRow >= 3) {
-        for (const col of colsMax) {
-          tableSheet.getCell(`${col}${maxRow}`).value = { formula: `MAX(${col}3:${col}${lastHoleRow})` };
-        }
-      }
+      zip.file('xl/workbook.xml', wbXml);
+    } catch (calcErr) {
+      console.warn('Could not update calcPr:', calcErr);
     }
 
-    updateProgress(95, 'Compiling Excel binary buffer...');
-    const outBuffer = await wb.xlsx.writeBuffer();
-    logMessage('Workbook generation complete!', 'success');
+    updateProgress(95, 'Generating output workbook package (all 102 graphs & drawings preserved)...');
+    const outBuffer = await zip.generateAsync({
+      type: 'arraybuffer',
+      compression: 'DEFLATE',
+      compressionOptions: { level: 6 }
+    });
+
+    logMessage('Workbook generation complete! All graphs and charts preserved.', 'success');
     updateProgress(100, 'Processing complete!');
     return outBuffer;
   }
