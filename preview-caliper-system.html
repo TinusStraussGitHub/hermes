@@ -85,7 +85,9 @@ code{background:#f0eeeb;padding:2px 6px;border-radius:6px;font-size:.85em;color:
     <div id="downloadArea" style="display:none; margin-top:24px;">
       <div class="note-box" style="display:block;">
         <strong>Output Ready</strong><br>
-        Your settings have been saved to localStorage. The Python script (<code>Calipering Reader.py</code>) processes .las uploads, writes sorted data, applies formulas, updates the Table sheet, and saves <code>Calipering.xlsx</code>. The download link below delivers that output file.
+        Your settings have been saved to localStorage. To populate the .LAS data into the Excel output, run the Python script with your settings and .las folder:<br>
+        <code>python3 caliper_web/run_caliper.py ./your_las_folder/ ./Borehole_Calipering_Template.xlsx ./caliper_web/Calipering_Report.xlsx</code><br>
+        The script inserts the user settings (Client, Mine, Block, Diameter, Stemming, Density) into the Information sheet, processes all .las files, writes sorted data to sheets, applies formulas, updates the Table, and saves the result. The download link below delivers the output file once generated.
         <br><br>
         <a href="caliper_web/Calipering_Report.xlsx" download id="downloadLink" class="btn">⬇ Download Calipering Report (.xlsx)</a>
       </div>
@@ -134,10 +136,9 @@ function updateFileList(files){
 }
 
 function generateDownload(){
-  // Show download area; link points to a server-side output placeholder
-  // For a real backend, this would trigger server processing.
+  saveSettings();
   document.getElementById('downloadArea').style.display = 'block';
-  document.getElementById('downloadLink').textContent = '⬇ Download Calipering Report (.xlsx) — Processed with saved settings';
+  document.getElementById('downloadLink').href = 'caliper_web/Calipering_Report.xlsx';
   document.getElementById('downloadArea').scrollIntoView({behavior:'smooth'});
 }
 
