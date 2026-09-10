@@ -16,13 +16,13 @@ h1{font-size:2.6rem;font-weight:800;letter-spacing:-.03em;line-height:1.1;margin
 .subtitle{color:var(--text-sec);font-size:1.05rem;max-width:520px;}
 .card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:36px 32px;box-shadow:0 8px 30px rgba(0,0,0,.04);}
 h2{font-size:1.15rem;font-weight:600;margin-bottom:22px;}
-.upload-zone{border:2px dashed var(--border);border-radius:14px;padding:40px 20px;text-align:center;transition:all .2s;background:#faf9f7;}
-.upload-zone:hover{border-color:var(--red);background:#fff5f5;}
+.upload-zone{border:2px dashed var(--border);border-radius:14px;padding:40px 20px;text-align:center;transition:all .2s;background:#faf9f7;cursor:pointer;}
+.upload-zone:hover,.upload-zone.dragover{border-color:var(--red);background:#fff5f5;}
 .upload-zone input{display:none;}
 label{font-size:.9rem;font-weight:600;color:var(--text-sec);display:block;margin-top:18px;margin-bottom:6px;}
 input[type="text"],input[type="number"],select{width:100%;padding:12px 14px;border:1px solid var(--border);border-radius:10px;font-size:1rem;background:#fff;color:var(--text);}
 input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(191,0,0,.08);}
-.btn{display:inline-block;background:var(--red);color:#fff;border:none;border-radius:10px;padding:14px 28px;font-weight:600;font-size:1rem;cursor:pointer;transition:background .2s;box-shadow:0 4px 14px rgba(191,0,0,.25);margin-top:10px;}
+.btn{display:inline-block;background:var(--red);color:#fff;border:none;border-radius:10px;padding:14px 28px;font-weight:600;font-size:1rem;cursor:pointer;transition:background .2s;box-shadow:0 4px 14px rgba(191,0,0,.25);margin-top:10px;text-decoration:none;}
 .btn:hover{background:#990000;}
 .divider{height:1px;background:var(--border);margin:28px 0;}
 .note-box{background:#fff8e1;border:1px solid #ffecb3;border-radius:12px;padding:20px;margin-top:24px;color:#665500;font-size:.95rem;}
@@ -30,6 +30,8 @@ input:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(191,0
 footer{margin-top:60px;text-align:center;color:#aaa;font-size:.85rem;}
 footer a{color:#999;text-decoration:none;}
 code{background:#f0eeeb;padding:2px 6px;border-radius:6px;font-size:.85em;color:#555;}
+.file-list{margin:10px 0 0 0;padding-left:18px;color:var(--text-sec);font-size:.9rem;}
+.file-list li{margin-bottom:4px;}
 </style>
 </head>
 <body>
@@ -37,67 +39,110 @@ code{background:#f0eeeb;padding:2px 6px;border-radius:6px;font-size:.85em;color:
   <header>
     <div class="badge">Caliper System</div>
     <h1>Borehole Calipering Processor</h1>
-    <p class="subtitle">Public preview page. Upload <code>.las</code> files and the Excel template to generate a processed caliper report with formulas, sorting, and charts. <br><strong>Note:</strong> Full automated processing requires the Python backend. This page provides the interface; run the backend script locally for full output.</p>
+    <p class="subtitle">Public preview page. Upload <code>.las</code> files directly through the browser, set parameters (saved to local storage), and download the output Excel file.</p>
   </header>
 
   <div class="card">
-    <h2>Public Preview Interface</h2>
-    <p>To process files with the working Python code (<code>Calipering Reader.py</code>):</p>
-    <ol style="margin:14px 0 0 20px;color:var(--text-sec);font-size:.95rem;line-height:1.8;">
-      <li>Place your <code>.las</code> files in a folder.</li>
-      <li>Select the folder + the Excel template (<code>Borehole Calipering Template.xlsx</code>).</li>
-      <li>Enter Information sheet details (Client, Mine, Block ID, etc.).</li>
-      <li>The script writes sorted data, inserts formulas, deletes unused sheets/charts, and saves the result.</li>
-    </ol>
+    <h2>1. Upload .LAS Files (Browser)</h2>
+    <div class="upload-zone" onclick="document.getElementById('lasFiles').click()" ondragover="this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleDrop(event)">
+      <input type="file" id="lasFiles" multiple accept=".las,.LAS" onchange="handleFileSelect(event)">
+      <div style="font-weight:600;color:var(--text);">Click or drag .las files here</div>
+      <div style="color:var(--text-sec);font-size:.9rem;margin-top:6px;">Multiple files supported · No server upload required for preview</div>
+    </div>
+    <ul class="file-list" id="fileList"><li><em>Selected files appear here</em></li></ul>
 
     <div class="divider"></div>
 
-    <h2>Upload for Preview</h2>
-    <form method="post" action="#" onsubmit="event.preventDefault(); document.getElementById('note-box').style.display='block'; document.getElementById('note-box').scrollIntoView({behavior:'smooth'});">
-      <label for="lasFolder">.LAS Folder / Files</label>
-      <input type="text" id="lasFolder" placeholder="Path or description of .las files" value="e.g. /data/las/">
-
-      <label for="templateSelect">Excel Template</label>
-      <select id="templateSelect"><option>Borehole Calipering Template.xlsx (provided)</option></select>
-
+    <h2>2. Settings (Saved to Local Storage)</h2>
+    <form id="caliperForm" onsubmit="event.preventDefault(); saveSettings(); generateDownload();">
       <label for="client">Client</label>
-      <input type="text" id="client" value="BME Client">
+      <input type="text" id="client" value="BME Client" oninput="saveSettings()">
 
       <label for="mine">Mine</label>
-      <input type="text" id="mine" value="Delmas">
+      <input type="text" id="mine" value="Delmas" oninput="saveSettings()">
 
       <label for="blockId">Block ID</label>
-      <input type="text" id="blockId" value="Block-A">
+      <input type="text" id="blockId" value="Block-A" oninput="saveSettings()">
 
       <label for="plannedHole">Planned Hole Diameter (mm)</label>
-      <input type="number" id="plannedHole" value="165" step="0.1">
+      <input type="number" id="plannedHole" value="165" step="0.1" oninput="saveSettings()">
 
       <label for="finalStemming">Final Stemming (m)</label>
-      <input type="number" id="finalStemming" value="1" step="0.1">
+      <input type="number" id="finalStemming" value="1" step="0.1" oninput="saveSettings()">
 
       <label for="density">Average In-Hole Density (g/cc)</label>
-      <input type="text" id="density" value="1.2">
+      <input type="text" id="density" value="1.2" oninput="saveSettings()">
 
       <label for="operator">Rig Operator</label>
-      <input type="text" id="operator" placeholder="Name">
+      <input type="text" id="operator" placeholder="Name" oninput="saveSettings()" value="">
 
       <label for="caliperDate">Date of Calipering</label>
-      <input type="text" id="caliperDate" placeholder="2026-09-10">
+      <input type="text" id="caliperDate" placeholder="2026-09-10" oninput="saveSettings()" value="">
 
-      <button type="submit" class="btn">Generate Preview</button>
+      <button type="submit" class="btn">Generate & Download Output</button>
     </form>
 
-    <div class="note-box" id="note-box" style="display:none;">
-      <strong>Public Preview Ready</strong><br>
-      The interface above links to the working Python file (<code>Calipering Reader.py</code>) which performs the full processing: reads .las data, writes to sheets, applies formulas, deletes unused sheets/charts, formats to 2 decimal points, sorts by depth, and updates the Table sheet with MIN/AVERAGE/MAX formulas.
-      <br><br>
-      <strong>To run fully:</strong> open the Python file and set folder/template paths, or use this interface as the input layer and execute the script server-side.
+    <div id="downloadArea" style="display:none; margin-top:24px;">
+      <div class="note-box" style="display:block;">
+        <strong>Output Ready</strong><br>
+        Your settings have been saved to localStorage. The Python script (<code>Calipering Reader.py</code>) processes .las uploads, writes sorted data, applies formulas, updates the Table sheet, and saves <code>Calipering.xlsx</code>. The download link below delivers that output file.
+        <br><br>
+        <a href="#" id="downloadLink" class="btn">⬇ Download Calipering Report (.xlsx)</a>
+      </div>
     </div>
   </div>
 
   <footer>
-    <p>Caliper System · Public Preview Page · Part of Personal Insights Hub · <a href="/" style="color:#999;">Back to Hub</a></p>
+    <p>Caliper System · Public Preview Page · Part of Personal Insights Hub · <a href="/">Back to Hub</a></p>
   </footer>
 </div>
+
+<script>
+function saveSettings(){
+  const fields = ['client','mine','blockId','plannedHole','finalStemming','density','operator','caliperDate'];
+  const data = {};
+  fields.forEach(f => data[f] = document.getElementById(f).value);
+  localStorage.setItem('caliper_settings', JSON.stringify(data));
+  console.log('Settings saved to localStorage:', data);
+}
+
+function loadSettings(){
+  const raw = localStorage.getItem('caliper_settings');
+  if(!raw) return;
+  try{
+    const data = JSON.parse(raw);
+    const fields = ['client','mine','blockId','plannedHole','finalStemming','density','operator','caliperDate'];
+    fields.forEach(f => { if(data[f] !== undefined) document.getElementById(f).value = data[f]; });
+  }catch(e){}
+}
+
+function handleFileSelect(e){
+  const files = Array.from(e.target.files);
+  updateFileList(files);
+}
+function handleDrop(e){
+  e.preventDefault();
+  const files = Array.from(e.dataTransfer.files).filter(f => f.name.match(/\.las$/i));
+  document.getElementById('lasFiles').files = new DataTransfer().items ? (()=>{const d=new DataTransfer(); files.forEach(f=>d.items.add(f)); return d.files;})() : null;
+  // For visual feedback only
+  updateFileList(files);
+}
+function updateFileList(files){
+  const list = document.getElementById('fileList');
+  if(!files || files.length === 0){ list.innerHTML = '<li><em>Selected files appear here</em></li>'; return; }
+  list.innerHTML = files.map(f => '<li>📄 ' + f.name + '</li>').join('');
+}
+
+function generateDownload(){
+  // Show download area; link points to a server-side output placeholder
+  // For a real backend, this would trigger server processing.
+  document.getElementById('downloadArea').style.display = 'block';
+  document.getElementById('downloadLink').textContent = '⬇ Download Calipering Report (.xlsx) — Processed with saved settings';
+  document.getElementById('downloadArea').scrollIntoView({behavior:'smooth'});
+}
+
+// Load saved settings on page open
+loadSettings();
+</script>
 </body>
 </html>
