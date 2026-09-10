@@ -91,9 +91,10 @@ def build_quote_items(items, exchange_rate, currency="both"):
         # Handle XPLOLOG products
         if item.get("product") == "XPLOLOG":
             product = config["products"]["XPLOLOG"]["items"][item["item"]]
-            unit_price = product["price_usd"]
-            line_total_usd = unit_price * qty
-            line_total_zar = line_total_usd * exchange_rate
+            unit_price_zar = product["price_zar"]
+            line_total_zar = unit_price_zar * qty
+            line_total_usd = line_total_zar / exchange_rate
+            unit_price_usd = unit_price_zar / exchange_rate
             subtotal_usd += line_total_usd
             subtotal_zar += line_total_zar
             
@@ -102,11 +103,11 @@ def build_quote_items(items, exchange_rate, currency="both"):
             
             # Build price cells based on currency
             if currency == "usd":
-                price_cells = f"      <td>${format_currency(unit_price)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
             elif currency == "zar":
-                price_cells = f"      <td>{format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>{format_zar(unit_price_zar)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
             else:  # both
-                price_cells = f"      <td>${format_currency(unit_price)} / {format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)} / {format_zar(unit_price_zar)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
             
             row = f"""    <tr>
       <td>
@@ -120,9 +121,10 @@ def build_quote_items(items, exchange_rate, currency="both"):
         # Handle MODULAR add-on products (e.g. Vibration Module)
         elif item.get("product") == "MODULAR":
             product = config["products"]["MODULAR"]["items"][item["item"]]
-            unit_price = product["price_usd"]
-            line_total_usd = unit_price * qty
-            line_total_zar = line_total_usd * exchange_rate
+            unit_price_zar = product["price_zar"]
+            line_total_zar = unit_price_zar * qty
+            line_total_usd = line_total_zar / exchange_rate
+            unit_price_usd = unit_price_zar / exchange_rate
             subtotal_usd += line_total_usd
             subtotal_zar += line_total_zar
 
@@ -130,11 +132,11 @@ def build_quote_items(items, exchange_rate, currency="both"):
             pricing_type = product.get("pricing_type", "annual")
 
             if currency == "usd":
-                price_cells = f"      <td>${format_currency(unit_price)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
             elif currency == "zar":
-                price_cells = f"      <td>{format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>{format_zar(unit_price_zar)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
             else:
-                price_cells = f"      <td>${format_currency(unit_price)} / {format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)} / {format_zar(unit_price_zar)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
 
             row = f"""    <tr>
       <td>
@@ -149,9 +151,10 @@ def build_quote_items(items, exchange_rate, currency="both"):
             # Handle BLASTMAP versions
             version = item["version"].upper()
             product = config["versions"][version]
-            unit_price = product["price_usd"]
-            line_total_usd = unit_price * qty
-            line_total_zar = line_total_usd * exchange_rate
+            unit_price_zar = product["price_zar"]
+            line_total_zar = unit_price_zar * qty
+            line_total_usd = line_total_zar / exchange_rate
+            unit_price_usd = unit_price_zar / exchange_rate
             subtotal_usd += line_total_usd
             subtotal_zar += line_total_zar
 
@@ -163,11 +166,11 @@ def build_quote_items(items, exchange_rate, currency="both"):
 
             # Build price cells based on currency
             if currency == "usd":
-                price_cells = f"      <td>${format_currency(unit_price)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)}</td>\n      <td><strong>${format_currency(line_total_usd)}</strong></td>"
             elif currency == "zar":
-                price_cells = f"      <td>{format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>{format_zar(unit_price_zar)}</td>\n      <td><strong>{format_zar(line_total_zar)}</strong></td>"
             else:  # both
-                price_cells = f"      <td>${format_currency(unit_price)} / {format_zar(unit_price * exchange_rate)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
+                price_cells = f"      <td>${format_currency(unit_price_usd)} / {format_zar(unit_price_zar)}</td>\n      <td><strong>${format_currency(line_total_usd)} / {format_zar(line_total_zar)}</strong></td>"
 
             row = f"""    <tr>
       <td>
@@ -410,44 +413,64 @@ def generate_quote(
     return result
 
 
-def set_prices(std_price=None, premium_price=None, android_tablet_price=None, xplolog_license_price=None):
-    """Update BME product prices."""
+def set_prices(std_price=None, premium_price=None, underground_price=None, android_tablet_price=None, xplolog_license_price=None, vibration_module_price=None):
+    """Update BME product prices in ZAR."""
     config = load_config()
     if std_price is not None:
-        config["versions"]["STD"]["price_usd"] = std_price
+        config["versions"]["STD"]["price_zar"] = std_price
     if premium_price is not None:
-        config["versions"]["PREMIUM"]["price_usd"] = premium_price
+        config["versions"]["PREMIUM"]["price_zar"] = premium_price
+    if underground_price is not None:
+        config["versions"]["UNDERGROUND"]["price_zar"] = underground_price
     if android_tablet_price is not None:
-        config["products"]["XPLOLOG"]["items"]["android_tablet"]["price_usd"] = android_tablet_price
+        config["products"]["XPLOLOG"]["items"]["android_tablet"]["price_zar"] = android_tablet_price
     if xplolog_license_price is not None:
-        config["products"]["XPLOLOG"]["items"]["xplolog_license"]["price_usd"] = xplolog_license_price
+        config["products"]["XPLOLOG"]["items"]["xplolog_license"]["price_zar"] = xplolog_license_price
+    if vibration_module_price is not None:
+        config["products"]["MODULAR"]["items"]["vibration_module"]["price_zar"] = vibration_module_price
     save_config(config)
     print("Prices updated:")
     if std_price is not None:
-        print(f"  BLASTMAP STD:      ${format_currency(std_price)}")
+        print(f"  BLASTMAP STD:      {format_zar(std_price)}")
     if premium_price is not None:
-        print(f"  BLASTMAP PREMIUM:  ${format_currency(premium_price)}")
+        print(f"  BLASTMAP PREMIUM:  {format_zar(premium_price)}")
+    if underground_price is not None:
+        print(f"  BLASTMAP UNDERGROUND: {format_zar(underground_price)}")
     if android_tablet_price is not None:
-        print(f"  XPLOLOG Tablet:    ${format_currency(android_tablet_price)}")
+        print(f"  XPLOLOG Tablet:    {format_zar(android_tablet_price)}")
     if xplolog_license_price is not None:
-        print(f"  XPLOLOG License:   ${format_currency(xplolog_license_price)}")
+        print(f"  XPLOLOG License:   {format_zar(xplolog_license_price)}")
+    if vibration_module_price is not None:
+        print(f"  Vibration Module:  {format_zar(vibration_module_price)}")
 
 
 def show_prices():
     """Display current prices and exchange rate."""
     config = load_config()
     er = config["exchange_rate"]
-    print("Current BLASTMAP Prices:")
-    print(f"  BLASTMAP FREE:     ${format_currency(config['versions']['FREE']['price_usd'])}")
-    print(f"  BLASTMAP STD:      ${format_currency(config['versions']['STD']['price_usd'])}")
-    print(f"  BLASTMAP PREMIUM:  ${format_currency(config['versions']['PREMIUM']['price_usd'])}")
+    print("Current BLASTMAP Prices (ZAR base):")
+    print(f"  BLASTMAP FREE:     {format_zar(config['versions']['FREE']['price_zar'])} (${format_currency(config['versions']['FREE']['price_zar'] / er['usd_to_zar'])})")
+    print(f"  BLASTMAP STD:      {format_zar(config['versions']['STD']['price_zar'])} (${format_currency(config['versions']['STD']['price_zar'] / er['usd_to_zar'])})")
+    print(f"  BLASTMAP UNDERGROUND: {format_zar(config['versions']['UNDERGROUND']['price_zar'])} (${format_currency(config['versions']['UNDERGROUND']['price_zar'] / er['usd_to_zar'])})")
+    print(f"  BLASTMAP PREMIUM:  {format_zar(config['versions']['PREMIUM']['price_zar'])} (${format_currency(config['versions']['PREMIUM']['price_zar'] / er['usd_to_zar'])})")
     
     if "products" in config and "XPLOLOG" in config["products"]:
-        print("\nCurrent XPLOLOG Prices:")
+        print("\nCurrent XPLOLOG Prices (ZAR base):")
         for item_key, item in config["products"]["XPLOLOG"]["items"].items():
             pricing_type = item.get("pricing_type", "annual")
             term = item.get("license_term", "per year")
-            print(f"  {item['name']}: ${format_currency(item['price_usd'])} ({pricing_type}, {term})")
+            price_zar = item["price_zar"]
+            price_usd = price_zar / er['usd_to_zar']
+            print(f"  {item['name']}: {format_zar(price_zar)} (${format_currency(price_usd)}) ({pricing_type}, {term})")
+    
+    if "products" in config and "MODULAR" in config["products"]:
+        print("\nCurrent MODULAR Prices (ZAR base):")
+        for item_key, item in config["products"]["MODULAR"]["items"].items():
+            pricing_type = item.get("pricing_type", "annual")
+            term = item.get("license_term", "per year")
+            price_zar = item["price_zar"]
+            price_usd = price_zar / er['usd_to_zar']
+            print(f"  {item['name']}: {format_zar(price_zar)} (${format_currency(price_usd)}) ({pricing_type}, {term})")
     
     print(f"\nExchange Rate: 1 USD = {format_currency(er['usd_to_zar'])} ZAR")
     print(f"  Last updated: {er['last_updated']} ({er['source']})")
@@ -486,11 +509,13 @@ def main():
     subparsers = parser.add_subparsers(dest="command", help="Command")
 
     # Price command
-    price_parser = subparsers.add_parser("set-prices", help="Set product prices")
-    price_parser.add_argument("--std-price", type=float, help="BLASTMAP STD price in USD")
-    price_parser.add_argument("--premium-price", type=float, help="BLASTMAP PREMIUM price in USD")
-    price_parser.add_argument("--tablet-price", type=float, help="XPLOLOG Android Tablet price in USD")
-    price_parser.add_argument("--xplolog-price", type=float, help="XPLOLOG License annual price in USD")
+    price_parser = subparsers.add_parser("set-prices", help="Set product prices (ZAR)")
+    price_parser.add_argument("--std-price", type=float, help="BLASTMAP STD price in ZAR")
+    price_parser.add_argument("--premium-price", type=float, help="BLASTMAP PREMIUM price in ZAR")
+    price_parser.add_argument("--underground-price", type=float, help="BLASTMAP UNDERGROUND price in ZAR")
+    price_parser.add_argument("--tablet-price", type=float, help="XPLOLOG Android Tablet price in ZAR")
+    price_parser.add_argument("--xplolog-price", type=float, help="XPLOLOG License annual price in ZAR")
+    price_parser.add_argument("--vibration-price", type=float, help="Vibration Module price in ZAR")
 
     # Show prices
     subparsers.add_parser("prices", help="Show current prices")
@@ -523,8 +548,10 @@ def main():
         set_prices(
             std_price=args.std_price,
             premium_price=args.premium_price,
+            underground_price=args.underground_price,
             android_tablet_price=args.tablet_price,
-            xplolog_license_price=args.xplolog_price
+            xplolog_license_price=args.xplolog_price,
+            vibration_module_price=args.vibration_price
         )
     elif args.command == "prices":
         show_prices()

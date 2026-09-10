@@ -5,7 +5,7 @@
     "FREE": {
       "name": "BLASTMAP FREE",
       "description": "Free version with basic pattern design",
-      "price_usd": 0,
+      "price_zar": 0,
       "features": [
         "Basic pattern design",
         "Standard hole layouts",
@@ -15,7 +15,7 @@
     "STD": {
       "name": "BLASTMAP STANDARD",
       "description": "Standard blasting pattern design software",
-      "price_usd": 3041.15,
+      "price_zar": 50800.0,
       "features": [
         "Timing Analysis",
         "Vibration Prediction",
@@ -27,7 +27,7 @@
     "UNDERGROUND": {
       "name": "BLASTMAP UNDERGROUND",
       "description": "Underground blasting pattern design software",
-      "price_usd": 3101.6423,
+      "price_zar": 50800.0,
       "features": [
         "Timing Analysis",
         "Vibration Prediction",
@@ -40,7 +40,7 @@
     "PREMIUM": {
       "name": "BLASTMAP PREMIUM",
       "description": "Advanced blasting pattern design software",
-      "price_usd": 5100.063989,
+      "price_zar": 83400.0,
       "features": [
         "Timing Analysis",
         "Vibration Prediction",
@@ -61,14 +61,14 @@
         "android_tablet": {
           "name": "Android Tablet",
           "description": "XPLOLOG Android tablet device",
-          "price_usd": 1100.0,
+          "price_zar": 18378.22,
           "pricing_type": "once-off",
           "license_term": "1 x device license"
         },
         "xplolog_license": {
           "name": "XPLOLOG License",
           "description": "XPLOLOG annual license fee",
-          "price_usd": 1900.0,
+          "price_zar": 31744.2,
           "pricing_type": "annual",
           "license_term": "per year"
         }
@@ -80,7 +80,7 @@
         "vibration_module": {
           "name": "Vibration Module",
           "description": "BLASTMAP Vibration Prediction module add-on",
-          "price_usd": 923.392881,
+          "price_zar": 15426.59,
           "pricing_type": "annual",
           "license_term": "1 Year Add-on"
         }
@@ -88,11 +88,11 @@
     }
   },
   "exchange_rate": {
-    "usd_to_zar": 16.707472,
-    "last_updated": "2026-07-30",
+    "usd_to_zar": 15.988946,
+    "last_updated": "2026-08-28",
     "source": "open.er-api.com"
   },
-  "quote_counter": 85,
+  "quote_counter": 92,
   "company": {
     "name": "BME",
     "full_name": "BME",

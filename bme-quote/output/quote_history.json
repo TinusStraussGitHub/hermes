@@ -1925,5 +1925,163 @@
     ],
     "currency": "zar",
     "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0086",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0086.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0086.html",
+    "subtotal_usd": 3040.56,
+    "vat_usd": 456.084,
+    "total_usd": 3496.644,
+    "total_zar": 58420.081723968004,
+    "exchange_rate": 16.707472,
+    "quote_date": "30 July 2026",
+    "valid_until": "29 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0087",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0087.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0087.html",
+    "subtotal_usd": 8125.7025599293265,
+    "vat_usd": 1218.855383989399,
+    "total_usd": 9344.557943918726,
+    "total_zar": 154330.0,
+    "exchange_rate": 16.515495,
+    "quote_date": "31 July 2026",
+    "valid_until": "30 August 2026",
+    "client_name": "Test Client",
+    "client_company": "Test Company",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      },
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "both",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0088",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0088.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0088.html",
+    "subtotal_usd": 3075.8993296900876,
+    "vat_usd": 461.3848994535131,
+    "total_usd": 3537.284229143601,
+    "total_zar": 58420.0,
+    "exchange_rate": 16.515495,
+    "quote_date": "31 July 2026",
+    "valid_until": "30 August 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0089",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0089.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0089.html",
+    "subtotal_usd": 5109.086970627528,
+    "vat_usd": 766.3630455941292,
+    "total_usd": 5875.450016221657,
+    "total_zar": 95910.0,
+    "exchange_rate": 16.323856,
+    "quote_date": "06 August 2026",
+    "valid_until": "05 September 2026",
+    "client_name": "Steven Strauss",
+    "client_company": "Self",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 1
+      }
+    ],
+    "currency": "both",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0090",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0090.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0090.html",
+    "subtotal_usd": 15460.795667417891,
+    "vat_usd": 2319.1193501126836,
+    "total_usd": 17779.915017530577,
+    "total_zar": 287730.0,
+    "exchange_rate": 16.182867,
+    "quote_date": "11 August 2026",
+    "valid_until": "10 September 2026",
+    "client_name": "Lourens Sadie",
+    "client_company": "Afrimat",
+    "items": [
+      {
+        "version": "PREMIUM",
+        "quantity": 3
+      }
+    ],
+    "currency": "both",
+    "include_vat": true
+  },
+  {
+    "quote_number": "BMP-0091",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0091.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0091.html",
+    "subtotal_usd": 3147.505165347183,
+    "vat_usd": 0,
+    "total_usd": 3147.505165347183,
+    "total_zar": 50800.0,
+    "exchange_rate": 16.139767,
+    "quote_date": "13 August 2026",
+    "valid_until": "12 September 2026",
+    "client_name": "Ian",
+    "client_company": "Rockland",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": false
+  },
+  {
+    "quote_number": "BMP-0092",
+    "pdf_path": "/opt/data/home/hermes/bme-quote/output/BMP-0092.pdf",
+    "html_path": "/opt/data/home/hermes/bme-quote/output/BMP-0092.html",
+    "subtotal_usd": 3177.1950446264564,
+    "vat_usd": 476.57925669396843,
+    "total_usd": 3653.774301320425,
+    "total_zar": 58420.0,
+    "exchange_rate": 15.988946,
+    "quote_date": "28 August 2026",
+    "valid_until": "27 September 2026",
+    "client_name": "Pieter Jonker",
+    "client_company": "Epic Blasting",
+    "items": [
+      {
+        "version": "STD",
+        "quantity": 1
+      }
+    ],
+    "currency": "zar",
+    "include_vat": true
   }
 ]
